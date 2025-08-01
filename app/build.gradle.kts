@@ -74,7 +74,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    
+    // Jetpack DataStore (for saving user preferences like onboarding status)
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation(libs.androidx.preference.ktx)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

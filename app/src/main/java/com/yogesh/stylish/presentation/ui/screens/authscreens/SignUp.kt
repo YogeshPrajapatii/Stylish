@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.yogesh.stylish.R
-import com.yogesh.stylish.data.repositoryimp.AuthRepositoryImpl
+import com.yogesh.stylish.data.repositoryimp.AuthRepositoryImp
 import com.yogesh.stylish.domain.usecase.LoginUseCase
 import com.yogesh.stylish.domain.usecase.SignUpUseCase
 import com.yogesh.stylish.domain.util.Result
@@ -59,8 +59,8 @@ fun SignUp(navController: NavHostController) {
     // 📝 AuthViewModel ko factory ke through initialize kar rahe hain
     val authViewModel: AuthViewModel =
         viewModel(factory = AuthViewModelFactory(
-            loginUseCase = LoginUseCase(AuthRepositoryImpl()),
-            signUpUseCase = SignUpUseCase(AuthRepositoryImpl())
+            loginUseCase = LoginUseCase(AuthRepositoryImp()),
+            signUpUseCase = SignUpUseCase(AuthRepositoryImp())
         ))
 
     // 📝 UI ke liye mutable state variables
