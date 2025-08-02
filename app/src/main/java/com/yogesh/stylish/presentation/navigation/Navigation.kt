@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.yogesh.stylish.presentation.ui.screens.HomeScreen
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.HomeScreen
 import com.yogesh.stylish.presentation.ui.screens.authscreens.ForgotPassword
 import com.yogesh.stylish.presentation.ui.screens.authscreens.Login
 import com.yogesh.stylish.presentation.ui.screens.authscreens.ResetPassword

@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.ui.screens
+package com.yogesh.stylish.presentation.ui.screens.mainscreens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,10 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.yogesh.stylish.presentation.navigation.Routes
 import com.yogesh.stylish.ui.theme.Stylish
 
