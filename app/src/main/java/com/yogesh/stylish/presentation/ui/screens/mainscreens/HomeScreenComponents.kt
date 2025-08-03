@@ -108,8 +108,7 @@ fun SearchAndFilterSection() {
                 Text("Filter")
             }
         }
-
-
+        
     }
 
 }
