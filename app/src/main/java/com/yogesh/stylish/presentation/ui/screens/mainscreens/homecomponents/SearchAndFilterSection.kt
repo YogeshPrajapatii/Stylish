@@ -1,6 +1,5 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,41 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yogesh.stylish.R
-
-@Composable
-fun HomeAppBar() {
-
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically) {
-
-        IconButton(onClick = {}) {
-
-            Icon(painter = painterResource(id = R.drawable.home_menu),
-                contentDescription = "Home " + "Menu",
-                modifier = Modifier.size(24.dp))
-
-        }
-
-        Image(painter = painterResource(id = R.drawable.app_logo),
-            contentDescription = "App Logo",
-            modifier = Modifier.height(30.dp))
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        IconButton(onClick = {}) {
-
-            Icon(painter = painterResource(id = R.drawable.profile_icon),
-                contentDescription = "Profile Logo",
-                modifier = Modifier.size(36.dp))
-
-        }
-
-    }
-
-
-}
 
 @Composable
 fun SearchAndFilterSection() {
@@ -99,16 +63,16 @@ fun SearchAndFilterSection() {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Sort")
             }
-            
+
             OutlinedButton(onClick = {}) {
-                
+
                 Icon(painter = painterResource(id = R.drawable.filter_ic),
                     contentDescription = "Filter Icon",
                     modifier = Modifier.size(18.dp))
                 Text("Filter")
             }
         }
-        
+
     }
 
 }
