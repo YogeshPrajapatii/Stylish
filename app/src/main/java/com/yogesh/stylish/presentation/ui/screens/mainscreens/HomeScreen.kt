@@ -13,7 +13,9 @@ import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.MyB
 fun HomeScreen(navController: NavHostController) {
     Scaffold(topBar = { HomeAppBar() },
         bottomBar = { MyBottomBar(navController = navController) }) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) { }
+        LazyColumn(modifier = Modifier.padding(innerPadding)) {
+
+        }
 
     }
 }
