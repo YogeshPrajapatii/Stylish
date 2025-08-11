@@ -48,5 +48,5 @@ Beyond the core features, the following functionalities are planned for the futu
 * Implement a payment gateway (e.g., Stripe or Razorpay).
 * Add a Product Reviews & Ratings system.
 * Push Notifications for order updates.
-* Develop an Admin Panel for managing products and orders. 
+* Develop an Admin Panel for managing products and orders.
 
