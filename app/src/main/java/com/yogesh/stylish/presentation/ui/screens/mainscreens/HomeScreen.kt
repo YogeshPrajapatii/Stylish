@@ -10,7 +10,7 @@ import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.Cat
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.FootwaresCard
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.HomeAppBar
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.MyBottomBar
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.Product
+import com.yogesh.stylish.domain.model.Product
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ProductsRow
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.PromoBanner
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SearchAndFilterSection

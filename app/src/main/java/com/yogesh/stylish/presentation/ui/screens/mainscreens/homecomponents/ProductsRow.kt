@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.yogesh.stylish.domain.model.Product
 
 
 @Composable
@@ -16,7 +17,7 @@ fun ProductsRow(
     title: String,
     products: List<Product>,
     onViewAllClicked: () -> Unit,
-    //onProductClicked: (Product) -> Unit
+    
 
 ) {
 

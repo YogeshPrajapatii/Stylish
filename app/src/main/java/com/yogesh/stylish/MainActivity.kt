@@ -1,6 +1,5 @@
 package com.yogesh.stylish
 
-// Sahi naam import karein, agar Android Studio na kare to manually karein
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

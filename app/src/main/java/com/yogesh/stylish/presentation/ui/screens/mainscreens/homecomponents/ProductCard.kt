@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
+import com.yogesh.stylish.domain.model.Product
 
 @Composable
 fun ProductCard(product: Product, modifier: Modifier

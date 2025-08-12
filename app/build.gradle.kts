@@ -2,8 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    kotlin("plugin.serialization") version "2.2.0"
     alias(libs.plugins.google.gms.google.services)
+
+    id("kotlinx-serialization")
+    
 }
 
 android {
@@ -77,6 +79,14 @@ dependencies {
     // Jetpack DataStore (for saving user preferences like onboarding status)
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation(libs.androidx.preference.ktx)
+
+    implementation("io.ktor:ktor-client-android:2.3.10")
+
+    // Ktor Content Negotiation - Ye JSON ko samajhne me help karta hai
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.10")
+
+    // Kotlinx Serialization - Ye JSON ko aapki data class me badalta hai
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.10")
 
 
     testImplementation(libs.junit)
