@@ -11,12 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
 
 @Composable
-fun ProductCard() {
+fun ProductCard(product: Product, modifier: Modifier
+) {
     Card(modifier = Modifier.padding(8.dp)) {
 
         Column() {
@@ -26,21 +26,14 @@ fun ProductCard() {
                     .fillMaxWidth()
                     .height(120.dp),
                 contentScale = ContentScale.Crop)
+            Column(modifier = Modifier.padding(8.dp)) {
+
+                Text(text = "Product Name ${product.title}")
+                Text(text = "Product Price ${product.price}")
+
+            }
 
         }
         
-        Column (modifier = Modifier.padding(8.dp)){
-
-            Text(text = "Product Name")
-            Text(text = "Product Price")
-            
-        }
-
     }
-}
-
-@Preview
-@Composable
-fun ProductCardPreview() {
-    ProductCard()
 }
