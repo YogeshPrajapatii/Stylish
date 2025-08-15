@@ -1,6 +1,7 @@
 package com.yogesh.stylish.domain.repository
 
 import com.yogesh.stylish.domain.model.Product
+import com.yogesh.stylish.domain.util.Result
 
 interface ProductRepository {
     

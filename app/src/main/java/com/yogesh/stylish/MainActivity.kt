@@ -13,6 +13,9 @@ import com.yogesh.stylish.presentation.navigation.Navigation
 import com.yogesh.stylish.presentation.ui.screens.splashscreen.SplashViewModel
 import com.yogesh.stylish.presentation.ui.screens.splashscreen.SplashViewModelFactory
 import com.yogesh.stylish.presentation.ui.theme.MyFirstComposeAppTheme
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint // <-- Ye annotation zaroori hai
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

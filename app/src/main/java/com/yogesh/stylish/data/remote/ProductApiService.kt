@@ -1,6 +1,8 @@
 package com.yogesh.stylish.data.remote
 
+import com.yogesh.stylish.data.remote.dto.ProductDto
 import com.yogesh.stylish.data.remote.dto.ProductsResponseDto
+import com.yogesh.stylish.domain.model.Product
 import io.ktor.client.*
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.*
@@ -28,5 +30,10 @@ class ProductApiService {
     suspend fun getAllCategories(): List<String> {
         val url = "https://dummyjson.com/products/categories"
         return client.get(url).body() 
+    }
+    
+    suspend fun getProductById(id:Int): ProductDto{
+        val url = "https://dummyjson.com/products/$id"
+        return client.get(url).body()
     }
 }

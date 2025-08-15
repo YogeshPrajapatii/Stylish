@@ -1,68 +1,63 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-data class Category(
-
-    val name: String, val imgRes: Int
-)
-
+/**
+ * This composable now just displays a single category name as a chip.
+ * It takes a simple String as a parameter.
+ */
 @Composable
-fun CategoryChip(category: Category, onClick: () -> Unit) {
-
-    Column(modifier = Modifier
-        .padding(horizontal = 8.dp)
-        .clickable(onClick = onClick),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-
-        Card(modifier = Modifier.size(60.dp),
-            shape = CircleShape,
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5))) {
-
-            Box(modifier = Modifier.fillMaxSize(),
-
-                contentAlignment = Alignment.Center) {
-
-                Image(painter = painterResource(id = category.imgRes),
-                    contentDescription = category.name,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(40.dp))
-
-            }
-
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(text = category.name, Modifier.size(14.dp))
-
-
+fun CategoryChip(categoryName: String, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(horizontal = 4.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F0F0)) // Light gray
+    ) {
+        Text(
+            text = categoryName.replaceFirstChar { it.uppercase() }, // Capitalize the first letter
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center
+        )
     }
-
 }
 
-
-
+/**
+ * This composable now accepts a List of Strings (the category names) from the ViewModel.
+ */
 @Composable
-fun CategoryChipsRow(){
-
+fun CategoryChipsRow(
+    categories: List<String>,
+    onCategoryClick: (String) -> Unit
+) {
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        // It loops through the list of category names
+        items(categories) { categoryName ->
+            // And creates a CategoryChip for each one
+            CategoryChip(
+                categoryName = categoryName,
+                onClick = { onCategoryClick(categoryName) }
+            )
+        }
+    }
 }

@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.compose) // Iski yahan zaroorat hai
     alias(libs.plugins.google.gms.google.services)
-
     id("kotlinx-serialization")
+    alias(libs.plugins.google.dagger.hilt.android) // <-- Ab ye kaam karega
+    kotlin("kapt")
     
 }
 
@@ -87,6 +88,10 @@ dependencies {
 
     // Kotlinx Serialization - Ye JSON ko aapki data class me badalta hai
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.10")
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
 
     testImplementation(libs.junit)
