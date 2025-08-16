@@ -47,7 +47,7 @@ import com.yogesh.stylish.domain.usecase.LoginUseCase
 import com.yogesh.stylish.domain.usecase.SignUpUseCase
 import com.yogesh.stylish.domain.util.Result
 import com.yogesh.stylish.presentation.navigation.Routes
-import com.yogesh.stylish.ui.theme.Stylish
+import com.yogesh.stylish.presentation.ui.theme.Stylish
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,13 +86,14 @@ fun Login(navController: NavHostController) {
                 showError = false
 
             }
+
             is Result.Success -> {
                 // Login success hone par Home screen pe navigate karo
                 navController.navigate(Routes.HomeScreen) {
                     popUpTo(Routes.Login) { inclusive = true } // Backstack clear
                 }
             }
-            
+
         }
     }
 
@@ -169,9 +170,9 @@ fun Login(navController: NavHostController) {
                     .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically) {
-                    SocialLoginButton(R.drawable.google, "Google")
-                    SocialLoginButton(R.drawable.apple, "Apple")
-                    SocialLoginButton(R.drawable.facebook, "Facebook")
+                    SocialLoginButton(R.drawable.ic_google, "Google")
+                    SocialLoginButton(R.drawable.ic_apple, "Apple")
+                    SocialLoginButton(R.drawable.ic_facebook, "Facebook")
                 }
 
                 // Sign Up Text

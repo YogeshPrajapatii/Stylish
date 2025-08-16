@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.yogesh.stylish.presentation.navigation.Routes
-import com.yogesh.stylish.ui.theme.Stylish
+import com.yogesh.stylish.presentation.ui.theme.Stylish
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)

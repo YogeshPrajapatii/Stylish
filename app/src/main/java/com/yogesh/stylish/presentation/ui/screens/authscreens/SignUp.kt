@@ -47,7 +47,7 @@ import com.yogesh.stylish.domain.usecase.LoginUseCase
 import com.yogesh.stylish.domain.usecase.SignUpUseCase
 import com.yogesh.stylish.domain.util.Result
 import com.yogesh.stylish.presentation.navigation.Routes
-import com.yogesh.stylish.ui.theme.Stylish
+import com.yogesh.stylish.presentation.ui.theme.Stylish
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -123,7 +123,7 @@ fun SignUp(navController: NavHostController) {
                         .fillMaxWidth()
                         .padding(start = 16.dp)
                 )
-                
+
                 // 📝 Username / Email TextField
                 OutlinedTextField(
                     value = userId,
@@ -179,21 +179,21 @@ fun SignUp(navController: NavHostController) {
                 ) {
                     IconButton(onClick = { /* TODO: Google login */ }) {
                         Image(
-                            painter = painterResource(id = R.drawable.google),
+                            painter = painterResource(id = R.drawable.ic_google),
                             contentDescription = "Google Logo",
                             modifier = Modifier.size(40.dp)
                         )
                     }
                     IconButton(onClick = { /* TODO: Apple login */ }) {
                         Image(
-                            painter = painterResource(id = R.drawable.apple),
+                            painter = painterResource(id = R.drawable.ic_apple),
                             contentDescription = "Apple Logo",
                             modifier = Modifier.size(40.dp)
                         )
                     }
                     IconButton(onClick = { /* TODO: Facebook login */ }) {
                         Image(
-                            painter = painterResource(id = R.drawable.facebook),
+                            painter = painterResource(id = R.drawable.ic_facebook),
                             contentDescription = "Facebook Logo",
                             modifier = Modifier.size(40.dp)
                         )

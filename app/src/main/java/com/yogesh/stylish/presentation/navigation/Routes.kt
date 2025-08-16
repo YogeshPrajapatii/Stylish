@@ -8,7 +8,7 @@ sealed class Routes {
     object Splash : Routes()
 
     @Serializable
-    object OnBoarding1: Routes()
+    object OnBoarding1 : Routes()
 
     @Serializable
     object OnBoarding2 : Routes()
@@ -24,9 +24,10 @@ sealed class Routes {
 
     @Serializable
     object ForgotPassword : Routes()
+
     @Serializable
-    object HomeScreen: Routes()
-    
+    object HomeScreen : Routes()
+
     @Serializable
-    object ResetPassword: Routes()
+    object ResetPassword : Routes()
 }

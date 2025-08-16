@@ -5,11 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.HomeScreen
 import com.yogesh.stylish.presentation.ui.screens.authscreens.ForgotPassword
 import com.yogesh.stylish.presentation.ui.screens.authscreens.Login
 import com.yogesh.stylish.presentation.ui.screens.authscreens.ResetPassword
 import com.yogesh.stylish.presentation.ui.screens.authscreens.SignUp
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.HomeScreen
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding1
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding2
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding3
@@ -26,7 +26,7 @@ fun Navigation(viewModel: SplashViewModel) {
 
             Splash(navController = navController, viewModel)
         }
-        
+
         composable<Routes.OnBoarding1> { OnBoarding1(navController) }
         composable<Routes.OnBoarding2> { OnBoarding2(navController) }
         composable<Routes.OnBoarding3> { OnBoarding3(navController) }

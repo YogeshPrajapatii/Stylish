@@ -7,7 +7,7 @@
         <item name="android:windowSplashScreenBackground">@android:color/white</item>
         <item name="android:windowIsTranslucent">true</item>
         // is se android ki default splash
-       // screen hide ho jati h
+        // screen hide ho jati h
 
 
     </style>

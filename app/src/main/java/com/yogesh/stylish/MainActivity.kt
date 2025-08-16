@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val authRepository = AuthRepositoryImp() 
+        val authRepository = AuthRepositoryImp()
 
         val userPreferenceManager = UserPreferenceManager(applicationContext)
         val userPrefRepo = UserPreferenceRepositoryImp(userPreferenceManager)

@@ -43,7 +43,7 @@ fun SearchAndFilterSection() {
             Icon(Icons.Default.Search, contentDescription = "Search Icon ")
         }, trailingIcon = {
             IconButton(onClick = {}) {
-                Icon(painter = painterResource(id = R.drawable.mic_ic),
+                Icon(painter = painterResource(id = R.drawable.ic_mic),
                     contentDescription = "Mic Icon")
             }
         })
@@ -57,7 +57,7 @@ fun SearchAndFilterSection() {
 
             OutlinedButton(onClick = {}) {
 
-                Icon(painter = painterResource(id = R.drawable.sort_ic),
+                Icon(painter = painterResource(id = R.drawable.ic_sort),
                     contentDescription = "Sort Icon",
                     modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
@@ -66,7 +66,7 @@ fun SearchAndFilterSection() {
 
             OutlinedButton(onClick = {}) {
 
-                Icon(painter = painterResource(id = R.drawable.filter_ic),
+                Icon(painter = painterResource(id = R.drawable.ic_filter),
                     contentDescription = "Filter Icon",
                     modifier = Modifier.size(18.dp))
                 Text("Filter")

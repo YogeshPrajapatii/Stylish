@@ -26,13 +26,13 @@ fun HomeAppBar() {
 
         IconButton(onClick = {}) {
 
-            Icon(painter = painterResource(id = R.drawable.home_menu),
+            Icon(painter = painterResource(id = R.drawable.ic_menu),
                 contentDescription = "Home " + "Menu",
                 modifier = Modifier.size(24.dp))
 
         }
 
-        Image(painter = painterResource(id = R.drawable.app_logo),
+        Image(painter = painterResource(id = R.drawable.img_app_logo),
             contentDescription = "App Logo",
             modifier = Modifier.height(30.dp))
 
@@ -40,7 +40,7 @@ fun HomeAppBar() {
 
         IconButton(onClick = {}) {
 
-            Icon(painter = painterResource(id = R.drawable.profile_icon),
+            Icon(painter = painterResource(id = R.drawable.img_profile_pic),
                 contentDescription = "Profile Logo",
                 modifier = Modifier.size(36.dp))
 

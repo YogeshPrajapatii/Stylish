@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.Flow
 
 class UserPreferenceRepositoryImp(private val userPreferenceManager: UserPreferenceManager) :
     UserPreferenceRepository {
-    override  fun readOnboardingStatus(): Flow<Boolean> {
+    override fun readOnboardingStatus(): Flow<Boolean> {
         return userPreferenceManager.getOnboardingStatus
     }
 
     override suspend fun saveOnboardingStatus() {
-         userPreferenceManager.saveOnboardingStatus()
+        userPreferenceManager.saveOnboardingStatus()
     }
 
 }

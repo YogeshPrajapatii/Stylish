@@ -42,7 +42,7 @@ fun PromoBanner() {
 
             }
 
-            Image(painter = painterResource(id = R.drawable.profile_icon),
+            Image(painter = painterResource(id = R.drawable.ic_google),
                 contentDescription = "Promo Banner",
                 modifier = Modifier.height(120.dp))
 

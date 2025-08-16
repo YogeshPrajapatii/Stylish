@@ -17,9 +17,9 @@ fun ProductsRow(
     title: String,
     products: List<Product>,
     onViewAllClicked: () -> Unit,
-    
 
-) {
+
+    ) {
 
     Column() {
 

@@ -54,14 +54,16 @@ fun OnBoarding2(navController: NavHostController) {
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text("2/3")
             Text(text = "Skip",
-                modifier = Modifier.clickable {     onboardingViewModel.onOnboardingFinished()
-                    navController.navigate(Routes.Login) })
+                modifier = Modifier.clickable {
+                    onboardingViewModel.onOnboardingFinished()
+                    navController.navigate(Routes.Login)
+                })
         }
 
         Box(Modifier
             .fillMaxWidth()
             .padding(top = 28.dp), contentAlignment = Alignment.Center) {
-            Image(painter = painterResource(R.drawable.obtwo),
+            Image(painter = painterResource(R.drawable.img_onboarding_2),
                 contentDescription = "OnBoarding Screen One")
         }
 

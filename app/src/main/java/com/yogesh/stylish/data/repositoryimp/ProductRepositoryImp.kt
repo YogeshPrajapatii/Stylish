@@ -2,9 +2,9 @@ package com.yogesh.stylish.data.repositoryimp
 
 import com.yogesh.stylish.data.remote.ProductApiService
 import com.yogesh.stylish.data.remote.dto.ProductDto
+import com.yogesh.stylish.domain.model.Product
 import com.yogesh.stylish.domain.repository.ProductRepository
 import com.yogesh.stylish.domain.util.Result
-import com.yogesh.stylish.domain.model.Product 
 
 class ProductRepositoryImpl(
     private val apiService: ProductApiService
@@ -29,18 +29,19 @@ class ProductRepositoryImpl(
         }
     }
 
-    override suspend fun getProductById(id: Int): Result<Product>{
+    override suspend fun getProductById(id: Int): Result<Product> {
 
         return try {
             val productDto = apiService.getProductById(id)
             Result.Success(productDto.toDomainProduct())
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Result.Failure(e.message ?: "Unknown Error !")
         }
-        
+
 
     }
 }
+
 private fun ProductDto.toDomainProduct(): Product {
     return Product(
         id = this.id,

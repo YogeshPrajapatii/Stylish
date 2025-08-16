@@ -61,7 +61,7 @@ fun OnBoarding3(navController: NavHostController) {
         Box(Modifier
             .fillMaxWidth()
             .padding(top = 28.dp), contentAlignment = Alignment.Center) {
-            Image(painter = painterResource(R.drawable.obthree),
+            Image(painter = painterResource(R.drawable.img_onboarding_3),
                 contentDescription = "OnBoarding Screen Three")
         }
         Column(modifier = Modifier.padding(horizontal = 16.dp),

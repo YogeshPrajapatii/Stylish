@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yogesh.stylish.domain.usecase.LoginUseCase
 import com.yogesh.stylish.domain.usecase.SignUpUseCase
+
 class AuthViewModelFactory(private val loginUseCase: LoginUseCase,
                            private val signUpUseCase: SignUpUseCase
 ) : ViewModelProvider.Factory {

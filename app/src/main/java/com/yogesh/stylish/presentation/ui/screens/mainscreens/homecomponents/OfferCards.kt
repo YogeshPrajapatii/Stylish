@@ -27,7 +27,7 @@ fun OfferCards() {
 
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
 
-            Image(painter = painterResource(id = R.drawable.profile_icon),
+            Image(painter = painterResource(id = R.drawable.ic_google),
                 contentDescription = "Special Offers",
                 modifier = Modifier.size(40.dp))
             Spacer(modifier = Modifier.width(16.dp))

@@ -29,7 +29,7 @@ fun FootwaresCard() {
         shape = RoundedCornerShape(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             // Left Image
-            Image(painter = painterResource(id = R.drawable.profile_icon),
+            Image(painter = painterResource(id = R.drawable.img_profile_pic),
                 contentDescription = "Heels",
                 modifier = Modifier.size(120.dp))
             // Right Column with Text and Button

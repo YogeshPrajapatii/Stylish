@@ -6,7 +6,7 @@ plugins {
     id("kotlinx-serialization")
     alias(libs.plugins.google.dagger.hilt.android) // <-- Ab ye kaam karega
     kotlin("kapt")
-    
+
 }
 
 android {
@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.google.material)
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     // Jetpack Lifecycle
 
 
@@ -71,8 +73,8 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
-    
-    
+
+
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

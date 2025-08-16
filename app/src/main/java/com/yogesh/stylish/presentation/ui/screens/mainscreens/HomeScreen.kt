@@ -14,7 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.*
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.CategoryChipsRow
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.FootwaresCard
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.HomeAppBar
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.MyBottomBar
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ProductsRow
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.PromoBanner
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SearchAndFilterSection
 
 @Composable
 fun HomeScreen(

@@ -34,6 +34,7 @@ class SplashViewModel(
 
     // Private mutable state that holds the navigation decision. Only the ViewModel can change it.
     private val _startupDestination = MutableStateFlow<StartupDestination?>(null)
+
     // Public immutable state that the UI can observe to react to changes.
     val startupDestination: StateFlow<StartupDestination?> = _startupDestination
 

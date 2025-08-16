@@ -1,4 +1,4 @@
-package com.yogesh.stylish.ui.theme
+package com.yogesh.stylish.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
