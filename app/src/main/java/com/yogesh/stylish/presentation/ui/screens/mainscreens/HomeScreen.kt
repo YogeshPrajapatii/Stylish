@@ -25,8 +25,10 @@ import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.Sea
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    viewModel: HomeViewModel = hiltViewModel()
-) {
+
+    ) {
+
+    val viewModel: HomeViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
 
     Scaffold(

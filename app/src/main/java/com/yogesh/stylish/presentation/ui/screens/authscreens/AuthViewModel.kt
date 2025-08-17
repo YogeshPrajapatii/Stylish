@@ -5,11 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.yogesh.stylish.domain.usecase.LoginUseCase
 import com.yogesh.stylish.domain.usecase.SignUpUseCase
 import com.yogesh.stylish.domain.util.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel(private val loginUseCase: LoginUseCase, private val signUpUseCase: SignUpUseCase
+@HiltViewModel
+class AuthViewModel @Inject constructor(private val loginUseCase: LoginUseCase,
+                                        private val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
 
     private val _authState = MutableStateFlow<Result<String>>(Result.Ideal)

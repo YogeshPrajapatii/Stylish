@@ -39,12 +39,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.yogesh.stylish.R
-import com.yogesh.stylish.data.repositoryimp.AuthRepositoryImp
-import com.yogesh.stylish.domain.usecase.LoginUseCase
-import com.yogesh.stylish.domain.usecase.SignUpUseCase
 import com.yogesh.stylish.domain.util.Result
 import com.yogesh.stylish.presentation.navigation.Routes
 import com.yogesh.stylish.presentation.ui.theme.Stylish
@@ -57,11 +54,7 @@ fun SignUp(navController: NavHostController) {
     val context = LocalContext.current
 
     // 📝 AuthViewModel ko factory ke through initialize kar rahe hain
-    val authViewModel: AuthViewModel =
-        viewModel(factory = AuthViewModelFactory(
-            loginUseCase = LoginUseCase(AuthRepositoryImp()),
-            signUpUseCase = SignUpUseCase(AuthRepositoryImp())
-        ))
+    val authViewModel: AuthViewModel = hiltViewModel()
 
     // 📝 UI ke liye mutable state variables
     var userId by rememberSaveable { mutableStateOf("") }

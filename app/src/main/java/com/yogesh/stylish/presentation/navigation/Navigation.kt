@@ -14,20 +14,20 @@ import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding1
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding2
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding3
 import com.yogesh.stylish.presentation.ui.screens.splashscreen.Splash
-import com.yogesh.stylish.presentation.ui.screens.splashscreen.SplashViewModel
 
 @Composable
-fun Navigation(viewModel: SplashViewModel) {
+fun Navigation() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Routes.Splash) {
 
         composable<Routes.Splash> {
-
-            Splash(navController = navController, viewModel)
+            Splash(navController = navController)
         }
 
-        composable<Routes.OnBoarding1> { OnBoarding1(navController) }
+        composable<Routes.OnBoarding1> {
+            OnBoarding1(navController)
+        }
         composable<Routes.OnBoarding2> { OnBoarding2(navController) }
         composable<Routes.OnBoarding3> { OnBoarding3(navController) }
         composable<Routes.SignUp> { SignUp(navController) }

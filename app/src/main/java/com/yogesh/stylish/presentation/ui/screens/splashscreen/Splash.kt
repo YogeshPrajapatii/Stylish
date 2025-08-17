@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.yogesh.stylish.R
 import com.yogesh.stylish.presentation.navigation.Routes
@@ -16,8 +17,9 @@ import com.yogesh.stylish.presentation.navigation.Routes
 @Composable
 fun Splash(
     navController: NavController,
-    splashViewModel: SplashViewModel
 ) {
+
+    val splashViewModel: SplashViewModel = hiltViewModel()
     val destination by splashViewModel.startupDestination.collectAsState()
 
     LaunchedEffect(destination) {

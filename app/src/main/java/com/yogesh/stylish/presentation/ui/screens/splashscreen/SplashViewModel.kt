@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yogesh.stylish.domain.repository.AuthRepository
 import com.yogesh.stylish.domain.usecase.ReadOnboardingStatusUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Represents the possible navigation destinations from the splash screen.
@@ -27,7 +29,8 @@ sealed class StartupDestination {
  * @param readOnboardingStatusUseCase UseCase to check if onboarding is completed.
  * @param authRepository Repository to check the current user's login status.
  */
-class SplashViewModel(
+@HiltViewModel
+class SplashViewModel @Inject constructor(
     private val readOnboardingStatusUseCase: ReadOnboardingStatusUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {

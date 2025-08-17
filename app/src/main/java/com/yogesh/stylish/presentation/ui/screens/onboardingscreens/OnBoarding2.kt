@@ -18,29 +18,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.yogesh.stylish.R
-import com.yogesh.stylish.data.local.UserPreferenceManager
-import com.yogesh.stylish.data.repositoryimp.UserPreferenceRepositoryImp
-import com.yogesh.stylish.domain.usecase.SaveOnboardingStatusUseCase
 import com.yogesh.stylish.presentation.navigation.Routes
 
 @Composable
 fun OnBoarding2(navController: NavHostController) {
 
-    // ViewModel ko yahan bhi waise hi initialize karein
-    val context = LocalContext.current
-    val userPreferenceManager = UserPreferenceManager(context)
-    val userPrefRepo = UserPreferenceRepositoryImp(userPreferenceManager)
-    val saveUseCase = SaveOnboardingStatusUseCase(userPrefRepo)
-    val factory = OnboardingViewModelFactory(saveUseCase)
-    val onboardingViewModel: OnboardingViewModel = viewModel(factory = factory)
+    val onboardingViewModel: OnboardingViewModel = hiltViewModel()
 
     Column(modifier = Modifier
         .fillMaxSize()
