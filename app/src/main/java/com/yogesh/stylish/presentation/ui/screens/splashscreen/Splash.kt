@@ -21,7 +21,6 @@ fun Splash(
 
     val splashViewModel: SplashViewModel = hiltViewModel()
     val destination by splashViewModel.startupDestination.collectAsState()
-
     LaunchedEffect(destination) {
         destination?.let {
             when (it) {

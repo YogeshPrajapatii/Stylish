@@ -1,6 +1,5 @@
 package com.yogesh.stylish.presentation.navigation
 
-
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,14 +25,31 @@ fun Navigation() {
         }
 
         composable<Routes.OnBoarding1> {
-            OnBoarding1(navController)
+            OnBoarding1(navController = navController)
         }
-        composable<Routes.OnBoarding2> { OnBoarding2(navController) }
-        composable<Routes.OnBoarding3> { OnBoarding3(navController) }
-        composable<Routes.SignUp> { SignUp(navController) }
-        composable<Routes.Login> { Login(navController) }
-        composable<Routes.ForgotPassword> { ForgotPassword(navController) }
-        composable<Routes.ResetPassword> { ResetPassword(navController) }
-        composable<Routes.HomeScreen> { HomeScreen(navController) }
+        composable<Routes.OnBoarding2> {
+            OnBoarding2(navController = navController)
+        }
+        composable<Routes.OnBoarding3> {
+            OnBoarding3(navController = navController)
+        }
+
+        composable<Routes.SignUp> {
+            SignUp(navController = navController)
+        }
+        composable<Routes.Login> {
+            Login(navController = navController)
+        }
+
+        composable<Routes.ForgotPassword> {
+            ForgotPassword(navController = navController)
+        }
+        composable<Routes.ResetPassword> {
+            ResetPassword(navController = navController)
+        }
+
+        composable<Routes.HomeScreen> {
+            HomeScreen(navController = navController)
+        }
     }
 }

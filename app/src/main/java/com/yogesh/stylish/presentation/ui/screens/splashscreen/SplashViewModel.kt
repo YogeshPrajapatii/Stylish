@@ -21,14 +21,6 @@ sealed class StartupDestination {
     object Login : StartupDestination()
 }
 
-/**
- * ViewModel for the Splash screen.
- * Its primary job is to determine the initial navigation route for the user
- * based on their onboarding completion and authentication status.
- *
- * @param readOnboardingStatusUseCase UseCase to check if onboarding is completed.
- * @param authRepository Repository to check the current user's login status.
- */
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val readOnboardingStatusUseCase: ReadOnboardingStatusUseCase,

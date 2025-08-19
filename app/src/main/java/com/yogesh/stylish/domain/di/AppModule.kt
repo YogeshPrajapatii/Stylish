@@ -55,49 +55,49 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesGetProductByIdUseCase(repository: ProductRepository): GetProductByIdUseCase {
+    fun provideGetProductByIdUseCase(repository: ProductRepository): GetProductByIdUseCase {
         return GetProductByIdUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun providesAuthRepository(): AuthRepository {
+    fun provideAuthRepository(): AuthRepository {
         return AuthRepositoryImp()
     }
 
     @Provides
     @Singleton
-    fun providesLoginUseCase(repository: AuthRepository): LoginUseCase {
+    fun provideLoginUseCase(repository: AuthRepository): LoginUseCase {
         return LoginUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun providesSignUpUseCase(repository: AuthRepository): SignUpUseCase {
+    fun provideSignUpUseCase(repository: AuthRepository): SignUpUseCase {
         return SignUpUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun providesUserPreferencesManager(@ApplicationContext context: Context): UserPreferenceManager {
+    fun provideUserPreferencesManager(@ApplicationContext context: Context): UserPreferenceManager {
         return UserPreferenceManager(context)
     }
 
     @Provides
     @Singleton
-    fun providesUserPreferencesRepository(manager: UserPreferenceManager): UserPreferenceRepository {
+    fun provideUserPreferencesRepository(manager: UserPreferenceManager): UserPreferenceRepository {
         return UserPreferenceRepositoryImp(manager)
     }
 
     @Provides
     @Singleton
-    fun providesSaveOnboardingStatusUseCase(repository: UserPreferenceRepository): SaveOnboardingStatusUseCase {
+    fun provideSaveOnboardingStatusUseCase(repository: UserPreferenceRepository): SaveOnboardingStatusUseCase {
         return SaveOnboardingStatusUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun providesReadOnboardingStatusUseCase(repository: UserPreferenceRepository):
+    fun provideReadOnboardingStatusUseCase(repository: UserPreferenceRepository):
             ReadOnboardingStatusUseCase {
         return ReadOnboardingStatusUseCase(repository)
     }

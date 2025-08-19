@@ -8,13 +8,11 @@ import com.yogesh.stylish.presentation.navigation.Navigation
 import com.yogesh.stylish.presentation.ui.theme.MyFirstComposeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint // <-- Ye annotation zaroori hai
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
             MyFirstComposeAppTheme {
                 Navigation()

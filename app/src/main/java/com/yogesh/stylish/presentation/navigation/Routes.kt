@@ -3,31 +3,31 @@ package com.yogesh.stylish.presentation.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Routes {
+sealed interface Routes {
     @Serializable
-    object Splash : Routes()
+    data object Splash : Routes
 
     @Serializable
-    object OnBoarding1 : Routes()
+    data object OnBoarding1 : Routes
 
     @Serializable
-    object OnBoarding2 : Routes()
+    data object OnBoarding2 : Routes
 
     @Serializable
-    object OnBoarding3 : Routes()
+    data object OnBoarding3 : Routes
 
     @Serializable
-    object SignUp : Routes()
+    data object SignUp : Routes
 
     @Serializable
-    object Login : Routes()
+    data object Login : Routes
 
     @Serializable
-    object ForgotPassword : Routes()
+    data object ForgotPassword : Routes
 
     @Serializable
-    object HomeScreen : Routes()
+    data object HomeScreen : Routes
 
     @Serializable
-    object ResetPassword : Routes()
+    data object ResetPassword : Routes
 }

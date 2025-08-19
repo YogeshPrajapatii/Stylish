@@ -12,8 +12,7 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val saveOnboardingStatusUseCase: SaveOnboardingStatusUseCase
 ) : ViewModel() {
-
-    // Ye function hum UI se call karenge
+    
     fun onOnboardingFinished() {
         viewModelScope.launch {
             saveOnboardingStatusUseCase()
