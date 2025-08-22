@@ -17,9 +17,9 @@ import com.yogesh.stylish.presentation.navigation.Routes
 @Composable
 fun Splash(
     navController: NavController,
+    splashViewModel: SplashViewModel,
 ) {
-
-    val splashViewModel: SplashViewModel = hiltViewModel()
+    
     val destination by splashViewModel.startupDestination.collectAsState()
     LaunchedEffect(destination) {
         destination?.let {

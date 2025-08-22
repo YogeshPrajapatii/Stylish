@@ -1,6 +1,7 @@
 package com.yogesh.stylish.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -13,6 +14,7 @@ import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding1
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding2
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding3
 import com.yogesh.stylish.presentation.ui.screens.splashscreen.Splash
+import com.yogesh.stylish.presentation.ui.screens.splashscreen.SplashViewModel
 
 @Composable
 fun Navigation() {
@@ -21,7 +23,10 @@ fun Navigation() {
     NavHost(navController = navController, startDestination = Routes.Splash) {
 
         composable<Routes.Splash> {
-            Splash(navController = navController)
+            // Get the ViewModel here in the NavHost
+            val splashViewModel: SplashViewModel = hiltViewModel()
+            // Pass the instance down to the Splash screen
+            Splash(navController = navController, splashViewModel = splashViewModel)
         }
 
         composable<Routes.OnBoarding1> {

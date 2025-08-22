@@ -31,7 +31,7 @@ fun ProductsRow(
 
             items(items = products) { product ->
 
-                ProductCard(product = product, modifier = Modifier.width(160.dp)
+                ProductCard(product = product, modifier = Modifier.width(180.dp)
 
                 )
 

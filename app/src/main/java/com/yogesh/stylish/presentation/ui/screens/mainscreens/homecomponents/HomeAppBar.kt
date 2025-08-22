@@ -28,13 +28,15 @@ fun HomeAppBar() {
 
             Icon(painter = painterResource(id = R.drawable.ic_menu),
                 contentDescription = "Home " + "Menu",
-                modifier = Modifier.size(24.dp))
+                modifier = Modifier.size(36.dp))
 
         }
 
+        Spacer(modifier = Modifier.weight(1f))
+
         Image(painter = painterResource(id = R.drawable.img_app_logo),
             contentDescription = "App Logo",
-            modifier = Modifier.height(30.dp))
+            modifier = Modifier.height(32.dp))
 
         Spacer(modifier = Modifier.weight(1f))
 

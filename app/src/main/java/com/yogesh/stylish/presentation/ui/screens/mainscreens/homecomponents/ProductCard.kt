@@ -1,16 +1,20 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -32,10 +36,17 @@ fun ProductCard(product: Product, modifier: Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f), // This makes the image area a square
                 contentScale = ContentScale.Crop)
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(modifier = Modifier.padding(12.dp)) {
 
-                Text(text = product.title)
-                Text(text = "₹${product.price}")
+                Text(text = product.title,
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.height(48.dp)
+                    )
+                Spacer(modifier=Modifier.height(4.dp))
+                Text(text = "₹${product.price}",
+                    style = MaterialTheme.typography.bodyMedium)
 
             }
 
