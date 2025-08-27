@@ -31,29 +31,29 @@ class HomeViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+        _state.update { it.copy(isLoading = true) }
+
         getProducts()
         getCategories()
     }
 
     private fun getProducts() {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-
             when (val result = getProductsUseCase()) {
                 is Result.Success -> {
-                    _state.update {
-                        it.copy(products = result.data, error = null, isLoading = false)
+                    _state.update { currentState ->
+                        currentState.copy(
+                            products = result.data,
+                            isLoading = _state.value.categories.isEmpty()
+                        )
                     }
                 }
                 is Result.Failure -> {
-                    _state.update {
-                        it.copy(isLoading = false, error = result.message)
+                    _state.update { currentState ->
+                        currentState.copy(isLoading = false, error = result.message)
                     }
                 }
-                // Add this else block to handle Ideal and Loading
-                else -> {
-                    // We don't need to do anything for these states here
-                }
+                else -> { }
             }
         }
     }
@@ -68,19 +68,19 @@ class HomeViewModel @Inject constructor(
                             imageUrl = getImageUrlForCategory(categoryName)
                         )
                     }
-                    _state.update {
-                        it.copy(categories = categoryObjects, error = null)
+                    _state.update { currentState ->
+                        currentState.copy(
+                            categories = categoryObjects,
+                            isLoading = _state.value.products.isEmpty()
+                        )
                     }
                 }
                 is Result.Failure -> {
-                    _state.update {
-                        it.copy(error = result.message)
+                    _state.update { currentState ->
+                        currentState.copy(isLoading = false, error = result.message)
                     }
                 }
-                // Add this else block to handle Ideal and Loading
-                else -> {
-                    // We don't need to do anything for these states here
-                }
+                else -> {  }
             }
         }
     }

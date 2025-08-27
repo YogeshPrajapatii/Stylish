@@ -7,16 +7,20 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 class ProductApiService {
 
+    private val json = Json {
+        ignoreUnknownKeys = true
+    }
+
     private val client = HttpClient(Android) {
         install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-            })
+            json(json)
         }
     }
 
@@ -29,7 +33,10 @@ class ProductApiService {
 
     suspend fun getAllCategories(): List<String> {
         val url = "https://dummyjson.com/products/categories"
-        return client.get(url).body()
+        val response: HttpResponse = client.get(url)
+        val jsonString: String = response.bodyAsText()
+
+        return json.decodeFromString<List<String>>(jsonString)
     }
 
     suspend fun getProductById(id: Int): ProductDto {
