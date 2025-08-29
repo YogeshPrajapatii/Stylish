@@ -10,6 +10,7 @@ import com.yogesh.stylish.presentation.ui.screens.authscreens.Login
 import com.yogesh.stylish.presentation.ui.screens.authscreens.ResetPassword
 import com.yogesh.stylish.presentation.ui.screens.authscreens.SignUp
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.HomeScreen
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ProfileScreen
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding1
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding2
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding3
@@ -56,5 +57,14 @@ fun Navigation() {
         composable<Routes.HomeScreen> {
             HomeScreen(navController = navController)
         }
+        
+        composable <Routes.ProfileScreen>{
+
+            ProfileScreen(navController = navController)
+            
+        }
+
+
     }
 }
+
