@@ -1,4 +1,4 @@
-  
+   
 # Stylish - A Full-Stack E-commerce App 🛍️
 
 > **Status:** 🚧 In Development 🚧
