@@ -62,10 +62,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = getCategoriesUseCase()) {
                 is Result.Success -> {
-                    val categoryObjects = result.data.map { categoryName ->
+                    val categoryObjects = result.data.map { categoryDto ->
                         Category(
-                            name = categoryName,
-                            imageUrl = getImageUrlForCategory(categoryName)
+                            name = categoryDto.name,
+                            imageUrl = getImageUrlForCategory(categoryDto.name)
                         )
                     }
                     _state.update { currentState ->

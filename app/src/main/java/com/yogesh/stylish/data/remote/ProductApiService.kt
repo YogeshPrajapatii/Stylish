@@ -1,6 +1,7 @@
 package com.yogesh.stylish.data.remote
 
 import android.util.Log
+import com.yogesh.stylish.data.remote.dto.CategoryDto
 import com.yogesh.stylish.data.remote.dto.ProductDto
 import com.yogesh.stylish.data.remote.dto.ProductsResponseDto
 import io.ktor.client.HttpClient
@@ -45,20 +46,9 @@ class ProductApiService {
         }
     }
 
-    suspend fun getAllCategories(): List<String> {
+    suspend fun getAllCategories(): List<CategoryDto> {
         val url = "https://dummyjson.com/products/categories"
-
-        return try {
-            val response: HttpResponse = client.get(url)
-            val jsonString: String = response.bodyAsText()
-            val categories = json.decodeFromString<List<String>>(jsonString)
-
-            Log.d("SUCCESS", "getAllCategories SUCCESS: Decoded ${categories.size} categories")
-            categories
-        } catch (e: Exception) {
-            Log.e("FAIL", "getAllCategories FAILED: Error decoding categories", e)
-            emptyList()
-        }
+        return client.get(url).body()
     }
 
     suspend fun getProductById(id: Int): ProductDto {

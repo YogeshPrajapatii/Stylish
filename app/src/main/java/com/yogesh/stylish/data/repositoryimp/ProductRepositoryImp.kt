@@ -1,6 +1,7 @@
 package com.yogesh.stylish.data.repositoryimp
 
 import com.yogesh.stylish.data.remote.ProductApiService
+import com.yogesh.stylish.data.remote.dto.CategoryDto
 import com.yogesh.stylish.data.remote.dto.ProductDto
 import com.yogesh.stylish.domain.model.Product
 import com.yogesh.stylish.domain.repository.ProductRepository
@@ -20,7 +21,7 @@ class ProductRepositoryImpl(
         }
     }
 
-    override suspend fun getAllCategories(): Result<List<String>> {
+    override suspend fun getAllCategories(): Result<List<CategoryDto>> {
         return try {
             val categories = apiService.getAllCategories()
             Result.Success(categories)
