@@ -15,10 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -37,6 +41,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -61,6 +67,7 @@ fun Login(navController: NavHostController) {
     var password by rememberSaveable { mutableStateOf("") }
     var showError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     // Auth State ko observe kar rahe hain ViewModel se
     val authState by authViewModel.authState.collectAsState()
@@ -111,7 +118,7 @@ fun Login(navController: NavHostController) {
                     textAlign = TextAlign.Start,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp))
+                        .padding(start = 8.dp))
 
                 // Username / Email TextField
                 OutlinedTextField(value = userId,
@@ -123,7 +130,20 @@ fun Login(navController: NavHostController) {
                 OutlinedTextField(value = password,
                     onValueChange = { password = it },
                     label = { Text("Password") },
-                    modifier = Modifier.fillMaxWidth())
+                    modifier = Modifier.fillMaxWidth(),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+
+                    trailingIcon = {
+                        val image = if (passwordVisible) Icons.Filled.Visibility
+                        else Icons.Filled.VisibilityOff
+
+                        val description = if (passwordVisible) "Hide password" else "Show password"
+
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(imageVector = image, contentDescription = description)
+                        }
+
+                    })
 
                 // Forgot Password Text
                 Text("Forgot Password?",
@@ -163,7 +183,7 @@ fun Login(navController: NavHostController) {
                 Row(modifier = Modifier
                     .padding(vertical = 16.dp)
                     .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically) {
                     SocialLoginButton(R.drawable.ic_google, "Google")
                     SocialLoginButton(R.drawable.ic_apple, "Apple")
@@ -188,6 +208,6 @@ fun SocialLoginButton(iconRes: Int, contentDescription: String) {
     IconButton(onClick = { /* TODO: Social login logic */ }) {
         Image(painter = painterResource(id = iconRes),
             contentDescription = contentDescription,
-            modifier = Modifier.size(40.dp))
+            modifier = Modifier.size(32.dp))
     }
 }

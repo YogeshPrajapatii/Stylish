@@ -1,6 +1,5 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,83 +15,69 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.CategoryChipsRow
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.FootwaresCard
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.HomeAppBar
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.MyBottomBar
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ProductsRow
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.PromoBanner
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SearchAndFilterSection
 
+
+// HomeScreen.kt
+
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-
-    ) {
-
+) {
     val viewModel: HomeViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
 
-    Log.d("DEBUG", "HomeScreen: ${state.categories}")
-
     Scaffold(
-        topBar = { HomeAppBar() },
-        bottomBar = { MyBottomBar(navController) }
+
+        topBar = { HomeAppBar() }, bottomBar = { MyBottomBar(navController) }
+
     ) { innerPadding ->
 
-        // Handle the Loading state
-        if (state.isLoading && state.products.isEmpty()) {
+
+        if (state.isLoading) {
             Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+                // padding lagayein taaki loading icon bhi top/bottom bar ke neeche aaye
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
+                // Yahan par hum baad mein Shimmer Effect laga sakte hain
             }
         }
-
-        // Handle the Error state
-        state.error?.let { errorMessage ->
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = errorMessage)
+        // Yadi koi error hai...
+        else if (state.error != null) {
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+                contentAlignment = Alignment.Center) {
+                Text(text = state.error!!)
             }
         }
-
-        // When data is available, show the main content
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
-
-            item { SearchAndFilterSection() }
-
-            // Pass the real categories list to the component
-            item {
-                CategoryChipsRow(
-                    categories = state.categories,
-                    onCategoryClick = {}
-                )
-            }
-
-            item { PromoBanner() }
-
-            // Pass the real products list to the component
-            item {
-                ProductsRow(
-                    title = "Deal of the Day",
-                    products = state.products, // Using real data from the state!
-                    onViewAllClicked = {}
-                )
-            }
-
-            item { FootwaresCard() }
-
-            // Example of reusing ProductsRow with filtered data
-            item {
-                val trendingProducts = state.products.filter { it.rating > 4.5 }
-                ProductsRow(
-                    title = "Trending Products",
-                    products = trendingProducts,
-                    onViewAllClicked = {}
-                )
+        // Yadi sab theek hai aur data aa chuka hai...
+        else {
+            LazyColumn(modifier = Modifier.padding(innerPadding)) {
+                item { SearchAndFilterSection() }
+                item {
+                    CategoryChipsRow(categories = state.categories, onCategoryClick = {})
+                }
+                item { PromoBanner() }
+                item {
+                    ProductsRow(title = "Deal of the Day",
+                        products = state.products,
+                        onViewAllClicked = {})
+                }
+                // item { FootwaresCard() } // Yaad rakhein, agle step mein ise hatana hai
+                item {
+                    val trendingProducts = state.products.filter { it.rating > 4.5 }
+                    ProductsRow(title = "Trending Products",
+                        products = trendingProducts,
+                        onViewAllClicked = {})
+                }
             }
         }
     }

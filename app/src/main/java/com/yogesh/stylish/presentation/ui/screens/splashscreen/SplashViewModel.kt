@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yogesh.stylish.domain.repository.AuthRepository
 import com.yogesh.stylish.domain.usecase.ReadOnboardingStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -47,24 +48,24 @@ class SplashViewModel @Inject constructor(
      */
     private fun checkStartupDestination() {
         viewModelScope.launch {
-            // 1. Check if the user has completed the onboarding process.
-            // We use .first() to get only the first value emitted by the Flow.
+            // Step 1: Faisla karein ki kahan jaana hai aur use 'destination' variable mein store karein
             val isOnboardingCompleted = readOnboardingStatusUseCase().first()
 
-            // 2. The Decision Tree logic.
-            if (!isOnboardingCompleted) {
-                // If onboarding is not complete, set the destination to Onboarding.
-                _startupDestination.value = StartupDestination.Onboarding
+            val destination = if (!isOnboardingCompleted) {
+                StartupDestination.Onboarding
             } else {
-                // 3. If onboarding is complete, check the user's login status from Firebase Auth cache.
                 if (authRepository.getCurrentUser() != null) {
-                    // If user is logged in, set the destination to Home.
-                    _startupDestination.value = StartupDestination.Home
+                    StartupDestination.Home
                 } else {
-                    // If user is not logged in, set the destination to Login.
-                    _startupDestination.value = StartupDestination.Login
+                    StartupDestination.Login
                 }
             }
+
+            // Step 2: Kam se kam 2.5 second ka intezaar karein
+            delay(1800L) 
+
+            // Step 3: Ab, intezaar ke baad, state ko update karein taaki UI navigate kar sake
+            _startupDestination.value = destination
         }
     }
 }

@@ -15,10 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -37,6 +41,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,8 +65,13 @@ fun SignUp(navController: NavHostController) {
     // 📝 UI ke liye mutable state variables
     var userId by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var confirmPassword by rememberSaveable { mutableStateOf("") }
+
     var showError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+    var passwordVisibleSignUp by rememberSaveable { mutableStateOf(false) }
+    var confirmPasswordVisibleSignUp by rememberSaveable { mutableStateOf(false) }
+
 
     // 📝 ViewModel se authState observe kar rahe hain
     val authState by authViewModel.authState.collectAsState()
@@ -93,67 +104,96 @@ fun SignUp(navController: NavHostController) {
 
     Scaffold(content = {
         // 🔥 Box for vertical centering of screen content
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp)
-                .windowInsetsPadding(WindowInsets.statusBars),
-            contentAlignment = Alignment.Center
-        ) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+            .windowInsetsPadding(WindowInsets.statusBars), contentAlignment = Alignment.Center) {
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
+            Column(modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp) // 📝 Standard vertical spacing
             ) {
 
                 // 📝 Heading Text
-                Text(
-                    text = "Create an\nAccount",
+                Text(text = "Create an\nAccount",
                     style = MaterialTheme.typography.headlineLarge,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp)
-                )
+                        .padding(start = 8.dp))
 
                 // 📝 Username / Email TextField
-                OutlinedTextField(
-                    value = userId,
+                OutlinedTextField(value = userId,
                     onValueChange = { userId = it },
                     label = { Text("Username or Email") },
-                    modifier = Modifier.fillMaxWidth()
-                )
+                    modifier = Modifier.fillMaxWidth())
 
                 // 📝 Password TextField
-                OutlinedTextField(
-                    value = password,
+                OutlinedTextField(value = password,
                     onValueChange = { password = it },
                     label = { Text("Password") },
-                    modifier = Modifier.fillMaxWidth()
-                )
+                    modifier = Modifier.fillMaxWidth(),
+                    visualTransformation = if (passwordVisibleSignUp) VisualTransformation.None else PasswordVisualTransformation(),
+
+                    trailingIcon = {
+                        val image = if (passwordVisibleSignUp) Icons.Filled.Visibility
+                        else Icons.Filled.VisibilityOff
+
+                        val description =
+                            if (passwordVisibleSignUp) "Hide password" else "Show password"
+
+                        IconButton(onClick = { passwordVisibleSignUp = !passwordVisibleSignUp }) {
+                            Icon(imageVector = image, contentDescription = description)
+                        }
+
+                    })
+
+                // 📝 Password TextField
+                OutlinedTextField(value = confirmPassword,
+                    onValueChange = { confirmPassword = it },
+                    label = { Text("Confirm Password") },
+                    modifier = Modifier.fillMaxWidth(),
+                    visualTransformation = if (confirmPasswordVisibleSignUp) VisualTransformation.None else PasswordVisualTransformation(),
+
+                    trailingIcon = {
+                        val image = if (confirmPasswordVisibleSignUp) Icons.Filled.Visibility
+                        else Icons.Filled.VisibilityOff
+
+                        val description =
+                            if (confirmPasswordVisibleSignUp) "Hide password" else "Show password"
+
+                        IconButton(onClick = {
+                            confirmPasswordVisibleSignUp = !confirmPasswordVisibleSignUp
+                        }) {
+                            Icon(imageVector = image, contentDescription = description)
+                        }
+
+                    })
 
                 // 📝 Sign Up Button with loading indicator
-                Button(
-                    onClick = {
-                        if (userId.isNotBlank() && password.isNotBlank()) {
+                Button(onClick = {
+                    if (userId.isNotBlank() && password.isNotBlank()) {
+                        if (password == confirmPassword) {
                             authViewModel.signup(userId, password)
                         } else {
-                            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT)
+
+                            Toast.makeText(context, "Password do not match !", Toast.LENGTH_SHORT)
                                 .show()
+
                         }
-                    },
+                    } else {
+                        Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                    }
+                },
                     colors = ButtonDefaults.buttonColors(containerColor = Stylish),
                     modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.small // 🔲 Rectangle button corners
                 ) {
                     if (isLoading) {
                         // 📝 Show loader while signup API is working
-                        CircularProgressIndicator(
-                            color = Color.White,
+                        CircularProgressIndicator(color = Color.White,
                             modifier = Modifier.size(20.dp),
-                            strokeWidth = 2.dp
-                        )
+                            strokeWidth = 2.dp)
                     } else {
                         Text("Sign Up")
                     }
@@ -163,47 +203,35 @@ fun SignUp(navController: NavHostController) {
                 Text("- or continue with -", style = MaterialTheme.typography.bodyLarge)
 
                 // 📝 Social Login Row (Google, Apple, Facebook)
-                Row(
-                    modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row(modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp,
+                        Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = { /* TODO: Google login */ }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_google),
+                        Image(painter = painterResource(id = R.drawable.ic_google),
                             contentDescription = "Google Logo",
-                            modifier = Modifier.size(40.dp)
-                        )
+                            modifier = Modifier.size(32.dp))
                     }
                     IconButton(onClick = { /* TODO: Apple login */ }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_apple),
+                        Image(painter = painterResource(id = R.drawable.ic_apple),
                             contentDescription = "Apple Logo",
-                            modifier = Modifier.size(40.dp)
-                        )
+                            modifier = Modifier.size(32.dp))
                     }
                     IconButton(onClick = { /* TODO: Facebook login */ }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_facebook),
+                        Image(painter = painterResource(id = R.drawable.ic_facebook),
                             contentDescription = "Facebook Logo",
-                            modifier = Modifier.size(40.dp)
-                        )
+                            modifier = Modifier.size(32.dp))
                     }
                 }
 
                 // 📝 Navigation to Login Screen
                 Row {
                     Text("I already have an account, ", style = MaterialTheme.typography.bodyLarge)
-                    Text(
-                        "Login",
-                        modifier = Modifier.clickable {
-                            navController.navigate(Routes.Login)
-                        },
-                        color = Color.Blue,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                    Text("Login", modifier = Modifier.clickable {
+                        navController.navigate(Routes.Login)
+                    }, color = Color.Blue, style = MaterialTheme.typography.bodyLarge)
                 }
             }
         }
