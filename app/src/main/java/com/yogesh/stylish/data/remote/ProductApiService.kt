@@ -46,9 +46,24 @@ class ProductApiService {
         }
     }
 
-    suspend fun getAllCategories(): List<CategoryDto> {
+  /*  suspend fun getAllCategories(): List<CategoryDto> {
         val url = "https://dummyjson.com/products/categories"
         return client.get(url).body()
+    }*/
+    
+    suspend fun getAllCategories(): List<CategoryDto> {
+        val url = "https://dummyjson.com/products/categories"
+        return try {
+            val categories = client.get(url).body<List<CategoryDto>>()
+            Log.d("SUCCESS", "getAllCategories SUCCESS : FETCHED  ${categories.size} CATEGORIES ")
+            Log.d(TAG, "First category item from API: ${categories.firstOrNull()}")
+            categories
+        }catch (e: Exception){
+            Log.e(TAG, "getAllCategories FAILED: Error fetching categories", e)
+            emptyList()
+        }
+        
+        
     }
 
     suspend fun getProductById(id: Int): ProductDto {

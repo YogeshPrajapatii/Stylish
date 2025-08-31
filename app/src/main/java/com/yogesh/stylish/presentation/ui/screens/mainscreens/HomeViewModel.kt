@@ -14,17 +14,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class HomeScreenState(
-    val isLoading: Boolean = true,
-    val products: List<Product> = emptyList(),
-    val categories: List<Category> = emptyList(),
-    val error: String? = null
+data class HomeScreenState(val isLoading: Boolean = true,
+                           val products: List<Product> = emptyList(),
+                           val categories: List<Category> = emptyList(),
+                           val error: String? = null
 )
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val getProductsUseCase: GetProductsUseCase,
-    private val getCategoriesUseCase: GetCategoriesUseCase
+class HomeViewModel @Inject constructor(private val getProductsUseCase: GetProductsUseCase,
+                                        private val getCategoriesUseCase: GetCategoriesUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeScreenState())
@@ -42,18 +40,18 @@ class HomeViewModel @Inject constructor(
             when (val result = getProductsUseCase()) {
                 is Result.Success -> {
                     _state.update { currentState ->
-                        currentState.copy(
-                            products = result.data,
-                            isLoading = _state.value.categories.isEmpty()
-                        )
+                        currentState.copy(products = result.data,
+                            isLoading = _state.value.categories.isEmpty())
                     }
                 }
+
                 is Result.Failure -> {
                     _state.update { currentState ->
                         currentState.copy(isLoading = false, error = result.message)
                     }
                 }
-                else -> { }
+
+                else -> {}
             }
         }
     }
@@ -63,37 +61,60 @@ class HomeViewModel @Inject constructor(
             when (val result = getCategoriesUseCase()) {
                 is Result.Success -> {
                     val categoryObjects = result.data.map { categoryDto ->
-                        Category(
-                            name = categoryDto.name,
-                            imageUrl = getImageUrlForCategory(categoryDto.name)
-                        )
+
+                        val categoryNameForCheck = categoryDto.name.lowercase()
+
+                        Category(name = categoryDto.name,
+                            imageUrl = getImageUrlForCategory(categoryNameForCheck))
                     }
                     _state.update { currentState ->
-                        currentState.copy(
-                            categories = categoryObjects,
-                            isLoading = _state.value.products.isEmpty()
-                        )
+                        currentState.copy(categories = categoryObjects,
+                            isLoading = _state.value.products.isEmpty())
                     }
                 }
+
                 is Result.Failure -> {
                     _state.update { currentState ->
                         currentState.copy(isLoading = false, error = result.message)
                     }
                 }
-                else -> {  }
+
+                else -> {}
             }
         }
     }
 
+
     private fun getImageUrlForCategory(categoryName: String): String {
-        return when (categoryName) {
-            "smartphones" -> "https://cdn.dummyjson.com/product-images/2/thumbnail.jpg"
-            "laptops" -> "https://cdn.dummyjson.com/product-images/6/thumbnail.png"
-            "fragrances" -> "https://cdn.dummyjson.com/product-images/11/thumbnail.jpg"
-            "skincare" -> "https://cdn.dummyjson.com/product-images/16/thumbnail.jpg"
-            "groceries" -> "https://cdn.dummyjson.com/product-images/21/thumbnail.png"
-            "home-decoration" -> "https://cdn.dummyjson.com/product-images/26/thumbnail.jpg"
-            else -> "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg"
+
+        return when (categoryName.lowercase()) {
+            "beauty" -> "https://picsum.photos/id/1/200"
+            "fragrances" -> "https://picsum.photos/id/9/200"
+            "furniture" -> "https://picsum.photos/id/21/200"
+            "groceries" -> "https://picsum.photos/id/25/200"
+            "home-decoration" -> "https://picsum.photos/id/20/200"
+            "kitchen-accessories" -> "https://picsum.photos/id/30/200"
+            "laptops" -> "https://picsum.photos/id/2/200"
+            "mens-shirts" -> "https://picsum.photos/id/45/200"
+            "mens-shoes" -> "https://picsum.photos/id/48/200"
+            "mens-watches" -> "https://picsum.photos/id/51/200"
+            "mobile-accessories" -> "https://picsum.photos/id/55/200"
+            "motorcycle" -> "https://picsum.photos/id/61/200"
+            "skin-care" -> "https://picsum.photos/id/12/200"
+            "smartphones" -> "https://picsum.photos/id/4/200"
+            "sports-accessories" -> "https://picsum.photos/id/66/200"
+            "sunglasses" -> "https://picsum.photos/id/71/200"
+            "tablets" -> "https://picsum.photos/id/75/200"
+            "tops" -> "https://picsum.photos/id/31/200"
+            "vehicle" -> "https://picsum.photos/id/81/200"
+            "womens-bags" -> "https://picsum.photos/id/85/200"
+            "womens-dresses" -> "https://picsum.photos/id/35/200"
+            "womens-jewellery" -> "https://picsum.photos/id/90/200"
+            "womens-shoes" -> "https://picsum.photos/id/41/200"
+            "womens-watches" -> "https://picsum.photos/id/95/200"
+            else -> "https://picsum.photos/id/50/200" // Default image
+
+
         }
     }
 }
