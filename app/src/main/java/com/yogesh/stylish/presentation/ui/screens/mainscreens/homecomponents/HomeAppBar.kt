@@ -1,11 +1,8 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,36 +19,26 @@ import com.yogesh.stylish.R
 @Composable
 fun HomeAppBar() {
     CenterAlignedTopAppBar(
-        modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
 
 
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
         title = {
-            Image(
-                painter = painterResource(id = R.drawable.img_app_logo),
+            Image(painter = painterResource(id = R.drawable.img_app_logo),
                 contentDescription = "App Logo",
-                modifier = Modifier.height(32.dp)
-            )
+                modifier = Modifier.height(32.dp))
         },
         navigationIcon = {
             IconButton(onClick = {}) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_menu),
+                Icon(painter = painterResource(id = R.drawable.ic_menu),
                     contentDescription = "Menu",
-                    modifier = Modifier.size(40.dp)
-                )
+                    modifier = Modifier.size(40.dp))
             }
         },
         actions = {
             IconButton(onClick = {}) {
-                Icon(
-                    painter = painterResource(id = R.drawable.img_profile_pic),
+                Icon(painter = painterResource(id = R.drawable.img_profile_pic),
                     contentDescription = "Profile Logo",
-                    modifier = Modifier.size(36.dp)
-                )
+                    modifier = Modifier.size(36.dp))
             }
-        }
-    )
+        })
 }
