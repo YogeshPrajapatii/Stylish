@@ -50,7 +50,6 @@ import androidx.navigation.NavHostController
 import com.yogesh.stylish.R
 import com.yogesh.stylish.domain.util.Result
 import com.yogesh.stylish.presentation.navigation.Routes
-import com.yogesh.stylish.presentation.ui.theme.Stylish
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -162,7 +161,7 @@ fun Login(navController: NavHostController) {
                         Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
                     }
                 },
-                    colors = ButtonDefaults.buttonColors(containerColor = Stylish),
+                    colors = ButtonDefaults.elevatedButtonColors(containerColor = MaterialTheme.colorScheme.primary),
                     modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.small // 👈 Rectangle corners
                 ) {
@@ -183,7 +182,8 @@ fun Login(navController: NavHostController) {
                 Row(modifier = Modifier
                     .padding(vertical = 16.dp)
                     .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp,
+                        Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically) {
                     SocialLoginButton(R.drawable.ic_google, "Google")
                     SocialLoginButton(R.drawable.ic_apple, "Apple")

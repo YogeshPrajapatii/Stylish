@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.yogesh.stylish.presentation.navigation.Routes
-import com.yogesh.stylish.presentation.ui.theme.Stylish
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +70,7 @@ fun ForgotPassword(navController: NavHostController) {
 
             ElevatedButton(
                 onClick = { navController.navigate(Routes.ResetPassword) },
-                colors = ButtonDefaults.elevatedButtonColors(containerColor = Stylish),
+                colors = ButtonDefaults.elevatedButtonColors(containerColor = MaterialTheme.colorScheme.primary),
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Submit", style = MaterialTheme.typography.headlineSmall)

@@ -50,7 +50,6 @@ import androidx.navigation.NavHostController
 import com.yogesh.stylish.R
 import com.yogesh.stylish.domain.util.Result
 import com.yogesh.stylish.presentation.navigation.Routes
-import com.yogesh.stylish.presentation.ui.theme.Stylish
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -185,7 +184,7 @@ fun SignUp(navController: NavHostController) {
                         Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
                     }
                 },
-                    colors = ButtonDefaults.buttonColors(containerColor = Stylish),
+                    colors = ButtonDefaults.elevatedButtonColors(containerColor = MaterialTheme.colorScheme.primary),
                     modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.small // 🔲 Rectangle button corners
                 ) {

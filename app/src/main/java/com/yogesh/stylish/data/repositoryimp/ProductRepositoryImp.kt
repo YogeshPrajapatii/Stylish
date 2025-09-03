@@ -54,7 +54,7 @@ private fun ProductDto.toDomainProduct(): Product {
         thumbnail = this.thumbnail,
         stock = 0,
         brand = "",
-        category = "",
+        category = this.category,
         images = emptyList()
     )
 }

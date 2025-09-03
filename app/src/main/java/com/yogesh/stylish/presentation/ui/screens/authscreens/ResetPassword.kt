@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.yogesh.stylish.presentation.navigation.Routes
-import com.yogesh.stylish.presentation.ui.theme.Stylish
 
 @Composable
 fun ResetPassword(navController: NavHostController) {
@@ -85,7 +84,7 @@ fun ResetPassword(navController: NavHostController) {
 
 
         },
-            colors = ButtonDefaults.elevatedButtonColors(containerColor = Stylish),
+            colors = ButtonDefaults.elevatedButtonColors(containerColor = MaterialTheme.colorScheme.primary),
             modifier = Modifier.fillMaxWidth()) {
             Text("Change Password", style = MaterialTheme.typography.titleLarge)
         }

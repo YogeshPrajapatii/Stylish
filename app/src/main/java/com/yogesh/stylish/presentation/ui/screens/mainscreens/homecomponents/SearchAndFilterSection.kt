@@ -1,6 +1,5 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,10 +8,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -40,22 +42,29 @@ fun SearchAndFilterSection() {
         OutlinedTextField(value = searchText, onValueChange = {
             searchText = it
         }, modifier = Modifier.fillMaxWidth(), placeholder = { Text("Search...") }, leadingIcon = {
-            Icon(Icons.Default.Search, contentDescription = "Search Icon ")
+            Icon(Icons.Default.Search, contentDescription = "Search Icon ", tint = MaterialTheme.colorScheme.onSurface)
         }, trailingIcon = {
             IconButton(onClick = {}) {
                 Icon(painter = painterResource(id = R.drawable.ic_mic),
-                    contentDescription = "Mic Icon")
+                    contentDescription = "Mic Icon", tint = MaterialTheme.colorScheme.onSurface)
             }
-        })
+        },
+            shape = CircleShape)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Row(modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
-            Text("All Featured", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text("All Featured",
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.Bold
+              )
+            Spacer(modifier = Modifier.weight(1f))
 
-            OutlinedButton(onClick = {}) {
+            OutlinedButton(onClick = {}, shape = CircleShape,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface 
+                )) {
 
                 Icon(painter = painterResource(id = R.drawable.ic_sort),
                     contentDescription = "Sort Icon",
@@ -63,16 +72,21 @@ fun SearchAndFilterSection() {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Sort")
             }
+            Spacer(modifier = Modifier.width(8.dp))
 
-            OutlinedButton(onClick = {}) {
+            OutlinedButton(onClick = {}, shape = CircleShape,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface 
+                )) {
 
                 Icon(painter = painterResource(id = R.drawable.ic_filter),
                     contentDescription = "Filter Icon",
                     modifier = Modifier.size(18.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+
                 Text("Filter")
             }
         }
 
     }
-
 }

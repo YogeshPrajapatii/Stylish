@@ -32,8 +32,7 @@ class ProductApiService {
     }
 
     suspend fun getAllProducts(): ProductsResponseDto {
-        val url =
-            "https://dummyjson.com/products?limit=30&select=id,title,price,thumbnail,rating,discountPercentage,description"
+        val url ="https://dummyjson.com/products?limit=0"
 
         return try {
             val response = client.get(url).body<ProductsResponseDto>()

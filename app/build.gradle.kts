@@ -58,6 +58,8 @@ dependencies {
 
     implementation(libs.androidx.material.icons.extended)
 
+    implementation(libs.shimmer)
+
     // Navigation
     implementation(libs.androidx.navigation.compose)
 

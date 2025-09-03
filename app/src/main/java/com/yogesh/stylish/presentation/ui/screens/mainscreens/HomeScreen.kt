@@ -1,25 +1,38 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.CategoryChipsRow
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.FootwaresCard
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.HomeAppBar
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.HorizontalProductList
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.MyBottomBar
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.OfferCards
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ProductsRow
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.PromoBanner
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SearchAndFilterSection
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ShimmerEffect
+
 
 
 // HomeScreen.kt
@@ -31,6 +44,14 @@ fun HomeScreen(
     val viewModel: HomeViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
 
+    LaunchedEffect(state.products) {
+        if (state.products.isNotEmpty()) {
+            val allCategoriesInProducts = state.products.map { it.category }.toSet()
+            Log.d("HomeScreen_Debug",
+                "API se products mein yeh categories aayi hain: $allCategoriesInProducts")
+        }
+    }
+
     Scaffold(
 
         topBar = { HomeAppBar() }, bottomBar = { MyBottomBar(navController) }
@@ -39,28 +60,20 @@ fun HomeScreen(
 
 
         if (state.isLoading) {
-            Box(
-                // padding lagayein taaki loading icon bhi top/bottom bar ke neeche aaye
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-                // Yahan par hum baad mein Shimmer Effect laga sakte hain
+
+            Box(modifier = Modifier.padding(innerPadding)) {
+                ShimmerEffect()
             }
-        }
-        // Yadi koi error hai...
-        else if (state.error != null) {
+        } else if (state.error != null) {
             Box(modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
                 contentAlignment = Alignment.Center) {
                 Text(text = state.error!!)
             }
-        }
-        // Yadi sab theek hai aur data aa chuka hai...
-        else {
-            LazyColumn(modifier = Modifier.padding(innerPadding)) {
+        } else {
+            LazyColumn(modifier = Modifier.padding(innerPadding),
+                verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 item { SearchAndFilterSection() }
                 item {
                     CategoryChipsRow(categories = state.categories, onCategoryClick = {})
@@ -69,16 +82,40 @@ fun HomeScreen(
                 item {
                     ProductsRow(title = "Deal of the Day",
                         products = state.products,
-                        onViewAllClicked = {})
+                        onViewAllClicked = {},
+                        subtitle = "22h 55m 20s remaining",
+                        icon = Icons.Default.Schedule,
+                        headerContainerColor = Color(0xFFE3F2FD), // Light Blue
+                        headerContentColor = Color(0xFF1565C0)  // Dark Blue
+                    )
                 }
-                // item { FootwaresCard() } // Yaad rakhein, agle step mein ise hatana hai
+                item { OfferCards() }
                 item {
-                    val trendingProducts = state.products.filter { it.rating > 4.5 }
-                    ProductsRow(title = "Trending Products",
-                        products = trendingProducts,
-                        onViewAllClicked = {})
+                    val offerProducts = state.products.filter { it.discountPercentage > 15 }
+                        .sortedByDescending { it.discountPercentage }
+                    HorizontalProductList(offerProducts)
                 }
+            
+            item { FootwaresCard() }
+            item {
+                val footwearProducts = state.products.filter { product ->
+                    product.category == "mens-shoes" || product.category == "womens-shoes"
+                }
+                HorizontalProductList(products = footwearProducts)
+            }
+
+            item {
+                val trendingProducts = state.products.filter { it.rating > 4.5 }
+                ProductsRow(title = "Trending Products",
+                    products = trendingProducts,
+                    onViewAllClicked = {},
+                    subtitle = "Last Date 29/02/22",
+                    icon = Icons.Default.DateRange,
+                    headerContainerColor = Color(0xFFFFEBEE), // Light Red
+                    headerContentColor = Color(0xFFC62828)  // Dark Red
+                )
             }
         }
     }
+}
 }
