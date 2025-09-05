@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import com.yogesh.stylish.presentation.navigation.Routes
@@ -62,14 +63,13 @@ fun MyBottomBar(navController: NavController) {
 
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
-    NavigationBar() {
+    NavigationBar( containerColor = Color.White) {
         bottomNavItems.forEachIndexed { index, item ->
             NavigationBarItem(selected = selectedItemIndex == index,
                 onClick = {
                     selectedItemIndex = index
-                    // TODO: Abhi sab HomeScreen par jaa rahe hain, baad mein sahi route par bhejenge
+                   
                     navController.navigate(item.route) {
-                        // Backstack ko a_che se manage karne ke liye
                         popUpTo(navController.graph.startDestinationId)
                         launchSingleTop = true
                     }

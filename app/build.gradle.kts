@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.yogesh.stylish"
-    compileSdk = 34 // Using a stable SDK version
+    compileSdk = 35 
 
     defaultConfig {
         applicationId = "com.yogesh.stylish"
         minSdk = 31
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -56,7 +56,7 @@ dependencies {
 
     implementation ("com.google.android.material:material:1.12.0")
 
-    implementation(libs.androidx.material.icons.extended)
+    implementation("androidx.compose.material:material-icons-extended:1.6.7")
 
     implementation(libs.shimmer)
 

@@ -48,7 +48,6 @@ class SplashViewModel @Inject constructor(
      */
     private fun checkStartupDestination() {
         viewModelScope.launch {
-            // Step 1: Faisla karein ki kahan jaana hai aur use 'destination' variable mein store karein
             val isOnboardingCompleted = readOnboardingStatusUseCase().first()
 
             val destination = if (!isOnboardingCompleted) {
@@ -61,10 +60,10 @@ class SplashViewModel @Inject constructor(
                 }
             }
 
-            // Step 2: Kam se kam 2.5 second ka intezaar karein
-            delay(1800L) 
+            
+            delay(1000L) 
 
-            // Step 3: Ab, intezaar ke baad, state ko update karein taaki UI navigate kar sake
+         
             _startupDestination.value = destination
         }
     }

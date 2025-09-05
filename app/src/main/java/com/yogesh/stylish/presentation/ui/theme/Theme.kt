@@ -12,11 +12,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-// Light Color Scheme (Din ke mode ke liye)
 private val LightColorScheme = lightColorScheme(
     primary = StylishRed,
     onPrimary = White,
-    primaryContainer = Color(0xFFFFEBEE), // Laal ka halka shade
+    primaryContainer = Color(0xFFFFEBEE), 
     onPrimaryContainer = StylishRed,
     secondary = StylishGray,
     onSecondary = White,
@@ -24,10 +23,12 @@ private val LightColorScheme = lightColorScheme(
     onBackground = StylishBlack,
     surface = White,
     onSurface = StylishBlack,
-    onSurfaceVariant = StylishGray // Secondary text/icons ke liye
-)
+    onSurfaceVariant = StylishGray,
+/*
+   surfaceTintColor = White 
+*/
+    )
 
-// Dark Color Scheme (Raat ke mode ke liye - abhi ke liye basic)
 private val DarkColorScheme = darkColorScheme(
     primary = StylishRed,
     onPrimary = White,
@@ -44,7 +45,6 @@ fun MyFirstComposeAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    // Sahi color scheme chunein
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(

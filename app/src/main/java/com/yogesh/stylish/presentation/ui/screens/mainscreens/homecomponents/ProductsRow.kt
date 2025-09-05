@@ -17,8 +17,7 @@ import com.yogesh.stylish.domain.model.Product
 fun ProductsRow(
     title: String,
     products: List<Product>,
-    onViewAllClicked: () -> Unit,
-    // Naye parameters
+    onViewAllClicked: () -> Unit, 
     subtitle: String? = null,
     icon: ImageVector? = null,
     headerContainerColor: Color,

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,51 +30,48 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
-import com.yogesh.stylish.presentation.ui.theme.StylishRed
+import com.yogesh.stylish.presentation.ui.theme.FigmaRed // 👈 Naya color import karein
 
 @Composable
 fun FootwaresCard() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(160.dp) // 1. Card ko ek consistent, aakarshak height di
+            .height(160.dp)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface) // 2. Figma jaisa safed background
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
-            // 3. Row ko poori height di
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier.fillMaxSize()
+                .clip(RoundedCornerShape(16.dp)), 
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Left Side: Image aur Decorative pattern ke liye Box
             Box(
                 modifier = Modifier
+                    .width(12.dp)
                     .fillMaxHeight()
-                    .weight(1f), // Dono hisson ko barabar jagah di
+                    .background(Color(0xFFFFD180)) // Golden/Yellow color
+            )
+
+            Box(
+                modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                // Decorative Pattern (Peeche)
-                Image(
-                    painter = painterResource(id = R.drawable.ic_deco_pattern),
-                    contentDescription = null,
-                    modifier = Modifier.align(Alignment.CenterStart).fillMaxHeight()
-                )
-                // Heels ki Image (Upar)
+               
                 Image(
                     painter = painterResource(id = R.drawable.ic_heels),
-                    contentDescription = "Heels"
+                    contentDescription = "Heels",
+                    modifier = Modifier.size(130.dp)
                 )
             }
 
-            // Right Column (Text aur Button ke liye)
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.Center, // Content ko vertically center kiya
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .padding(end = 16.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Flat and Heels",
@@ -83,12 +81,12 @@ fun FootwaresCard() {
                 Text(
                     text = "Stand a chance to get rewarded",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = { },
-                    colors = ButtonDefaults.buttonColors(containerColor = StylishRed),
+                    colors = ButtonDefaults.buttonColors(containerColor = FigmaRed),
                     shape = RoundedCornerShape(25)
                 ) {
                     Text(text = "Visit now ->")

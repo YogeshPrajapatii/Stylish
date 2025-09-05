@@ -7,17 +7,9 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -31,57 +23,29 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+/**
+ * This ShimmerEffect's shapes and sizes now accurately match the HomeScreen UI.
+ */
 @Composable
 fun ShimmerEffect() {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(top = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp) // Same spacing as HomeScreen
     ) {
         // 1. Placeholder for SearchAndFilterSection
         item {
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                ShimmerItem(modifier = Modifier.fillMaxWidth().height(56.dp), cornerRadius = 28.dp)
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    ShimmerItem(height = 24.dp, width = 120.dp, cornerRadius = 8.dp)
-                    Spacer(modifier = Modifier.weight(1f))
-                    ShimmerItem(height = 40.dp, width = 80.dp, cornerRadius = 20.dp)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    ShimmerItem(height = 40.dp, width = 80.dp, cornerRadius = 20.dp)
-                }
-            }
+            Spacer(modifier = Modifier.height(8.dp)) // Added top spacing
+            SearchAndFilterPlaceholder()
         }
 
         // 2. Placeholder for CategoryChipsRow
         item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                repeat(5) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        ShimmerItem(size = 64.dp, shape = CircleShape)
-                        ShimmerItem(height = 12.dp, width = 50.dp, cornerRadius = 4.dp)
-                    }
-                }
-            }
+            CategoryChipsPlaceholder()
         }
 
         // 3. Placeholder for PromoBanner
         item {
-            ShimmerItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .padding(horizontal = 16.dp),
-                cornerRadius = 16.dp
-            )
+            PromoBannerPlaceholder()
         }
 
         // 4. Placeholder for "Deal of the Day" ProductsRow
@@ -91,95 +55,154 @@ fun ShimmerEffect() {
 
         // 5. Placeholder for OfferCards
         item {
-            ShimmerItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .padding(horizontal = 16.dp),
-                cornerRadius = 16.dp
-            )
+            OfferCardsPlaceholder()
         }
 
-        // 6. Placeholder for FootwaresCard
+        // 6. Placeholder for HorizontalProductList (Offers)
         item {
-            ShimmerItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(160.dp)
-                    .padding(horizontal = 16.dp),
-                cornerRadius = 16.dp
-            )
+            HorizontalProductListPlaceholder()
         }
 
-        // 7. Placeholder for HorizontalProductList (Footwear)
+        // 7. Placeholder for FootwaresCard
         item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                repeat(2) {
-                    ShimmerItem(
-                        modifier = Modifier.width(180.dp).height(280.dp),
-                        cornerRadius = 12.dp
-                    )
-                }
-            }
+            FootwaresCardPlaceholder()
         }
 
+        // 8. Placeholder for HorizontalProductList (Footwear)
+        item {
+            HorizontalProductListPlaceholder()
+        }
 
-        // 8. Placeholder for "Trending Products" ProductsRow
+        // 9. Placeholder for "Trending Products" ProductsRow
         item {
             ProductRowPlaceholder()
         }
     }
 }
 
-// ProductsRow ka placeholder banane ke liye ek alag Composable
+// --- Component Placeholders ---
+
 @Composable
-private fun ProductRowPlaceholder() {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        // Section Header Placeholder
-        ShimmerItem(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .padding(horizontal = 16.dp),
-            cornerRadius = 12.dp
-        )
-        // Product Cards Placeholder
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            ShimmerItem(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(280.dp),
-                cornerRadius = 12.dp
-            )
-            ShimmerItem(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(280.dp),
-                cornerRadius = 12.dp
-            )
+private fun SearchAndFilterPlaceholder() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .height(56.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        ShimmerItem(modifier = Modifier.weight(1f).height(56.dp), shape = RoundedCornerShape(28.dp))
+        ShimmerItem(modifier = Modifier.size(56.dp), shape = CircleShape)
+    }
+}
+
+@Composable
+private fun CategoryChipsPlaceholder() {
+    // CORRECTED: Using circular shapes for images and rectangles for text below.
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceAround // SpaceAround gives better distribution
+    ) {
+        repeat(5) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ShimmerItem(size = 64.dp, shape = CircleShape) // Corrected to CircleShape
+                ShimmerItem(height = 12.dp, width = 50.dp, shape = RoundedCornerShape(4.dp))
+            }
         }
     }
 }
 
-// Yeh helper component waisa hi hai, bas thoda saaf kiya hai
+@Composable
+private fun PromoBannerPlaceholder() {
+    ShimmerItem(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp)
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(16.dp)
+    )
+}
+
+@Composable
+private fun ProductRowPlaceholder() {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        // Section Header Placeholder - More accurate now
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                ShimmerItem(height = 20.dp, width = 150.dp, shape = RoundedCornerShape(6.dp))
+                ShimmerItem(height = 14.dp, width = 200.dp, shape = RoundedCornerShape(6.dp))
+            }
+            ShimmerItem(height = 16.dp, width = 60.dp, shape = RoundedCornerShape(6.dp))
+        }
+        HorizontalProductListPlaceholder()
+    }
+}
+
+@Composable
+private fun OfferCardsPlaceholder() {
+    ShimmerItem(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(16.dp)
+    )
+}
+
+@Composable
+private fun FootwaresCardPlaceholder() {
+    ShimmerItem(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(160.dp)
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(16.dp)
+    )
+}
+
+@Composable
+private fun HorizontalProductListPlaceholder() {
+    // CORRECTED: More accurate product card skeleton.
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(2) {
+            Column(modifier = Modifier.width(180.dp)) {
+                // Image part of the card
+                ShimmerItem(height = 124.dp, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
+                Spacer(modifier = Modifier.height(12.dp))
+                // Text lines part of the card
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ShimmerItem(height = 16.dp, modifier = Modifier.fillMaxWidth(0.9f), shape = RoundedCornerShape(4.dp))
+                    ShimmerItem(height = 14.dp, modifier = Modifier.fillMaxWidth(0.5f), shape = RoundedCornerShape(4.dp))
+                    ShimmerItem(height = 14.dp, modifier = Modifier.fillMaxWidth(0.7f), shape = RoundedCornerShape(4.dp))
+                }
+            }
+        }
+    }
+}
+
+
+// --- Base Shimmer Composable ---
 @Composable
 private fun ShimmerItem(
     modifier: Modifier = Modifier,
     height: Dp? = null,
     width: Dp? = null,
     size: Dp? = null,
-    cornerRadius: Dp = 0.dp,
-    shape: Shape = RoundedCornerShape(cornerRadius)
+    shape: Shape
 ) {
     val shimmerColors = listOf(
         Color.LightGray.copy(alpha = 0.6f),
@@ -194,7 +217,8 @@ private fun ShimmerItem(
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1200, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Reverse
-        ), label = "ShimmerAnim"
+        ),
+        label = "ShimmerAnim"
     )
 
     val brush = Brush.linearGradient(

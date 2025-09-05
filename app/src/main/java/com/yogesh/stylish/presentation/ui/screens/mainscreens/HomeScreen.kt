@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +31,6 @@ import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.Pro
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.PromoBanner
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SearchAndFilterSection
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ShimmerEffect
-
 
 
 // HomeScreen.kt
@@ -58,7 +56,7 @@ fun HomeScreen(
 
     ) { innerPadding ->
 
-
+        
         if (state.isLoading) {
 
             Box(modifier = Modifier.padding(innerPadding)) {
@@ -95,27 +93,27 @@ fun HomeScreen(
                         .sortedByDescending { it.discountPercentage }
                     HorizontalProductList(offerProducts)
                 }
-            
-            item { FootwaresCard() }
-            item {
-                val footwearProducts = state.products.filter { product ->
-                    product.category == "mens-shoes" || product.category == "womens-shoes"
-                }
-                HorizontalProductList(products = footwearProducts)
-            }
 
-            item {
-                val trendingProducts = state.products.filter { it.rating > 4.5 }
-                ProductsRow(title = "Trending Products",
-                    products = trendingProducts,
-                    onViewAllClicked = {},
-                    subtitle = "Last Date 29/02/22",
-                    icon = Icons.Default.DateRange,
-                    headerContainerColor = Color(0xFFFFEBEE), // Light Red
-                    headerContentColor = Color(0xFFC62828)  // Dark Red
-                )
+                item { FootwaresCard() }
+                item {
+                    val footwearProducts = state.products.filter { product ->
+                        product.category == "mens-shoes" || product.category == "womens-shoes"
+                    }
+                    HorizontalProductList(products = footwearProducts)
+                }
+
+                item {
+                    val trendingProducts = state.products.filter { it.rating > 4.5 }
+                    ProductsRow(title = "Trending Products",
+                        products = trendingProducts,
+                        onViewAllClicked = {},
+                        subtitle = "Last Date 29/02/22",
+                        icon = Icons.Default.DateRange,
+                        headerContainerColor = Color(0xFFFFEBEE), // Light Red
+                        headerContentColor = Color(0xFFC62828)  // Dark Red
+                    )
+                }
             }
         }
     }
-}
 }

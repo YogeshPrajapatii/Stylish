@@ -34,7 +34,7 @@ fun HomeAppBar() {
             IconButton(onClick = {}) {
                 Icon(painter = painterResource(id = R.drawable.ic_menu),
                     contentDescription = "Menu",
-                    modifier = Modifier.size(40.dp))
+                    modifier = Modifier.size(36.dp))
             }
         },
         actions = {
