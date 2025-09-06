@@ -32,6 +32,8 @@ import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.Pro
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.PromoBanner
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SearchAndFilterSection
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ShimmerEffect
+import com.yogesh.stylish.presentation.ui.theme.StylishRed
+import com.yogesh.stylish.presentation.ui.theme.White
 
 
 // HomeScreen.kt
@@ -85,8 +87,8 @@ fun HomeScreen(
                         onViewAllClicked = {},
                         subtitle = "22h 55m 20s remaining",
                         icon = Icons.Default.Schedule,
-                        headerContainerColor = Color(0xFFE3F2FD), // Light Blue
-                        headerContentColor = Color(0xFF1565C0)  // Dark Blue
+                        headerContainerColor = Color(0xFF2196F3), //  Blue
+                        headerContentColor = White  
                     )
                 }
                 item { OfferCards() }
@@ -111,8 +113,8 @@ fun HomeScreen(
                         onViewAllClicked = {},
                         subtitle = "Last Date 29/02/22",
                         icon = Icons.Default.DateRange,
-                        headerContainerColor = Color(0xFFFFEBEE), // Light Red
-                        headerContentColor = Color(0xFFC62828)  // Dark Red
+                        headerContainerColor = StylishRed, // Dark Red
+                        headerContentColor =White
                     )
                 }
             }

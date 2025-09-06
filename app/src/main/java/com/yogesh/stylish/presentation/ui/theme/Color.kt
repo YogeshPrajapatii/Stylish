@@ -14,3 +14,7 @@ val FigmaRed = Color(0xFFF83758)
 val LightCardBackground = Color(0xFFF0F4F8)
 
 val AccentCardBackground = Color(0xFFFFF7ED)
+
+val PromoCardBackground = Color(0xFFFDE7EA)
+
+val ProductCardWhite = Color(0xFFFFFFFF)

@@ -30,7 +30,7 @@ fun PromoBanner() {
     Card(modifier = Modifier
         .fillMaxWidth()
         .height(180.dp)
-        .padding(horizontal = 16.dp, vertical = 8.dp), shape = RoundedCornerShape(16.dp)) {
+        .padding(horizontal = 16.dp, vertical = 8.dp), shape = RoundedCornerShape(8.dp)) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
 
@@ -42,7 +42,7 @@ fun PromoBanner() {
                 .align(Alignment.CenterStart)
                 .padding(24.dp)) {
                 Text(text = "50-40% OFF",
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.ExtraBold,
                     color = Color.White)
                 Text(text = "Now in (product)\nAll colours",
@@ -54,7 +54,7 @@ fun PromoBanner() {
                     shape = RoundedCornerShape(25),
 
                     border = BorderStroke(1.5.dp, Color.White),
-                    contentPadding = PaddingValues(horizontal = 24.dp)) {
+                    contentPadding = PaddingValues(horizontal = 8.dp)) {
                     Text(text = "Shop Now ->", color = Color.White)
                 }
 
