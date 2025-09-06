@@ -60,6 +60,7 @@ fun SectionHeader(
                 }
             }
         }
+        Spacer(modifier = Modifier.width(4.dp))
 
         OutlinedButton(
             onClick = onViewAllClicked,

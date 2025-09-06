@@ -4,38 +4,13 @@ import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,188 +26,150 @@ import com.yogesh.stylish.R
 import com.yogesh.stylish.domain.util.Result
 import com.yogesh.stylish.presentation.navigation.Routes
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SignUp(navController: NavHostController) {
-
     val context = LocalContext.current
-
-    // 📝 AuthViewModel ko factory ke through initialize kar rahe hain
     val authViewModel: AuthViewModel = hiltViewModel()
-
-    // 📝 UI ke liye mutable state variables
     var userId by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
-
-    var showError by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf("") }
     var passwordVisibleSignUp by rememberSaveable { mutableStateOf(false) }
     var confirmPasswordVisibleSignUp by rememberSaveable { mutableStateOf(false) }
-
-
-    // 📝 ViewModel se authState observe kar rahe hain
     val authState by authViewModel.authState.collectAsState()
-    val isLoading = authState is Result.Loading // ✅ Loading indicator ka state
+    val isLoading = authState is Result.Loading
 
-    /**
-     * 🔥 LaunchedEffect ka use kar rahe hain taaki jaise hi authState change ho
-     * hum response ke hisaab se UI update kar saken
-     */
     LaunchedEffect(authState) {
         when (val currentState = authState) {
             is Result.Failure -> {
-                showError = true
-                errorMessage = currentState.message
-                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, currentState.message, Toast.LENGTH_SHORT).show()
             }
-
-            Result.Ideal, Result.Loading -> {
-                showError = false
-            }
-
             is Result.Success<*> -> {
-                // 📝 SignUp successful hone par HomeScreen pe navigate karo
                 navController.navigate(Routes.Login) {
-                    popUpTo(Routes.SignUp) { inclusive = true } // Backstack clear
+                    popUpTo(Routes.SignUp) { inclusive = true }
                 }
             }
+            else -> {}
         }
     }
 
-    Scaffold(content = {
-        // 🔥 Box for vertical centering of screen content
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp)
-            .windowInsetsPadding(WindowInsets.statusBars), contentAlignment = Alignment.Center) {
-
-            Column(modifier = Modifier.fillMaxWidth(),
+    Scaffold {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp)
+                .windowInsetsPadding(WindowInsets.statusBars),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp) // 📝 Standard vertical spacing
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
-                // 📝 Heading Text
-                Text(text = "Create an\nAccount",
+                Text(
+                    text = "Create an\nAccount",
                     style = MaterialTheme.typography.headlineLarge,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp))
+                    modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
+                )
 
-                // 📝 Username / Email TextField
-                OutlinedTextField(value = userId,
+                OutlinedTextField(
+                    value = userId,
                     onValueChange = { userId = it },
                     label = { Text("Username or Email") },
-                    modifier = Modifier.fillMaxWidth())
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-                // 📝 Password TextField
-                OutlinedTextField(value = password,
+                OutlinedTextField(
+                    value = password,
                     onValueChange = { password = it },
                     label = { Text("Password") },
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = if (passwordVisibleSignUp) VisualTransformation.None else PasswordVisualTransformation(),
-
                     trailingIcon = {
-                        val image = if (passwordVisibleSignUp) Icons.Filled.Visibility
-                        else Icons.Filled.VisibilityOff
-
-                        val description =
-                            if (passwordVisibleSignUp) "Hide password" else "Show password"
-
+                        val image = if (passwordVisibleSignUp) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val description = if (passwordVisibleSignUp) "Hide password" else "Show password"
                         IconButton(onClick = { passwordVisibleSignUp = !passwordVisibleSignUp }) {
                             Icon(imageVector = image, contentDescription = description)
                         }
+                    }
+                )
 
-                    })
-
-                // 📝 Password TextField
-                OutlinedTextField(value = confirmPassword,
+                OutlinedTextField(
+                    value = confirmPassword,
                     onValueChange = { confirmPassword = it },
                     label = { Text("Confirm Password") },
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = if (confirmPasswordVisibleSignUp) VisualTransformation.None else PasswordVisualTransformation(),
-
                     trailingIcon = {
-                        val image = if (confirmPasswordVisibleSignUp) Icons.Filled.Visibility
-                        else Icons.Filled.VisibilityOff
-
-                        val description =
-                            if (confirmPasswordVisibleSignUp) "Hide password" else "Show password"
-
-                        IconButton(onClick = {
-                            confirmPasswordVisibleSignUp = !confirmPasswordVisibleSignUp
-                        }) {
+                        val image = if (confirmPasswordVisibleSignUp) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val description = if (confirmPasswordVisibleSignUp) "Hide password" else "Show password"
+                        IconButton(onClick = { confirmPasswordVisibleSignUp = !confirmPasswordVisibleSignUp }) {
                             Icon(imageVector = image, contentDescription = description)
                         }
-
-                    })
-
-                // 📝 Sign Up Button with loading indicator
-                Button(onClick = {
-                    if (userId.isNotBlank() && password.isNotBlank()) {
-                        if (password == confirmPassword) {
-                            authViewModel.signup(userId, password)
-                        } else {
-
-                            Toast.makeText(context, "Password do not match !", Toast.LENGTH_SHORT)
-                                .show()
-
-                        }
-                    } else {
-                        Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
                     }
-                },
-                    colors = ButtonDefaults.elevatedButtonColors(containerColor = MaterialTheme.colorScheme.primary),
+                )
+
+                Button(
+                    onClick = {
+                        if (userId.isNotBlank() && password.isNotBlank()) {
+                            if (password == confirmPassword) {
+                                authViewModel.signup(userId, password)
+                            } else {
+                                Toast.makeText(context, "Passwords do not match!", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    // <-- FIX: Added contentColor = Color.White
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.White
+                    ),
                     modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.small // 🔲 Rectangle button corners
+                    shape = MaterialTheme.shapes.small
                 ) {
                     if (isLoading) {
-                        // 📝 Show loader while signup API is working
-                        CircularProgressIndicator(color = Color.White,
+                        CircularProgressIndicator(
+                            color = Color.White, // Ensure spinner is also white
                             modifier = Modifier.size(20.dp),
-                            strokeWidth = 2.dp)
+                            strokeWidth = 2.dp
+                        )
                     } else {
-                        Text("Sign Up")
+                        // FIX: Explicitly set text color to ensure visibility
+                        Text("Sign Up", color = Color.White)
                     }
                 }
 
-                // 📝 Divider Text
                 Text("- or continue with -", style = MaterialTheme.typography.bodyLarge)
 
-                // 📝 Social Login Row (Google, Apple, Facebook)
-                Row(modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp,
-                        Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     IconButton(onClick = { /* TODO: Google login */ }) {
-                        Image(painter = painterResource(id = R.drawable.ic_google),
-                            contentDescription = "Google Logo",
-                            modifier = Modifier.size(32.dp))
+                        Image(painter = painterResource(id = R.drawable.ic_google), contentDescription = "Google Logo", modifier = Modifier.size(32.dp))
                     }
                     IconButton(onClick = { /* TODO: Apple login */ }) {
-                        Image(painter = painterResource(id = R.drawable.ic_apple),
-                            contentDescription = "Apple Logo",
-                            modifier = Modifier.size(32.dp))
+                        Image(painter = painterResource(id = R.drawable.ic_apple), contentDescription = "Apple Logo", modifier = Modifier.size(32.dp))
                     }
                     IconButton(onClick = { /* TODO: Facebook login */ }) {
-                        Image(painter = painterResource(id = R.drawable.ic_facebook),
-                            contentDescription = "Facebook Logo",
-                            modifier = Modifier.size(32.dp))
+                        Image(painter = painterResource(id = R.drawable.ic_facebook), contentDescription = "Facebook Logo", modifier = Modifier.size(32.dp))
                     }
                 }
 
-                // 📝 Navigation to Login Screen
                 Row {
                     Text("I already have an account, ", style = MaterialTheme.typography.bodyLarge)
-                    Text("Login", modifier = Modifier.clickable {
-                        navController.navigate(Routes.Login)
-                    }, color = Color.Blue, style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        "Login",
+                        modifier = Modifier.clickable { navController.navigate(Routes.Login) },
+                        color = Color.Blue,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
             }
         }
-    })
-} 
+    }
+}

@@ -84,17 +84,13 @@ fun ShimmerEffect() {
 
 @Composable
 private fun SearchAndFilterPlaceholder() {
-    Row(
+    ShimmerItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .height(56.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        ShimmerItem(modifier = Modifier.weight(1f).height(56.dp), shape = RoundedCornerShape(28.dp))
-        ShimmerItem(modifier = Modifier.size(56.dp), shape = CircleShape)
-    }
+            .height(56.dp), // Height of your actual TextField
+        shape = RoundedCornerShape(12.dp) // <-- FIX: Less rounded corners, adjust as per your actual TextField
+    )
 }
 
 @Composable

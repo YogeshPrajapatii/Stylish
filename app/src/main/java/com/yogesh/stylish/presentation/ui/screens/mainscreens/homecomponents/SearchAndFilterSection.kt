@@ -1,5 +1,6 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
 
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,16 +9,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +29,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yogesh.stylish.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchAndFilterSection() {
     Column(modifier = Modifier
@@ -39,54 +43,79 @@ fun SearchAndFilterSection() {
 
         var searchText by rememberSaveable { mutableStateOf("") }
 
-        OutlinedTextField(value = searchText, onValueChange = {
-            searchText = it
-        }, modifier = Modifier.fillMaxWidth(), placeholder = { Text("Search...") }, leadingIcon = {
-            Icon(Icons.Default.Search, contentDescription = "Search Icon ", tint = MaterialTheme.colorScheme.onSurface)
-        }, trailingIcon = {
-            IconButton(onClick = {}) {
-                Icon(painter = painterResource(id = R.drawable.ic_mic),
-                    contentDescription = "Mic Icon", tint = MaterialTheme.colorScheme.onSurface)
-            }
-        },
-            shape = CircleShape)
+        OutlinedTextField(value = searchText,
+            onValueChange = { searchText = it },
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text("Search any Product..") },
+            leadingIcon = {
+                Icon(Icons.Default.Search,
+                    contentDescription = "Search Icon",
+                    tint = MaterialTheme.colorScheme.onSurface)
+            },
+            trailingIcon = {
+                IconButton(onClick = {}) {
+                    Icon(painter = painterResource(id = R.drawable.ic_mic),
+                        contentDescription = "Mic Icon",
+                        tint = MaterialTheme.colorScheme.onSurface)
+                }
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(15),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = MaterialTheme.colorScheme.outline, // Focus  border color
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline, // Unfocus  border color
+                cursorColor = MaterialTheme.colorScheme.onSurface, // Cursor color (Text color)
+                focusedLeadingIconColor = MaterialTheme.colorScheme.onSurface, // Focused leading icon color
+                unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface, // Unfocused leading icon color
+                focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface, // Focused trailing icon color
+                unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface, // Unfocused trailing icon color
+                focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), // Placeholder color
+                unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) // Placeholder color
+            ))
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text("All Featured",
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
-              )
-            Spacer(modifier = Modifier.weight(1f))
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f))
 
-            OutlinedButton(onClick = {}, shape = CircleShape,
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onSurface 
-                )) {
+            Spacer(modifier = Modifier.width(8.dp))
 
+            // Sort Button (Pill Shape)
+            OutlinedButton(onClick = { /* Handle sort click */ },
+                shape = RoundedCornerShape(percent = 15),
+                modifier = Modifier.height(36.dp),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp,
+                    vertical = 0.dp),
+                colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
                 Icon(painter = painterResource(id = R.drawable.ic_sort),
                     contentDescription = "Sort Icon",
                     modifier = Modifier.size(18.dp))
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(6.dp))
                 Text("Sort")
             }
-            Spacer(modifier = Modifier.width(8.dp))
 
-            OutlinedButton(onClick = {}, shape = CircleShape,
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onSurface 
-                )) {
+            Spacer(modifier = Modifier.width(12.dp))
 
+            OutlinedButton(onClick = { /* Handle sort click */ },
+                shape = RoundedCornerShape(percent = 15),
+                modifier = Modifier.height(36.dp),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp,
+                    vertical = 0.dp),
+
+                colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
                 Icon(painter = painterResource(id = R.drawable.ic_filter),
-                    contentDescription = "Filter Icon",
+                    contentDescription = "Sort Icon",
                     modifier = Modifier.size(18.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-
+                Spacer(modifier = Modifier.width(6.dp))
                 Text("Filter")
             }
-        }
 
+        }
     }
 }

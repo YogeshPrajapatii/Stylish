@@ -24,9 +24,7 @@ private val LightColorScheme = lightColorScheme(
     surface = White,
     onSurface = StylishBlack,
     onSurfaceVariant = StylishGray,
-/*
-   surfaceTintColor = White 
-*/
+    
     )
 
 private val DarkColorScheme = darkColorScheme(
@@ -45,7 +43,8 @@ fun MyFirstComposeAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    var colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    colorScheme = colorScheme.copy(surfaceTint = Color.Transparent)
 
     MaterialTheme(
         colorScheme = colorScheme,

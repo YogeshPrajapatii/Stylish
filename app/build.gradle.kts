@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.yogesh.stylish"
-    compileSdk = 35 
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.yogesh.stylish"
         minSdk = 31
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

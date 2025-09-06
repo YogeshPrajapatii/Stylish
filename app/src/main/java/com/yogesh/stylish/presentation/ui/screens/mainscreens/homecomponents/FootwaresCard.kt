@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
+import com.yogesh.stylish.presentation.ui.theme.AccentCardBackground
 import com.yogesh.stylish.presentation.ui.theme.FigmaRed // 👈 Naya color import karein
 
 @Composable
@@ -38,14 +39,14 @@ fun FootwaresCard() {
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 8.dp, vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = AccentCardBackground)
     ) {
         Row(
             modifier = Modifier.fillMaxSize()
-                .clip(RoundedCornerShape(16.dp)), 
+                .clip(RoundedCornerShape(5)), 
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -70,7 +71,7 @@ fun FootwaresCard() {
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 16.dp),
+                    .padding(end = 12.dp),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(

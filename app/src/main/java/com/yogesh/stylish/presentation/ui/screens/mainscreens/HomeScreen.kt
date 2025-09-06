@@ -1,6 +1,7 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,13 +47,14 @@ fun HomeScreen(
         if (state.products.isNotEmpty()) {
             val allCategoriesInProducts = state.products.map { it.category }.toSet()
             Log.d("HomeScreen_Debug",
-                "API se products mein yeh categories aayi hain: $allCategoriesInProducts")
+                "PRODUCT CATEGORIES THAT ARRIVED USING API: $allCategoriesInProducts")
         }
     }
 
     Scaffold(
 
-        topBar = { HomeAppBar() }, bottomBar = { MyBottomBar(navController) }
+        topBar = { HomeAppBar() }, bottomBar = { MyBottomBar(navController) },
+        containerColor = Color.White
 
     ) { innerPadding ->
 
@@ -70,8 +72,8 @@ fun HomeScreen(
                 Text(text = state.error!!)
             }
         } else {
-            LazyColumn(modifier = Modifier.padding(innerPadding),
-                verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            LazyColumn(modifier = Modifier.padding(innerPadding).background(Color.White),
+                verticalArrangement = Arrangement.spacedBy(2.dp) ) {
                 item { SearchAndFilterSection() }
                 item {
                     CategoryChipsRow(categories = state.categories, onCategoryClick = {})

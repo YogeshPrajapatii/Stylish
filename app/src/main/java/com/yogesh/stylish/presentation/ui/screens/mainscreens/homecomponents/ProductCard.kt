@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yogesh.stylish.domain.model.Product
+import com.yogesh.stylish.presentation.ui.theme.LightCardBackground
 import kotlin.math.roundToInt
 
 @Composable
@@ -34,7 +35,7 @@ fun ProductCard(product: Product, modifier: Modifier = Modifier
 ) {
     Card(modifier = modifier.padding(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp, pressedElevation = 0.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)) {
+        colors = CardDefaults.cardColors(containerColor = LightCardBackground)) {
         Column {
             AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(product.thumbnail)
                 .crossfade(true).build(),

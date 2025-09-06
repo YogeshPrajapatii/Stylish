@@ -2,6 +2,7 @@ package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -21,30 +22,30 @@ import com.yogesh.stylish.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeAppBar() {
-    CenterAlignedTopAppBar(
+    CenterAlignedTopAppBar(modifier = Modifier.height(70.dp),
 
 
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
-        title = {
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface, // Surface color
+            titleContentColor = MaterialTheme.colorScheme.onSurface, // Title  color (If Text Available)
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface, // Navigation icon  color
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface // Action icons  color
+        ), title = {
             Image(painter = painterResource(id = R.drawable.img_app_logo),
                 contentDescription = "App Logo",
-                modifier = Modifier.height(32.dp))
-        },
-        navigationIcon = {
-            IconButton(onClick = {}) {
+                modifier = Modifier.height(36.dp))
+        }, navigationIcon = {
+            IconButton(onClick = {}, modifier = Modifier.padding(start = 4.dp)) {
                 Icon(painter = painterResource(id = R.drawable.ic_menu),
                     contentDescription = "Menu",
-                    modifier = Modifier.size(36.dp))
+                    modifier = Modifier.size(28.dp))
             }
-        },
-        actions = {
-            Image(
-                painter = painterResource(id = R.drawable.img_profile_pic),
-                contentDescription = "Profile Logo",
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape), 
-                contentScale = ContentScale.Crop
-            )
+        }, actions = {
+            IconButton(onClick = {},modifier = Modifier.padding(end = 4.dp)) {
+                Image(painter = painterResource(R.drawable.img_profile_pic),
+                    contentDescription = "Profile Image",
+                    modifier = Modifier.size(32.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop)
+            }
         })
 }

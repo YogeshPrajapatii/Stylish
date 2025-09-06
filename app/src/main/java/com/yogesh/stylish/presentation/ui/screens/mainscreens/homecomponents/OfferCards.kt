@@ -22,20 +22,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
+import com.yogesh.stylish.presentation.ui.theme.AccentCardBackground
 
 @Composable
 fun OfferCards() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp) // 1. Card ko ek consistent, aakarshak height di
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .height(120.dp) 
+            .padding(horizontal = 10.dp, vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface) // 2. Figma jaisa safed background
+        colors = CardDefaults.cardColors(containerColor = AccentCardBackground) 
     ) {
         Row(
-            // 3. Row ko poori height di taaki content center mein aa sake
+           
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(horizontal = 16.dp),
