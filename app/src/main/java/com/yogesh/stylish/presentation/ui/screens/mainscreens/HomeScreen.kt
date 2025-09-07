@@ -1,10 +1,14 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -19,9 +23,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.yogesh.stylish.R
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.CategoryChipsRow
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.FootwaresCard
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.HomeAppBar
@@ -32,6 +39,8 @@ import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.Pro
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.PromoBanner
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SearchAndFilterSection
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ShimmerEffect
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SponsoredCard
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SummerSaleCard
 import com.yogesh.stylish.presentation.ui.theme.StylishRed
 import com.yogesh.stylish.presentation.ui.theme.White
 
@@ -117,6 +126,15 @@ fun HomeScreen(
                         headerContentColor =White
                     )
                 }
+
+                item {
+                    SummerSaleCard() 
+                }
+                item {
+                    SponsoredCard() 
+                }
+                item { Spacer(modifier = Modifier.height(6.dp))}
+                
             }
         }
     }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,18 +25,19 @@ import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
 import com.yogesh.stylish.presentation.ui.theme.AccentCardBackground
 import com.yogesh.stylish.presentation.ui.theme.PromoCardBackground
+import com.yogesh.stylish.presentation.ui.theme.PromoSolidBackground
+import com.yogesh.stylish.presentation.ui.theme.White
 
 @Composable
 fun OfferCards() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(120.dp) 
-            .padding(horizontal = 10.dp, vertical = 8.dp),
+    Surface(modifier = Modifier
+        .fillMaxWidth()
+        .height(120.dp)
+        .padding(horizontal = 10.dp, vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = PromoCardBackground) 
-    ) {
+        shadowElevation = 2.dp,
+        tonalElevation = 0.dp,
+        color = White){
         Row(
            
             modifier = Modifier

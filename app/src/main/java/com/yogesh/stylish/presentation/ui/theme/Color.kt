@@ -18,3 +18,7 @@ val AccentCardBackground = Color(0xFFFFF7ED)
 val PromoCardBackground = Color(0xFFFDE7EA)
 
 val ProductCardWhite = Color(0xFFFFFFFF)
+
+val ProductCardSolidBackground = Color(0xFFF9F9F9)
+
+val PromoSolidBackground = Color(0xFFFFB3BA)
