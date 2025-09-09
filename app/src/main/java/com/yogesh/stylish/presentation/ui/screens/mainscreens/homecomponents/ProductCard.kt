@@ -1,5 +1,6 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface // Import Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip // Add this import for clip
@@ -38,6 +40,9 @@ fun ProductCard(
     product: Product,
     modifier: Modifier = Modifier
 ) {
+
+  
+
     Surface(
         modifier = modifier
             .padding(8.dp)
@@ -85,11 +90,11 @@ fun ProductCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    val originalPrice =
-                        (product.price / (1 - product.discountPercentage / 100)).roundToInt()
+                    val newPrice = product.price * 10
 
+                    val originalPrice = (newPrice / (1 - product.discountPercentage / 100)).roundToInt()
                     Text(
-                        text = "₹${product.price.toInt()}",
+                        text = "₹${newPrice.toInt()}",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface

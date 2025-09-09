@@ -36,8 +36,11 @@ class ProductApiService {
 
         return try {
             val response = client.get(url).body<ProductsResponseDto>()
-    
-            Log.d("SUCCESS", "getAllProducts SUCCESS: Fetched ${response.products.size} products")
+
+            Log.d(TAG, "getAllProducts SUCCESS: Fetched ${response.products.size} products")
+            response.products.forEachIndexed { index, productDto ->
+                Log.d(TAG, "Product #$index: Title: ${productDto.title}, Raw Price: ${productDto.price}, Discount: ${productDto.discountPercentage}")
+            }
             response
         } catch (e: Exception) {
             Log.e("FAIL", "getAllProducts FAILED: Error fetching products", e)
@@ -45,10 +48,7 @@ class ProductApiService {
         }
     }
 
-  /*  suspend fun getAllCategories(): List<CategoryDto> {
-        val url = "https://dummyjson.com/products/categories"
-        return client.get(url).body()
-    }*/
+
     
     suspend fun getAllCategories(): List<CategoryDto> {
         val url = "https://dummyjson.com/products/categories"
