@@ -17,11 +17,12 @@ import com.yogesh.stylish.domain.model.Product
 fun ProductsRow(
     title: String,
     products: List<Product>,
-    onViewAllClicked: () -> Unit, 
+    onViewAllClicked: () -> Unit,
     subtitle: String? = null,
     icon: ImageVector? = null,
     headerContainerColor: Color,
-    headerContentColor: Color
+    headerContentColor: Color,
+    onProductClick: (Int) -> Unit
 ) {
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
         SectionHeader(
@@ -38,7 +39,8 @@ fun ProductsRow(
             items(items = products) { product ->
                 ProductCard(
                     product = product,
-                    modifier = Modifier.width(240.dp)
+                    modifier = Modifier.width(240.dp),
+                    onProductClick = onProductClick
                 )
             }
         }

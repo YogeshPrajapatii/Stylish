@@ -1,13 +1,11 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,12 +21,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.yogesh.stylish.R
+import com.yogesh.stylish.presentation.navigation.Routes
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.CategoryChipsRow
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.FootwaresCard
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.HomeAppBar
@@ -64,12 +60,13 @@ fun HomeScreen(
 
     Scaffold(
 
-        topBar = { HomeAppBar() }, bottomBar = { MyBottomBar(navController) },
+        topBar = { HomeAppBar() },
+        bottomBar = { MyBottomBar(navController) },
         containerColor = Color.White
 
     ) { innerPadding ->
 
-        
+
         if (state.isLoading) {
 
             Box(modifier = Modifier.padding(innerPadding)) {
@@ -83,8 +80,10 @@ fun HomeScreen(
                 Text(text = state.error!!)
             }
         } else {
-            LazyColumn(modifier = Modifier.padding(innerPadding).background(Color.White),
-                verticalArrangement = Arrangement.spacedBy(2.dp) ) {
+            LazyColumn(modifier = Modifier
+                .padding(innerPadding)
+                .background(Color.White),
+                verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 item { SearchAndFilterSection() }
                 item {
                     CategoryChipsRow(categories = state.categories, onCategoryClick = {})
@@ -97,14 +96,18 @@ fun HomeScreen(
                         subtitle = "22h 55m 20s remaining",
                         icon = Icons.Default.Schedule,
                         headerContainerColor = Color(0xFF2196F3), //  Blue
-                        headerContentColor = White  
-                    )
+                        headerContentColor = White,
+                        onProductClick = { productId ->
+                            navController.navigate(Routes.ProductDetailScreen(productId = productId))
+                        })
                 }
                 item { OfferCards() }
                 item {
                     val offerProducts = state.products.filter { it.discountPercentage > 15 }
                         .sortedByDescending { it.discountPercentage }
-                    HorizontalProductList(offerProducts)
+                    HorizontalProductList(offerProducts, onProductClick = { productId ->
+                        navController.navigate(Routes.ProductDetailScreen(productId = productId))
+                    })
                 }
 
                 item { FootwaresCard() }
@@ -112,7 +115,10 @@ fun HomeScreen(
                     val footwearProducts = state.products.filter { product ->
                         product.category == "mens-shoes" || product.category == "womens-shoes"
                     }
-                    HorizontalProductList(products = footwearProducts)
+                    HorizontalProductList(products = footwearProducts,
+                        onProductClick = { productId ->
+                            navController.navigate(Routes.ProductDetailScreen(productId = productId))
+                        })
                 }
 
                 item {
@@ -123,18 +129,20 @@ fun HomeScreen(
                         subtitle = "Last Date 29/02/22",
                         icon = Icons.Default.DateRange,
                         headerContainerColor = StylishRed, // Dark Red
-                        headerContentColor =White
-                    )
+                        headerContentColor = White,
+                        onProductClick = { productId ->
+                            navController.navigate(Routes.ProductDetailScreen(productId = productId))
+                        })
                 }
 
                 item {
-                    SummerSaleCard() 
+                    SummerSaleCard()
                 }
                 item {
-                    SponsoredCard() 
+                    SponsoredCard()
                 }
-                item { Spacer(modifier = Modifier.height(6.dp))}
-                
+                item { Spacer(modifier = Modifier.height(6.dp)) }
+
             }
         }
     }

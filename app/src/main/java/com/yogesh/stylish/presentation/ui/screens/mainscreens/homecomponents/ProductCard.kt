@@ -1,6 +1,7 @@
 package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,7 +39,8 @@ import kotlin.math.roundToInt
 @Composable
 fun ProductCard(
     product: Product,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onProductClick: (Int) -> Unit
 ) {
 
   
@@ -46,7 +48,8 @@ fun ProductCard(
     Surface(
         modifier = modifier
             .padding(8.dp)
-            .width(180.dp), 
+            .width(180.dp)
+            .clickable { onProductClick(product.id) }, 
         shape = RoundedCornerShape(12.dp), 
         shadowElevation = 2.dp, 
         tonalElevation = 0.dp,
