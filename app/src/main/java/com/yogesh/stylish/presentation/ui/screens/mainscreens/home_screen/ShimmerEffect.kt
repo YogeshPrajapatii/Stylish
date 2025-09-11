@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen
 
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.RepeatMode

@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.yogesh.stylish.R
 import com.yogesh.stylish.presentation.navigation.Routes
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.viewmodel.SplashViewModel
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.viewmodel.StartupDestination
 
 @Composable
 fun Splash(

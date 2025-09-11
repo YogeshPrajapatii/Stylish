@@ -1,6 +1,5 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface // Import Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip // Add this import for clip
@@ -32,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yogesh.stylish.domain.model.Product
-import com.yogesh.stylish.presentation.ui.theme.ProductCardSolidBackground // Assuming this is your desired White/Off-White
 import com.yogesh.stylish.presentation.ui.theme.White
 import kotlin.math.roundToInt
 

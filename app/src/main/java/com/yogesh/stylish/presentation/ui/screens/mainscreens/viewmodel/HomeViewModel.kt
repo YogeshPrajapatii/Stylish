@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

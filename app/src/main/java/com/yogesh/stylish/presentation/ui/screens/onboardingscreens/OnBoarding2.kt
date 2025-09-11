@@ -26,6 +26,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.yogesh.stylish.R
 import com.yogesh.stylish.presentation.navigation.Routes
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.viewmodel.OnboardingViewModel
 
 @Composable
 fun OnBoarding2(navController: NavHostController) {

@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,9 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
-import com.yogesh.stylish.presentation.ui.theme.AccentCardBackground
-import com.yogesh.stylish.presentation.ui.theme.PromoCardBackground
-import com.yogesh.stylish.presentation.ui.theme.PromoSolidBackground
 import com.yogesh.stylish.presentation.ui.theme.White
 
 @Composable

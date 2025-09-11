@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -25,18 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.yogesh.stylish.presentation.navigation.Routes
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.CategoryChipsRow
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.FootwaresCard
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.HomeAppBar
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.HorizontalProductList
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.MyBottomBar
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.OfferCards
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ProductsRow
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.PromoBanner
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SearchAndFilterSection
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.ShimmerEffect
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SponsoredCard
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents.SummerSaleCard
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.viewmodel.HomeViewModel
 import com.yogesh.stylish.presentation.ui.theme.StylishRed
 import com.yogesh.stylish.presentation.ui.theme.White
 

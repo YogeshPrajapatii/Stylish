@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.yogesh.stylish.R
 import com.yogesh.stylish.presentation.navigation.Routes
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.viewmodel.OnboardingViewModel
 
 @Composable
 fun OnBoarding3(navController: NavHostController) {

@@ -1,8 +1,7 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen
 
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,26 +15,25 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
-import com.yogesh.stylish.presentation.ui.theme.White 
+import com.yogesh.stylish.presentation.ui.theme.White
 
 @Composable
-fun SummerSaleCard(modifier: Modifier = Modifier) {
+fun SponsoredCard(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(260.dp) 
+            .height(280.dp) 
             .padding(horizontal = 10.dp, vertical = 8.dp), 
         shape = RoundedCornerShape(10.dp), 
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp), 
-        colors = CardDefaults.cardColors(containerColor = White) 
+        colors = CardDefaults.cardColors(containerColor = White)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.summer_sale_img),
-            contentDescription = "Hot Summer Sale",
+            painter = painterResource(id = R.drawable.supponserd_img), 
+            contentDescription = "Sponsored Offer",
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillWidth 
-          
+            contentScale = ContentScale.FillBounds 
+            
         )
-       
     }
 }

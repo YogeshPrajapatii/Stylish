@@ -1,22 +1,18 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
-import com.yogesh.stylish.presentation.ui.theme.AccentCardBackground // <-- NEW: AccentCardBackground import karein
-import com.yogesh.stylish.presentation.ui.theme.StylishRed // <-- NEW: StylishRed import karein
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

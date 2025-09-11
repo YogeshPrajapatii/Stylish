@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.ui.screens.mainscreens.homecomponents
+package com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -39,7 +39,6 @@ import com.yogesh.stylish.presentation.ui.theme.StylishBlack
 import com.yogesh.stylish.presentation.ui.theme.White
 import com.yogesh.stylish.presentation.ui.theme.StylishRed
 import androidx.compose.foundation.layout.fillMaxWidth // For the separator line
-import androidx.compose.ui.unit.Dp // For custom elevation
 
 // Data class for Bottom Navigation items, now using 'Routes' type
 data class BottomNavItem(
