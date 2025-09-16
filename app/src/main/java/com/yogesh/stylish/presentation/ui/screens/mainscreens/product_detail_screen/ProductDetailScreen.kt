@@ -22,13 +22,12 @@ import com.yogesh.stylish.presentation.ui.screens.mainscreens.viewmodel.ProductD
 import kotlin.math.roundToInt 
 
 @OptIn(ExperimentalMaterial3Api::class) 
-
-
 @Composable
 fun ProductDetailScreen(
     productId: Int, 
     navController: NavHostController,
     viewModel: ProductDetailViewModel = hiltViewModel() 
+    
 ) {
     val state by viewModel.state.collectAsState() 
 

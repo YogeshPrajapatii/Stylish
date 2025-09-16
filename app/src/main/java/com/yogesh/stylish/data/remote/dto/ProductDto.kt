@@ -11,5 +11,9 @@ data class ProductDto(
     val discountPercentage: Double,
     val rating: Double,
     val thumbnail: String,
-    val category: String
+    val category: String,
+    val stock: Int, 
+    val brand: String, 
+    val images: List<String> 
+
 )

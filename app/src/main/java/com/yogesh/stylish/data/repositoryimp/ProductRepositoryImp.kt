@@ -52,9 +52,9 @@ private fun ProductDto.toDomainProduct(): Product {
         discountPercentage = this.discountPercentage,
         rating = this.rating,
         thumbnail = this.thumbnail,
-        stock = 0,
-        brand = "",
+        stock = this.stock,
+        brand = this.brand,
         category = this.category,
-        images = emptyList()
-    )
-}
+        images = this.images,
+        sizes = null 
+    )}
