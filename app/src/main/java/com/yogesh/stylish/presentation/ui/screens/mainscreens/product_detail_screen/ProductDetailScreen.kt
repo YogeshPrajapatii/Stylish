@@ -33,6 +33,7 @@ fun ProductDetailScreen(
 
     LaunchedEffect(productId) {
         viewModel.getProductById(productId) 
+        
     }
 
     Scaffold(
