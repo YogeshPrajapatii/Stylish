@@ -8,4 +8,5 @@ data class ProductsResponseDto(
     val total: Int,
     val skip: Int,
     val limit: Int
+    
 )
