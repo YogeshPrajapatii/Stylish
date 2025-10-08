@@ -53,7 +53,7 @@ private fun ProductDto.toDomainProduct(): Product {
         rating = this.rating,
         thumbnail = this.thumbnail,
         stock = this.stock,
-        brand = this.brand,
+        brand = this.brand?: "Unknown" ,
         category = this.category,
         images = this.images,
         sizes = null 

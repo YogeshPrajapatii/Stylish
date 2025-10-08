@@ -13,7 +13,7 @@ data class ProductDto(
     val thumbnail: String,
     val category: String,
     val stock: Int, 
-    val brand: String, 
+    val brand: String? = null, 
     val images: List<String> 
 
 )

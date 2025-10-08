@@ -98,7 +98,7 @@ fun MyBottomBar(navController: NavController) {
 
         NavigationBar(
             containerColor = White, 
-            modifier = Modifier.height(62.dp),
+            modifier = Modifier.height(70.dp),
             tonalElevation = 2.dp 
         ) {
             bottomNavItems.forEachIndexed { index, item ->
