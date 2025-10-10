@@ -49,6 +49,8 @@ data class BottomNavItem(
 )
 
 // Define your bottom navigation items
+
+
 val bottomNavItems = listOf(
     BottomNavItem(
         label = "Home",
