@@ -12,6 +12,7 @@ import com.yogesh.stylish.presentation.ui.screens.authscreens.ResetPassword
 import com.yogesh.stylish.presentation.ui.screens.authscreens.SignUp
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen.HomeScreen
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen.ProfileScreen
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.product_detail_screen.ProductDetailScreen
 
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding1
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding2
@@ -64,6 +65,10 @@ fun Navigation() {
         
         composable <Routes.ProfileScreen>{
             ProfileScreen(navController = navController)
+        }
+
+        composable<Routes.ProductDetailScreen> {
+            ProductDetailScreen(navController = navController)
         }
 
 
