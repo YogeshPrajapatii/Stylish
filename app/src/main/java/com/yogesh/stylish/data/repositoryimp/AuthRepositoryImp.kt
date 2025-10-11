@@ -9,7 +9,7 @@ import com.yogesh.stylish.domain.util.Result
 import kotlinx.coroutines.tasks.await
 
 
-class AuthRepositoryImp : AuthRepository {
+class AuthRepositoryImp(firebaseAuth: FirebaseAuth) : AuthRepository {
     override suspend fun login(email: String, password: String): Result<String> {
 
         return try {
@@ -27,6 +27,17 @@ class AuthRepositoryImp : AuthRepository {
         } catch (e: Exception) {
             Result.Failure(e.message ?: "Sign up failed")
         }
+    }
+
+    override suspend fun logout(): Result<String> {
+       return try {
+
+           FirebaseAuth.getInstance().signOut()
+           Result.Success(" Logout Success !")
+           
+       }catch (e:Exception){
+           Result.Failure(e.message?:"Logout Failed !")
+       }
     }
 
     override fun getCurrentUser(): FirebaseUser? {

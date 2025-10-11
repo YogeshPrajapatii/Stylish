@@ -17,11 +17,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.yogesh.stylish.R
+import com.yogesh.stylish.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeAppBar() {
+fun HomeAppBar(navController: NavController) {
     CenterAlignedTopAppBar(modifier = Modifier.height(70.dp),
 
 
@@ -40,7 +42,9 @@ fun HomeAppBar() {
                     modifier = Modifier.size(28.dp))
             }
         }, actions = {
-            IconButton(onClick = {},modifier = Modifier.padding(end = 4.dp)) {
+            IconButton(onClick = {navController.navigate(Routes.ProfileScreen)},modifier = Modifier
+                .padding(end = 4
+                .dp)) {
                 Image(painter = painterResource(R.drawable.img_profile_pic),
                     contentDescription = "Profile Image",
                     modifier = Modifier.size(32.dp)

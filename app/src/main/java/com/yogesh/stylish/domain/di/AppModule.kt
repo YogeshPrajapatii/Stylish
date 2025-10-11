@@ -1,6 +1,7 @@
 package com.yogesh.stylish.domain.di
 
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
 import com.yogesh.stylish.data.local.UserPreferenceManager
 import com.yogesh.stylish.data.remote.ProductApiService
 import com.yogesh.stylish.data.repositoryimp.AuthRepositoryImp
@@ -13,6 +14,7 @@ import com.yogesh.stylish.domain.usecase.GetCategoriesUseCase
 import com.yogesh.stylish.domain.usecase.GetProductByIdUseCase
 import com.yogesh.stylish.domain.usecase.GetProductsUseCase
 import com.yogesh.stylish.domain.usecase.LoginUseCase
+import com.yogesh.stylish.domain.usecase.LogoutUseCase
 import com.yogesh.stylish.domain.usecase.ReadOnboardingStatusUseCase
 import com.yogesh.stylish.domain.usecase.SaveOnboardingStatusUseCase
 import com.yogesh.stylish.domain.usecase.SignUpUseCase
@@ -59,11 +61,7 @@ object AppModule {
         return GetProductByIdUseCase(repository)
     }
 
-    @Provides
-    @Singleton
-    fun provideAuthRepository(): AuthRepository {
-        return AuthRepositoryImp()
-    }
+  
 
     @Provides
     @Singleton
@@ -75,6 +73,12 @@ object AppModule {
     @Singleton
     fun provideSignUpUseCase(repository: AuthRepository): SignUpUseCase {
         return SignUpUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLogoutUseCase(repository: AuthRepository): LogoutUseCase {
+        return LogoutUseCase(repository)
     }
 
     @Provides
@@ -101,5 +105,20 @@ object AppModule {
             ReadOnboardingStatusUseCase {
         return ReadOnboardingStatusUseCase(repository)
     }
+
+    // ## 1. ADD THIS FUNCTION TO PROVIDE FirebaseAuth ##
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
+    // ## 2. UPDATE THIS FUNCTION TO USE THE FirebaseAuth PROVIDER ##
+    @Provides
+    @Singleton
+    fun provideAuthRepository(firebaseAuth: FirebaseAuth): AuthRepository {
+        return AuthRepositoryImp(firebaseAuth) // Pass the instance here
+    }
+
 
 }

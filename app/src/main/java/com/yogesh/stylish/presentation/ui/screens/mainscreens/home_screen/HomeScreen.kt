@@ -49,7 +49,7 @@ fun HomeScreen(
 
     Scaffold(
 
-        topBar = { HomeAppBar() },
+        topBar = { HomeAppBar(navController) },
         bottomBar = { MyBottomBar(navController) },
         containerColor = Color.White
 

@@ -5,13 +5,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.yogesh.stylish.presentation.ui.screens.authscreens.ForgotPassword
 import com.yogesh.stylish.presentation.ui.screens.authscreens.Login
 import com.yogesh.stylish.presentation.ui.screens.authscreens.ResetPassword
 import com.yogesh.stylish.presentation.ui.screens.authscreens.SignUp
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen.HomeScreen
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen.ProfileScreen
+import com.yogesh.stylish.presentation.ui.screens.mainscreens.profile_screen.ProfileScreen
 import com.yogesh.stylish.presentation.ui.screens.mainscreens.product_detail_screen.ProductDetailScreen
 
 import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding1
@@ -70,6 +69,7 @@ fun Navigation() {
         composable<Routes.ProductDetailScreen> {
             ProductDetailScreen(navController = navController)
         }
+        
 
 
     }
