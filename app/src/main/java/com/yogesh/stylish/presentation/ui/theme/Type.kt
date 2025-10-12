@@ -1,3 +1,5 @@
+// ## File: presentation/ui/theme/Type.kt
+
 package com.yogesh.stylish.presentation.ui.theme
 
 import androidx.compose.material3.Typography
@@ -8,18 +10,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.yogesh.stylish.R
 
-// 1. Define your custom font family using the files from the res/font folder.
 val Montserrat = FontFamily(Font(R.font.montserrat_regular, FontWeight.Normal),
     Font(R.font.montserrat_medium, FontWeight.Medium),
-    Font(R.font.montserrat_bold, FontWeight.Bold))
+    Font(R.font.montserrat_semibold, FontWeight.SemiBold),
+    Font(R.font.montserrat_bold, FontWeight.Bold),
+    Font(R.font.montserrat_extrabold, FontWeight.ExtraBold))
 
-// 2. Create your app's Typography "rulebook".
-val Typography = Typography(
-    headlineLarge = TextStyle(fontFamily = Montserrat,
+
+val Typography = Typography(headlineLarge = TextStyle(fontFamily = Montserrat,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 34.sp,
+    lineHeight = 40.sp,
+    letterSpacing = 0.5.sp),
+    headlineMedium = TextStyle(fontFamily = Montserrat,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp),
+        fontSize = 28.sp),
+    titleLarge = TextStyle(fontFamily = Montserrat, fontWeight = FontWeight.Bold, fontSize = 22.sp),
+    titleMedium = TextStyle(fontFamily = Montserrat,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp),
     bodyLarge = TextStyle(fontFamily = Montserrat,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp),
-    // Define other text styles from your Figma design as needed
-)
+    bodyMedium = TextStyle(fontFamily = Montserrat,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp),
+    labelLarge = TextStyle(fontFamily = Montserrat,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp))
