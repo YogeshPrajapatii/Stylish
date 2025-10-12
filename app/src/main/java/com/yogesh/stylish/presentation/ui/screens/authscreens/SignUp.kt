@@ -4,13 +4,36 @@ import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,11 +67,13 @@ fun SignUp(navController: NavHostController) {
             is Result.Failure -> {
                 Toast.makeText(context, currentState.message, Toast.LENGTH_SHORT).show()
             }
+
             is Result.Success<*> -> {
-                navController.navigate(Routes.Login) {
-                    popUpTo(Routes.SignUp) { inclusive = true }
+                navController.navigate(Routes.HomeScreen) {
+                    popUpTo(navController.graph.id) { inclusive = true }
                 }
             }
+
             else -> {}
         }
     }
@@ -70,7 +95,9 @@ fun SignUp(navController: NavHostController) {
                     text = "Create an\nAccount",
                     style = MaterialTheme.typography.headlineLarge,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp)
                 )
 
                 OutlinedTextField(
@@ -87,8 +114,10 @@ fun SignUp(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = if (passwordVisibleSignUp) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
-                        val image = if (passwordVisibleSignUp) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                        val description = if (passwordVisibleSignUp) "Hide password" else "Show password"
+                        val image =
+                            if (passwordVisibleSignUp) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val description =
+                            if (passwordVisibleSignUp) "Hide password" else "Show password"
                         IconButton(onClick = { passwordVisibleSignUp = !passwordVisibleSignUp }) {
                             Icon(imageVector = image, contentDescription = description)
                         }
@@ -102,9 +131,13 @@ fun SignUp(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = if (confirmPasswordVisibleSignUp) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
-                        val image = if (confirmPasswordVisibleSignUp) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                        val description = if (confirmPasswordVisibleSignUp) "Hide password" else "Show password"
-                        IconButton(onClick = { confirmPasswordVisibleSignUp = !confirmPasswordVisibleSignUp }) {
+                        val image =
+                            if (confirmPasswordVisibleSignUp) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val description =
+                            if (confirmPasswordVisibleSignUp) "Hide password" else "Show password"
+                        IconButton(onClick = {
+                            confirmPasswordVisibleSignUp = !confirmPasswordVisibleSignUp
+                        }) {
                             Icon(imageVector = image, contentDescription = description)
                         }
                     }
@@ -116,10 +149,13 @@ fun SignUp(navController: NavHostController) {
                             if (password == confirmPassword) {
                                 authViewModel.signup(userId, password)
                             } else {
-                                Toast.makeText(context, "Passwords do not match!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context,
+                                    "Passwords do not match!",
+                                    Toast.LENGTH_SHORT).show()
                             }
                         } else {
-                            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     },
                     // <-- FIX: Added contentColor = Color.White
@@ -145,18 +181,27 @@ fun SignUp(navController: NavHostController) {
                 Text("- or continue with -", style = MaterialTheme.typography.bodyLarge)
 
                 Row(
-                    modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
+                    modifier = Modifier
+                        .padding(vertical = 16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp,
+                        Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = { /* TODO: Google login */ }) {
-                        Image(painter = painterResource(id = R.drawable.ic_google), contentDescription = "Google Logo", modifier = Modifier.size(32.dp))
+                        Image(painter = painterResource(id = R.drawable.ic_google),
+                            contentDescription = "Google Logo",
+                            modifier = Modifier.size(32.dp))
                     }
                     IconButton(onClick = { /* TODO: Apple login */ }) {
-                        Image(painter = painterResource(id = R.drawable.ic_apple), contentDescription = "Apple Logo", modifier = Modifier.size(32.dp))
+                        Image(painter = painterResource(id = R.drawable.ic_apple),
+                            contentDescription = "Apple Logo",
+                            modifier = Modifier.size(32.dp))
                     }
                     IconButton(onClick = { /* TODO: Facebook login */ }) {
-                        Image(painter = painterResource(id = R.drawable.ic_facebook), contentDescription = "Facebook Logo", modifier = Modifier.size(32.dp))
+                        Image(painter = painterResource(id = R.drawable.ic_facebook),
+                            contentDescription = "Facebook Logo",
+                            modifier = Modifier.size(32.dp))
                     }
                 }
 

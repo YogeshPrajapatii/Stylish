@@ -26,9 +26,7 @@ fun Navigation() {
     NavHost(navController = navController, startDestination = Routes.Splash) {
 
         composable<Routes.Splash> {
-            // Get the ViewModel here in the NavHost
             val splashViewModel: SplashViewModel = hiltViewModel()
-            // Pass the instance down to the Splash screen
             Splash(navController = navController, splashViewModel = splashViewModel)
         }
 
@@ -69,8 +67,6 @@ fun Navigation() {
         composable<Routes.ProductDetailScreen> {
             ProductDetailScreen(navController = navController)
         }
-        
-
 
     }
 }

@@ -9,23 +9,17 @@ import androidx.compose.ui.unit.sp
 import com.yogesh.stylish.R
 
 // 1. Define your custom font family using the files from the res/font folder.
-val Montserrat = FontFamily(
-    Font(R.font.montserrat_regular, FontWeight.Normal),
+val Montserrat = FontFamily(Font(R.font.montserrat_regular, FontWeight.Normal),
     Font(R.font.montserrat_medium, FontWeight.Medium),
-    Font(R.font.montserrat_bold, FontWeight.Bold)
-)
+    Font(R.font.montserrat_bold, FontWeight.Bold))
 
 // 2. Create your app's Typography "rulebook".
 val Typography = Typography(
-    headlineLarge = TextStyle(
-        fontFamily = Montserrat,
+    headlineLarge = TextStyle(fontFamily = Montserrat,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp
-    ),
-    bodyLarge = TextStyle(
-        fontFamily = Montserrat,
+        fontSize = 32.sp),
+    bodyLarge = TextStyle(fontFamily = Montserrat,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    ),
+        fontSize = 16.sp),
     // Define other text styles from your Figma design as needed
 )
