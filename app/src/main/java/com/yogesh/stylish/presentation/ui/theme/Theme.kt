@@ -7,24 +7,24 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val LightColorScheme = lightColorScheme(primary = StylishRed,
-    onPrimary = White,
-    primaryContainer = Color(0xFFFFEBEE),
-    secondary = StylishGray,
-    onSecondary = White,
-    background = White,
-    onBackground = StylishBlack,
-    surface = White,
-    onSurface = StylishBlack,
-    onSurfaceVariant = StylishGray)
+private val LightColorScheme = lightColorScheme(primary = PrimaryRed,
+    onPrimary = TextWhite,
+    background = BackgroundWhite,
+    onBackground = TextPrimary,
+    surface = SurfaceWhite,
+    onSurface = TextPrimary,
+    onSurfaceVariant = TextSecondary,
+    primaryContainer = White,
+    error = ErrorRed)
 
-private val DarkColorScheme = darkColorScheme(primary = StylishRed,
-    onPrimary = White,
-    background = StylishBlack,
-    onBackground = White,
+private val DarkColorScheme = darkColorScheme(primary = PrimaryRed,
+    onPrimary = TextWhite,
+    background = PrimaryBlack,
+    onBackground = TextWhite,
     surface = Color(0xFF1E1E1E),
-    onSurface = White,
-    onSurfaceVariant = StylishGray)
+    onSurface = TextWhite,
+    onSurfaceVariant = TextSecondary,
+    error = ErrorRed)
 
 @Composable
 fun MyFirstComposeAppTheme(darkTheme: Boolean = isSystemInDarkTheme(),
