@@ -2,6 +2,8 @@ package com.yogesh.stylish.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// FIGMA DESIGN COLORS WITH HEX CODE
+
 // --- BRAND COLORS ---
 val PrimaryRed = Color(0xFFF83758)
 val PrimaryBlack = Color(0xFF000000)
