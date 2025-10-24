@@ -7,6 +7,8 @@ import androidx.compose.ui.graphics.Color
 /* NOW IT IS EASIER TO FOLLOW FIGMA DESIGN IN THE APP */
 
 // --- BRAND COLORS ---
+
+// Redefining the complete app
 val PrimaryRed = Color(0xFFF83758)
 val PrimaryBlack = Color(0xFF000000)
 
