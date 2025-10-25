@@ -1,6 +1,6 @@
-package com.yogesh.stylish.domain.usecase
+package com.yogesh.stylish.domain.usecase.userprefs
 
-import com.yogesh.stylish.domain.repository.UserPreferenceRepository
+import com.yogesh.stylish.domain.repository.userprefs.UserPreferenceRepository
 
 class SaveOnboardingStatusUseCase(private val repository: UserPreferenceRepository) {
 

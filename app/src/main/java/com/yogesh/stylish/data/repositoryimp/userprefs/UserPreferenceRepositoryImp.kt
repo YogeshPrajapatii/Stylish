@@ -1,7 +1,7 @@
-package com.yogesh.stylish.data.repositoryimp
+package com.yogesh.stylish.data.repositoryimp.userprefs
 
-import com.yogesh.stylish.data.local.UserPreferenceManager
-import com.yogesh.stylish.domain.repository.UserPreferenceRepository
+import com.yogesh.stylish.data.local.data_store.user.UserPreferenceManager
+import com.yogesh.stylish.domain.repository.userprefs.UserPreferenceRepository
 import kotlinx.coroutines.flow.Flow
 
 class UserPreferenceRepositoryImp(private val userPreferenceManager: UserPreferenceManager) :

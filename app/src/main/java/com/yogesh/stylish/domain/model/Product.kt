@@ -1,6 +1,14 @@
 package com.yogesh.stylish.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+import kotlinx.serialization.Serializable 
+
+@Serializable
+@Entity(tableName = "wishlist_table")
 data class Product(
+    @PrimaryKey
     val id: Int,
     val title: String,
     val description: String,

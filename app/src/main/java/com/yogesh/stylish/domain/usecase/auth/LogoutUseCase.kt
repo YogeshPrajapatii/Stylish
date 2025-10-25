@@ -1,6 +1,6 @@
-package com.yogesh.stylish.domain.usecase
+package com.yogesh.stylish.domain.usecase.auth
 
-import com.yogesh.stylish.domain.repository.AuthRepository
+import com.yogesh.stylish.domain.repository.auth.AuthRepository
 import javax.inject.Inject
 import com.yogesh.stylish.domain.util.Result
 class LogoutUseCase @Inject constructor(private val repository: AuthRepository){

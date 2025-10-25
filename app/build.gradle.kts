@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.kotlin.serialization)
     kotlin("kapt")
+
+
 }
 
 android {
@@ -23,10 +25,8 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -54,7 +54,11 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    implementation ("com.google.android.material:material:1.12.0")
+    implementation(libs.androidx.room.runtime) 
+    implementation(libs.androidx.room.ktx)      
+    kapt(libs.androidx.room.compiler)
+
+    implementation("com.google.android.material:material:1.12.0")
 
     implementation("androidx.compose.material:material-icons-extended:1.6.7")
 

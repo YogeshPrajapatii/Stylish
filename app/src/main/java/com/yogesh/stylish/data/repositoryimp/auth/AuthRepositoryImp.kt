@@ -1,13 +1,12 @@
-package com.yogesh.stylish.data.repositoryimp
+package com.yogesh.stylish.data.repositoryimp.auth
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.yogesh.stylish.domain.repository.AuthRepository
+import com.yogesh.stylish.domain.repository.auth.AuthRepository
 import com.yogesh.stylish.domain.util.Result
 import kotlinx.coroutines.tasks.await
-
 
 class AuthRepositoryImp(firebaseAuth: FirebaseAuth) : AuthRepository {
     override suspend fun login(email: String, password: String): Result<String> {
@@ -30,14 +29,14 @@ class AuthRepositoryImp(firebaseAuth: FirebaseAuth) : AuthRepository {
     }
 
     override suspend fun logout(): Result<String> {
-       return try {
+        return try {
 
-           FirebaseAuth.getInstance().signOut()
-           Result.Success(" Logout Success !")
-           
-       }catch (e:Exception){
-           Result.Failure(e.message?:"Logout Failed !")
-       }
+            FirebaseAuth.getInstance().signOut()
+            Result.Success(" Logout Success !")
+
+        } catch (e: Exception) {
+            Result.Failure(e.message ?: "Logout Failed !")
+        }
     }
 
     override fun getCurrentUser(): FirebaseUser? {

@@ -1,4 +1,4 @@
-package com.yogesh.stylish.data.local
+package com.yogesh.stylish.data.local.data_store.user
 
 import android.content.Context
 import androidx.datastore.core.DataStore

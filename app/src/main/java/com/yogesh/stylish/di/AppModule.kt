@@ -1,23 +1,31 @@
-package com.yogesh.stylish.domain.di
+package com.yogesh.stylish.di
 
 import android.content.Context
+import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
-import com.yogesh.stylish.data.local.UserPreferenceManager
+import com.yogesh.stylish.data.local.data_store.user.UserPreferenceManager
+import com.yogesh.stylish.data.local.dao.WishlistDao
+import com.yogesh.stylish.data.local.data_store.cart.CartDataStore
+import com.yogesh.stylish.data.local.database.StylishDatabase
 import com.yogesh.stylish.data.remote.ProductApiService
-import com.yogesh.stylish.data.repositoryimp.AuthRepositoryImp
-import com.yogesh.stylish.data.repositoryimp.ProductRepositoryImpl
-import com.yogesh.stylish.data.repositoryimp.UserPreferenceRepositoryImp
-import com.yogesh.stylish.domain.repository.AuthRepository
-import com.yogesh.stylish.domain.repository.ProductRepository
-import com.yogesh.stylish.domain.repository.UserPreferenceRepository
-import com.yogesh.stylish.domain.usecase.GetCategoriesUseCase
-import com.yogesh.stylish.domain.usecase.GetProductByIdUseCase
-import com.yogesh.stylish.domain.usecase.GetProductsUseCase
-import com.yogesh.stylish.domain.usecase.LoginUseCase
-import com.yogesh.stylish.domain.usecase.LogoutUseCase
-import com.yogesh.stylish.domain.usecase.ReadOnboardingStatusUseCase
-import com.yogesh.stylish.domain.usecase.SaveOnboardingStatusUseCase
-import com.yogesh.stylish.domain.usecase.SignUpUseCase
+import com.yogesh.stylish.data.repositoryimp.auth.AuthRepositoryImp
+import com.yogesh.stylish.data.repositoryimp.cart.CartRepositoryImpl
+import com.yogesh.stylish.data.repositoryimp.product.ProductRepositoryImpl
+import com.yogesh.stylish.data.repositoryimp.userprefs.UserPreferenceRepositoryImp
+import com.yogesh.stylish.data.repositoryimp.wishlist.WishlistRepositoryImpl
+import com.yogesh.stylish.domain.repository.cart.CartRepository
+import com.yogesh.stylish.domain.repository.auth.AuthRepository
+import com.yogesh.stylish.domain.repository.product.ProductRepository
+import com.yogesh.stylish.domain.repository.userprefs.UserPreferenceRepository
+import com.yogesh.stylish.domain.repository.wishlist.WishlistRepository
+import com.yogesh.stylish.domain.usecase.product.GetCategoriesUseCase
+import com.yogesh.stylish.domain.usecase.product.GetProductByIdUseCase
+import com.yogesh.stylish.domain.usecase.product.GetProductsUseCase
+import com.yogesh.stylish.domain.usecase.auth.LoginUseCase
+import com.yogesh.stylish.domain.usecase.auth.LogoutUseCase
+import com.yogesh.stylish.domain.usecase.userprefs.ReadOnboardingStatusUseCase
+import com.yogesh.stylish.domain.usecase.userprefs.SaveOnboardingStatusUseCase
+import com.yogesh.stylish.domain.usecase.auth.SignUpUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -81,6 +89,33 @@ object AppModule {
         return LogoutUseCase(repository)
     }
 
+
+    @Provides
+    @Singleton
+    fun provideStylishDatabase(@ApplicationContext context: Context): StylishDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext, 
+            StylishDatabase::class.java,
+            "stylish_database.db" 
+        )
+            
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideWishlistDao(database: StylishDatabase): WishlistDao {
+        return database.wishlistDao() 
+    }
+
+  
+
+    @Provides
+    @Singleton
+    fun provideWishlistRepository(wishlistDao: WishlistDao): WishlistRepository {
+        return WishlistRepositoryImpl(wishlistDao)
+    }
+
     @Provides
     @Singleton
     fun provideUserPreferencesManager(@ApplicationContext context: Context): UserPreferenceManager {
@@ -106,18 +141,29 @@ object AppModule {
         return ReadOnboardingStatusUseCase(repository)
     }
 
-    // ## 1. ADD THIS FUNCTION TO PROVIDE FirebaseAuth ##
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
 
-    // ## 2. UPDATE THIS FUNCTION TO USE THE FirebaseAuth PROVIDER ##
     @Provides
     @Singleton
     fun provideAuthRepository(firebaseAuth: FirebaseAuth): AuthRepository {
-        return AuthRepositoryImp(firebaseAuth) // Pass the instance here
+        return AuthRepositoryImp(firebaseAuth) 
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartDataStore(@ApplicationContext context: Context): CartDataStore {
+        return CartDataStore(context) 
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartRepository(cartDataStore: CartDataStore): CartRepository {
+       
+        return CartRepositoryImpl(cartDataStore)
     }
 
 

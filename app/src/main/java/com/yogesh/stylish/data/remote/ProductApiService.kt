@@ -9,8 +9,6 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -32,14 +30,15 @@ class ProductApiService {
     }
 
     suspend fun getAllProducts(): ProductsResponseDto {
-        val url ="https://dummyjson.com/products?limit=0"
+        val url = "https://dummyjson.com/products?limit=0"
 
         return try {
             val response = client.get(url).body<ProductsResponseDto>()
 
             Log.d(TAG, "getAllProducts SUCCESS: Fetched ${response.products.size} products")
             response.products.forEachIndexed { index, productDto ->
-                Log.d(TAG, "Product #$index: Title: ${productDto.title}, Raw Price: ${productDto.price}, Discount: ${productDto.discountPercentage}")
+                Log.d(TAG,
+                    "Product #$index: Title: ${productDto.title}, Raw Price: ${productDto.price}, Discount: ${productDto.discountPercentage}")
             }
             response
         } catch (e: Exception) {
@@ -49,7 +48,6 @@ class ProductApiService {
     }
 
 
-    
     suspend fun getAllCategories(): List<CategoryDto> {
         val url = "https://dummyjson.com/products/categories"
         return try {
@@ -57,12 +55,12 @@ class ProductApiService {
             Log.d("SUCCESS", "getAllCategories SUCCESS : FETCHED  ${categories.size} CATEGORIES ")
             Log.d(TAG, "First category item from API: ${categories.firstOrNull()}")
             categories
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Log.e(TAG, "getAllCategories FAILED: Error fetching categories", e)
             emptyList()
         }
-        
-        
+
+
     }
 
     suspend fun getProductById(id: Int): ProductDto {

@@ -2,8 +2,8 @@ package com.yogesh.stylish.presentation.ui.screens.authscreens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yogesh.stylish.domain.usecase.LoginUseCase
-import com.yogesh.stylish.domain.usecase.SignUpUseCase
+import com.yogesh.stylish.domain.usecase.auth.LoginUseCase
+import com.yogesh.stylish.domain.usecase.auth.SignUpUseCase
 import com.yogesh.stylish.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

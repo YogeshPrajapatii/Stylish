@@ -1,13 +1,12 @@
-package com.yogesh.stylish.domain.usecase
+package com.yogesh.stylish.domain.usecase.auth
 
 import android.util.Patterns
-import com.yogesh.stylish.domain.repository.AuthRepository
+import com.yogesh.stylish.domain.repository.auth.AuthRepository
 import com.yogesh.stylish.domain.util.Result
 
-class SignUpUseCase(private val repository: AuthRepository) {
+class LoginUseCase(private val repository: AuthRepository) {
 
     suspend operator fun invoke(email: String, password: String): Result<String> {
-
 
         if (email.isBlank()) {
 
@@ -30,10 +29,7 @@ class SignUpUseCase(private val repository: AuthRepository) {
             return Result.Failure("Password must contain at least 6 characters!")
         }
 
-
-
-
-        return repository.signup(email, password)
+        return repository.login(email, password)
 
     }
 

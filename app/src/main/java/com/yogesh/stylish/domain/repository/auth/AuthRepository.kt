@@ -1,4 +1,4 @@
-package com.yogesh.stylish.domain.repository
+package com.yogesh.stylish.domain.repository.auth
 
 import com.google.firebase.auth.FirebaseUser
 import com.yogesh.stylish.domain.util.Result
