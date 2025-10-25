@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.yogesh.stylish.presentation.navigation.Navigation
-import com.yogesh.stylish.presentation.ui.theme.MyFirstComposeAppTheme
+import com.yogesh.stylish.presentation.theme.MyFirstComposeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

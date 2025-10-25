@@ -5,19 +5,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.yogesh.stylish.presentation.ui.screens.authscreens.ForgotPassword
-import com.yogesh.stylish.presentation.ui.screens.authscreens.Login
-import com.yogesh.stylish.presentation.ui.screens.authscreens.ResetPassword
-import com.yogesh.stylish.presentation.ui.screens.authscreens.SignUp
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.home_screen.HomeScreen
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.profile_screen.ProfileScreen
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.product_detail_screen.ProductDetailScreen
+import com.yogesh.stylish.presentation.feature.auth.ForgotPassword
+import com.yogesh.stylish.presentation.feature.auth.Login
+import com.yogesh.stylish.presentation.feature.auth.ResetPassword
+import com.yogesh.stylish.presentation.feature.auth.SignUp
+import com.yogesh.stylish.presentation.feature.home.screen.HomeScreen
+import com.yogesh.stylish.presentation.feature.profile.ProfileScreen
+import com.yogesh.stylish.presentation.feature.product.ProductDetailScreen
 
-import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding1
-import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding2
-import com.yogesh.stylish.presentation.ui.screens.onboardingscreens.OnBoarding3
-import com.yogesh.stylish.presentation.ui.screens.splashscreen.Splash
-import com.yogesh.stylish.presentation.ui.screens.mainscreens.viewmodel.SplashViewModel
+import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding1
+import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding2
+import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding3
+import com.yogesh.stylish.presentation.feature.splash.Splash
+import com.yogesh.stylish.presentation.feature.splash.SplashViewModel
 
 @Composable
 fun Navigation() {
