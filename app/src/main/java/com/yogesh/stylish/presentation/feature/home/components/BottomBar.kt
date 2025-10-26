@@ -47,18 +47,15 @@ data class BottomNavItem(val label: String,
                          val route: Routes
 )
 
-val bottomNavItems = listOf(
-    BottomNavItem(label = "Home",
+val bottomNavItems = listOf(BottomNavItem(label = "Home",
     selectedIcon = Icons.Filled.Home,
     unselectedIcon = Icons.Outlined.Home,
     route = Routes.HomeScreen),
     BottomNavItem(label = "Wishlist",
         selectedIcon = Icons.Filled.Favorite,
         unselectedIcon = Icons.Outlined.FavoriteBorder,
-        
-        
-        
-        
+
+
         route = Routes.HomeScreen),
     BottomNavItem(label = "Cart",
         selectedIcon = Icons.Filled.ShoppingCart,
@@ -82,46 +79,48 @@ fun MyBottomBar(navController: NavController) {
     Column {
         Box(modifier = Modifier
             .fillMaxWidth()
-            .height(1.dp)
-            )
+            .height(1.dp))
 
-        NavigationBar(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = White, modifier
-        = Modifier
-            .fillMaxSize
-            ()) {
+        NavigationBar(containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = White,
+            modifier = Modifier.fillMaxWidth()) {
             bottomNavItems.forEachIndexed { index, item ->
                 val isSelected = selectedItemIndex == index
                 NavigationBarItem(
-                    
-                    selected = isSelected, onClick = {
-                    selectedItemIndex = index
-                    navController.navigate(Routes.HomeScreen) {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }, label = {
-                    Text(text = item.label,
-                        color = if (isSelected) MaterialTheme.colorScheme.primary else StylishBlack)
-                }, icon = {
-                    if (item.label == "Cart" && isSelected) {
-                        Box(modifier = Modifier
-                            .size(45.dp)
-                            .background(color = StylishRed, shape = CircleShape),
-                            contentAlignment = Alignment.Center) {
-                            Icon(imageVector = item.selectedIcon,
-                                contentDescription = item.label,
-                                tint = White)
+
+                    selected = isSelected,
+                    onClick = {
+                        selectedItemIndex = index
+                        navController.navigate(Routes.HomeScreen) {
+                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                    } else {
-                        Icon(imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
-                            contentDescription = item.label,
-                            tint = if (isSelected) MaterialTheme.colorScheme.primary else StylishBlack)
-                    }
-                }, colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent))
+                    },
+                    label = {
+                        Text(text = item.label,
+                            color = if (isSelected) MaterialTheme.colorScheme.primary else StylishBlack)
+                    },
+                    icon = {
+                        if (item.label == "Cart" && isSelected) {
+                            Box(modifier = Modifier
+                                .size(45.dp)
+                                .background(color = StylishRed, shape = CircleShape),
+                                contentAlignment = Alignment.Center) {
+                                Icon(imageVector = item.selectedIcon,
+                                    contentDescription = item.label,
+                                    tint = White)
+                            }
+                        } else {
+                            Icon(imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = item.label,
+                                tint = if (isSelected) MaterialTheme.colorScheme.primary else StylishBlack)
+                        }
+                    },
+                    colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent))
             }
         }
     }
-    
-    
+
+
 }

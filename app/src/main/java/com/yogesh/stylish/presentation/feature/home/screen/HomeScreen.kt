@@ -28,7 +28,7 @@ import com.yogesh.stylish.presentation.navigation.Routes
 import com.yogesh.stylish.presentation.feature.home.components.CategoryChipsRow
 import com.yogesh.stylish.presentation.feature.home.components.FootwaresCard
 import com.yogesh.stylish.presentation.feature.home.components.MyBottomBar
-import com.yogesh.stylish.presentation.feature.home.components.ProductsRow
+import com.yogesh.stylish.presentation.feature.product.ProductsRow
 import com.yogesh.stylish.presentation.theme.StylishRed
 import com.yogesh.stylish.presentation.theme.White
 import com.yogesh.stylish.presentation.feature.home.components.HomeAppBar

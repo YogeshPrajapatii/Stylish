@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.feature.home.components
+package com.yogesh.stylish.presentation.feature.product
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

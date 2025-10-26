@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.feature.home.components
+package com.yogesh.stylish.presentation.feature.product
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.domain.model.Product
+import com.yogesh.stylish.presentation.feature.home.components.SectionHeader
 
 
 @Composable
