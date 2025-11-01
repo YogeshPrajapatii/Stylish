@@ -4,9 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.yogesh.stylish.domain.repository.cart.CartRepository
-import com.yogesh.stylish.domain.repository.wishlist.WishlistRepository
+import com.yogesh.stylish.domain.usecase.cart.AddToCartUseCase
 import com.yogesh.stylish.domain.usecase.product.GetProductByIdUseCase
+import com.yogesh.stylish.domain.usecase.wishlist.AddToWishlistUseCase
+import com.yogesh.stylish.domain.usecase.wishlist.CheckWishlistStatusUseCase
+import com.yogesh.stylish.domain.usecase.wishlist.RemoveFromWishlistUseCase
 import com.yogesh.stylish.domain.util.Result
 import com.yogesh.stylish.presentation.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,10 +19,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductDetailViewModel @Inject constructor(private val getProductByIdUseCase: GetProductByIdUseCase,
-                                                 private val wishlistRepository: WishlistRepository,
-                                                 private val cartRepository: CartRepository,
-                                                 savedStateHandle: SavedStateHandle
+class ProductDetailViewModel @Inject constructor(
+    private val getProductByIdUseCase: GetProductByIdUseCase,
+    private val addToWishlistUseCase: AddToWishlistUseCase,
+    private val removeFromWishlistUseCase: RemoveFromWishlistUseCase,
+    private val checkWishlistStatusUseCase: CheckWishlistStatusUseCase,
+    private val addToCartUseCase: AddToCartUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProductDetailState())
@@ -42,20 +47,18 @@ class ProductDetailViewModel @Inject constructor(private val getProductByIdUseCa
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
 
-            when (val result = getProductByIdUseCase(id)) {
+            when (val result = getProductByIdUseCase(id)) { 
                 is Result.Failure -> {
                     _state.update {
                         it.copy(isLoading = false, error = result.message)
                     }
                 }
-
                 is Result.Success -> {
-                                  checkWishlistStatus(id)
                     _state.update {
                         it.copy(product = result.data, isLoading = false, error = null)
                     }
+                    checkWishlistStatus(id)
                 }
-
                 else -> {
                     _state.update { it.copy(isLoading = false) }
                 }
@@ -66,10 +69,10 @@ class ProductDetailViewModel @Inject constructor(private val getProductByIdUseCa
     private fun checkWishlistStatus(productId: Int) {
         viewModelScope.launch {
             try {
-                val isInWishlistNow = wishlistRepository.isInWishlist(productId)
+                val isInWishlistNow = checkWishlistStatusUseCase(productId)
                 _state.update { it.copy(isInWishlist = isInWishlistNow) }
             } catch (e: Exception) {
-                _state.update { it.copy(isInWishlist = false) }
+                _state.update { it.copy(isInWishlist = false, error = "Failed to check wishlist status") }
             }
         }
     }
@@ -81,11 +84,11 @@ class ProductDetailViewModel @Inject constructor(private val getProductByIdUseCa
             if (product != null) {
                 try {
                     if (currentState.isInWishlist) {
-                        wishlistRepository.removeFromWishlist(product.id)
+                        removeFromWishlistUseCase(product.id)
                     } else {
-                        wishlistRepository.addToWishlist(product)
+                        addToWishlistUseCase(product)
                     }
-                    checkWishlistStatus(product.id)
+                    _state.update { it.copy(isInWishlist = !currentState.isInWishlist) }
                 } catch (e: Exception) {
                     _state.update { it.copy(error = "Wishlist update failed: ${e.message}") }
                 }
@@ -98,7 +101,7 @@ class ProductDetailViewModel @Inject constructor(private val getProductByIdUseCa
             val product = _state.value.product
             if (product != null) {
                 try {
-                    cartRepository.addToCart(product, 1)
+                    addToCartUseCase(product, 1) 
                 } catch (e: Exception) {
                     _state.update { it.copy(error = "Add to cart failed: ${e.message}") }
                 }

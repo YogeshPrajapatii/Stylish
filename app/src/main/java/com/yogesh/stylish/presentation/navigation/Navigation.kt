@@ -9,6 +9,7 @@ import com.yogesh.stylish.presentation.feature.auth.ForgotPassword
 import com.yogesh.stylish.presentation.feature.auth.Login
 import com.yogesh.stylish.presentation.feature.auth.ResetPassword
 import com.yogesh.stylish.presentation.feature.auth.SignUp
+import com.yogesh.stylish.presentation.feature.cart.CartScreen
 import com.yogesh.stylish.presentation.feature.home.screen.HomeScreen
 import com.yogesh.stylish.presentation.feature.profile.ProfileScreen
 import com.yogesh.stylish.presentation.feature.product.ProductDetailScreen
@@ -18,6 +19,7 @@ import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding2
 import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding3
 import com.yogesh.stylish.presentation.feature.splash.Splash
 import com.yogesh.stylish.presentation.feature.splash.SplashViewModel
+import com.yogesh.stylish.presentation.feature.wishlist.WishlistScreen
 
 @Composable
 fun Navigation() {
@@ -57,7 +59,10 @@ fun Navigation() {
         composable<Routes.HomeScreen> {
             HomeScreen(navController = navController)
         }
-        
+
+        composable<Routes.WishlistScreen> {
+            WishlistScreen(navController = navController)
+        }
         
         
         composable <Routes.ProfileScreen>{
@@ -66,6 +71,10 @@ fun Navigation() {
 
         composable<Routes.ProductDetailScreen> {
             ProductDetailScreen(navController = navController)
+        }
+
+        composable<Routes.CartScreen> {
+            CartScreen(navController = navController)
         }
 
     }

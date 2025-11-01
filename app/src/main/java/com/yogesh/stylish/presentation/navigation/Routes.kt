@@ -35,5 +35,11 @@ sealed interface Routes {
     data class ProductDetailScreen(val productId: Int) : Routes    
     @Serializable
     data object ProfileScreen: Routes
+
+    @Serializable
+    data object WishlistScreen : Routes
+
+    @Serializable
+    data object CartScreen : Routes
     
 }
