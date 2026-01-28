@@ -7,5 +7,7 @@ data class ProductDetailState(
     val isLoading: Boolean = false,
     val product: Product? = null,
     val error: String? = null,
-    val isInWishlist: Boolean = false
+    val isInWishlist: Boolean = false,
+    val selectedSize:String = "",
+    val snackbarMessage: String? = null
 )

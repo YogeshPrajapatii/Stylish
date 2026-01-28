@@ -3,8 +3,8 @@ package com.yogesh.stylish.di
 import android.content.Context
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
+import com.yogesh.stylish.data.local.dao.CartDao
 import com.yogesh.stylish.data.local.dao.WishlistDao
-import com.yogesh.stylish.data.local.data_store.cart.CartDataStore
 import com.yogesh.stylish.data.local.data_store.user.UserPreferenceManager
 import com.yogesh.stylish.data.local.database.StylishDatabase
 import com.yogesh.stylish.data.remote.ProductApiService
@@ -44,9 +44,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-
 @InstallIn(SingletonComponent::class)
-
 object AppModule {
 
     @Provides
@@ -79,7 +77,6 @@ object AppModule {
         return GetProductByIdUseCase(repository)
     }
 
-
     @Provides
     @Singleton
     fun provideLoginUseCase(repository: AuthRepository): LoginUseCase {
@@ -98,15 +95,14 @@ object AppModule {
         return LogoutUseCase(repository)
     }
 
-
     @Provides
     @Singleton
     fun provideStylishDatabase(@ApplicationContext context: Context): StylishDatabase {
-        return Room.databaseBuilder(context.applicationContext,
+        return Room.databaseBuilder(
+            context.applicationContext,
             StylishDatabase::class.java,
-            "stylish_database.db")
-
-            .build()
+            "stylish_database.db"
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
@@ -115,11 +111,22 @@ object AppModule {
         return database.wishlistDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideCartDao(database: StylishDatabase): CartDao {
+        return database.cartDao()
+    }
 
     @Provides
     @Singleton
     fun provideWishlistRepository(wishlistDao: WishlistDao): WishlistRepository {
         return WishlistRepositoryImpl(wishlistDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartRepository(cartDao: CartDao): CartRepository {
+        return CartRepositoryImpl(cartDao)
     }
 
     @Provides
@@ -157,20 +164,6 @@ object AppModule {
     fun provideAuthRepository(firebaseAuth: FirebaseAuth): AuthRepository {
         return AuthRepositoryImp(firebaseAuth)
     }
-
-    @Provides
-    @Singleton
-    fun provideCartDataStore(@ApplicationContext context: Context): CartDataStore {
-        return CartDataStore(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideCartRepository(cartDataStore: CartDataStore): CartRepository {
-
-        return CartRepositoryImpl(cartDataStore)
-    }
-
 
     @Provides
     @Singleton
@@ -231,5 +224,4 @@ object AppModule {
     fun provideAddToWishlistUseCase(repository: WishlistRepository): AddToWishlistUseCase {
         return AddToWishlistUseCase(repository)
     }
-
 }

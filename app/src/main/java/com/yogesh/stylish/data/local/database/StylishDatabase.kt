@@ -7,12 +7,16 @@ import com.yogesh.stylish.data.local.converter.StringListConverter
 import com.yogesh.stylish.data.local.dao.WishlistDao
 import com.yogesh.stylish.domain.model.Product
 
+
+import com.yogesh.stylish.data.local.dao.CartDao
+import com.yogesh.stylish.data.local.entity.CartEntity
 @Database(
-    entities = [Product::class], 
-    version = 1,                
+    entities = [Product::class, CartEntity::class],
+    version = 2,
     exportSchema = false        )
 @TypeConverters(StringListConverter::class) 
 abstract class StylishDatabase : RoomDatabase() {
 
     abstract fun wishlistDao(): WishlistDao
+    abstract fun cartDao(): CartDao
 }

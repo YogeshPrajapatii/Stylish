@@ -47,7 +47,7 @@ class ProductDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
 
-            when (val result = getProductByIdUseCase(id)) { 
+            when (val result = getProductByIdUseCase(id)) {
                 is Result.Failure -> {
                     _state.update {
                         it.copy(isLoading = false, error = result.message)
@@ -96,16 +96,37 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
+    fun onSizeSelected(size: String) {
+        _state.update { it.copy(selectedSize = size, error = null) }
+    }
+
     fun addToCart() {
         viewModelScope.launch {
-            val product = _state.value.product
-            if (product != null) {
-                try {
-                    addToCartUseCase(product, 1) 
-                } catch (e: Exception) {
-                    _state.update { it.copy(error = "Add to cart failed: ${e.message}") }
+            val product = _state.value.product ?: return@launch
+            val selectedSize = _state.value.selectedSize
+            val isSizeRequired = !product.sizes.isNullOrEmpty()
+
+            if (isSizeRequired && selectedSize.isEmpty()) {
+                _state.update { it.copy(error = "Please select a size") }
+                return@launch
+            }
+
+            try {
+                val finalSize = if (isSizeRequired) selectedSize else ""
+                addToCartUseCase(product, 1, finalSize)
+                _state.update {
+                    it.copy(
+                        error = null,
+                        snackbarMessage = "Added to cart successfully!"
+                    )
                 }
+            } catch (e: Exception) {
+                _state.update { it.copy(error = "Add to cart failed: ${e.message}") }
             }
         }
+    }
+
+    fun resetSnackbarMessage() {
+        _state.update { it.copy(snackbarMessage = null) }
     }
 }

@@ -12,12 +12,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.ShoppingCart 
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,8 +41,17 @@ fun ProductDetailScreen(
     viewModel: ProductDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(state.snackbarMessage) {
+        state.snackbarMessage?.let { message ->
+            snackbarHostState.showSnackbar(message)
+            viewModel.resetSnackbarMessage()
+        }
+    }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text("Product Details", style = MaterialTheme.typography.titleLarge) },
@@ -64,7 +71,6 @@ fun ProductDetailScreen(
                 )
             )
         },
-      
         bottomBar = {
             if (state.product != null) {
                 ProductDetailBottomBar(
@@ -75,7 +81,7 @@ fun ProductDetailScreen(
                 )
             }
         },
-        containerColor = MaterialTheme.colorScheme.background 
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -84,18 +90,14 @@ fun ProductDetailScreen(
             contentAlignment = Alignment.Center
         ) {
             when {
-                state.isLoading -> {
-                    CircularProgressIndicator()
-                }
-                state.error != null -> {
-                    Text(text = "Error: ${state.error}", color = MaterialTheme.colorScheme.error)
-                }
-                state.product != null -> {
-                    ProductDetailsContent(product = state.product!!)
-                }
-                else -> {
-                    Text("Product not found.")
-                }
+                state.isLoading -> CircularProgressIndicator()
+                state.error != null -> Text(text = "Error: ${state.error}", color = MaterialTheme.colorScheme.error)
+                state.product != null -> ProductDetailsContent(
+                    product = state.product!!,
+                    selectedSize = state.selectedSize,
+                    onSizeSelected = { size -> viewModel.onSizeSelected(size) }
+                )
+                else -> Text("Product not found.")
             }
         }
     }
@@ -103,14 +105,15 @@ fun ProductDetailScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProductDetailsContent(product: Product) {
-    // LazyColumn now fills the whole space
+fun ProductDetailsContent(
+    product: Product,
+    selectedSize: String,
+    onSizeSelected: (String) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        // Add padding at the bottom so content doesn't hide under the sticky buttons
         contentPadding = PaddingValues(bottom = 100.dp)
     ) {
-        // 1. Image Pager
         item {
             val pagerState = rememberPagerState { product.images.size }
             HorizontalPager(
@@ -126,11 +129,10 @@ fun ProductDetailsContent(product: Product) {
                         .build(),
                     contentDescription = "Product Image ${page + 1}",
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop // Use Crop or Fit based on your design
+                    contentScale = ContentScale.Crop
                 )
             }
 
-            // Pager Indicator
             Row(
                 Modifier
                     .height(50.dp)
@@ -151,29 +153,26 @@ fun ProductDetailsContent(product: Product) {
             }
         }
 
-        // 2. Product Info
         item {
             Column(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Apply Theme Typography
                 Text(
                     text = product.title,
-                    style = MaterialTheme.typography.headlineSmall, // Use Theme
+                    style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "Brand: ${product.brand}",
-                    style = MaterialTheme.typography.titleMedium, // Use Theme
-                    color = MaterialTheme.colorScheme.onSurfaceVariant // Use Theme
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                // Rating
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "Rating: ${product.rating}",
-                        style = MaterialTheme.typography.bodyMedium, // Use Theme
+                        style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -181,74 +180,69 @@ fun ProductDetailsContent(product: Product) {
                         Icon(
                             Icons.Filled.Star,
                             contentDescription = "Star",
-                            tint = Color(0xFFFFC107), // Star color is usually fine to hardcode
+                            tint = Color(0xFFFFC107),
                             modifier = Modifier.size(16.dp)
                         )
                     }
                 }
 
-                // Price
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // TODO: This price logic seems off. DummyJson price is usually final.
-                    // Let's use the actual price fields.
                     val discountedPrice = product.price * (1 - product.discountPercentage / 100.0)
                     val originalPrice = product.price
 
                     Text(
-                        text = "₹${(discountedPrice * 83).roundToInt()}", // TODO: Use proper currency conversion/locale
-                        style = MaterialTheme.typography.headlineSmall, // Use Theme
+                        text = "₹${(discountedPrice * 83).roundToInt()}",
+                        style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
                     )
-                    if(product.discountPercentage > 0) {
+                    if (product.discountPercentage > 0) {
                         Text(
-                            text = "₹${(originalPrice * 83).roundToInt()}", // TODO: Use proper currency conversion
-                            style = MaterialTheme.typography.bodyMedium, // Use Theme
+                            text = "₹${(originalPrice * 83).roundToInt()}",
+                            style = MaterialTheme.typography.bodyMedium,
                             textDecoration = TextDecoration.LineThrough,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = "${product.discountPercentage.roundToInt()}% Off",
-                            style = MaterialTheme.typography.bodyMedium, // Use Theme
-                            color = Color(0xFF4CAF50), // TODO: Move to Color.kt as SuccessGreen
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFF4CAF50),
                             fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
 
-                // Stock
-                val stockColor = if (product.stock > 0) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error // Use Theme
+                val stockColor = if (product.stock > 0) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error
                 Text(
                     text = if (product.stock > 0) "In Stock (${product.stock})" else "Out of Stock",
-                    style = MaterialTheme.typography.bodyMedium, // Use Theme
+                    style = MaterialTheme.typography.bodyMedium,
                     color = stockColor,
                     fontWeight = FontWeight.Bold
                 )
 
-                // Description
+                com.yogesh.stylish.presentation.component.SizeSelector(
+                    sizes = product.sizes ?: emptyList(),
+                    selectedSize = selectedSize,
+                    onSizeSelected = onSizeSelected
+                )
+
                 Text(
                     text = "Description",
-                    style = MaterialTheme.typography.titleLarge, // Use Theme
+                    style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(top = 16.dp)
                 )
                 Text(
                     text = product.description,
-                    style = MaterialTheme.typography.bodyLarge // Use Theme
+                    style = MaterialTheme.typography.bodyLarge
                 )
-
-                // Buttons are removed from here
             }
         }
     }
 }
 
-/**
- * This is the new composable for the sticky bottom bar.
- * It contains the Wishlist and Cart buttons.
- */
 @Composable
 fun ProductDetailBottomBar(
     product: Product,
@@ -258,17 +252,16 @@ fun ProductDetailBottomBar(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shadowElevation = 8.dp, // Add shadow like Figma
-        color = MaterialTheme.colorScheme.surface // Use theme color
+        shadowElevation = 8.dp,
+        color = MaterialTheme.colorScheme.surface
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp), // Padding inside the bar
+                .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Wishlist Button (Styled like "Outlined" or Figma's "View Similar")
             OutlinedButton(
                 onClick = onToggleWishlist,
                 modifier = Modifier.weight(1f),
@@ -284,23 +277,19 @@ fun ProductDetailBottomBar(
                 Text(
                     text = if (isInWishlist) "In Wishlist" else "Wishlist",
                     color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.labelLarge.copy(fontSize = 14.sp) // Match style
+                    style = MaterialTheme.typography.labelLarge.copy(fontSize = 14.sp)
                 )
             }
 
-            // Add to Cart Button (Styled like "Filled" or Figma's "Buy Now")
             Button(
                 onClick = onAddToCart,
                 modifier = Modifier.weight(1f),
-                enabled = product.stock > 0, // Disable if out of stock
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary // Use theme color
-                    // You can define a custom "Buy Now" green in Color.kt if needed
-                )
+                enabled = product.stock > 0,
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
                 Text(
                     text = if (product.stock > 0) "Add to Cart" else "Out of Stock",
-                    style = MaterialTheme.typography.labelLarge.copy(fontSize = 14.sp) // Match style
+                    style = MaterialTheme.typography.labelLarge.copy(fontSize = 14.sp)
                 )
             }
         }

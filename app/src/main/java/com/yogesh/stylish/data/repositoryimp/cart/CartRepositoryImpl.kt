@@ -1,59 +1,70 @@
 package com.yogesh.stylish.data.repositoryimp.cart
 
-import com.yogesh.stylish.data.local.data_store.cart.CartDataStore
+import com.yogesh.stylish.data.local.dao.CartDao
+import com.yogesh.stylish.data.local.entity.CartEntity
 import com.yogesh.stylish.domain.model.CartItem
 import com.yogesh.stylish.domain.model.Product
 import com.yogesh.stylish.domain.repository.cart.CartRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class CartRepositoryImpl(private val cartDataStore: CartDataStore
-) : CartRepository { 
+class CartRepositoryImpl @Inject constructor(
+    private val cartDao: CartDao
+) : CartRepository {
 
     override fun getCartItems(): Flow<List<CartItem>> {
-        return cartDataStore.cartItems
-    }
-
-    override suspend fun addToCart(product: Product, quantity: Int) {
-        val currentItems = cartDataStore.cartItems.first() 
-        val mutableItems = currentItems.toMutableList()
-
-        val existingItemIndex = mutableItems.indexOfFirst { it.product.id == product.id }
-
-        if (existingItemIndex != -1) {
-            val existingItem = mutableItems[existingItemIndex]
-            mutableItems[existingItemIndex] =
-                existingItem.copy(quantity = existingItem.quantity + quantity)
-        } else {
-            mutableItems.add(CartItem(product = product, quantity = quantity))
-        }
-
-        cartDataStore.updateCartItems(mutableItems)
-    }
-
-    override suspend fun removeFromCart(productId: Int) {
-        val currentItems = cartDataStore.cartItems.first()
-        val updatedItems = currentItems.filter { it.product.id != productId }
-        cartDataStore.updateCartItems(updatedItems)
-    }
-
-    override suspend fun updateQuantity(productId: Int, quantity: Int) {
-        val currentItems = cartDataStore.cartItems.first()
-        val updatedItems = currentItems.mapNotNull { item -> 
-            if (item.product.id == productId) {
-                if (quantity > 0) {
-                    item.copy(quantity = quantity) 
-                } else {
-                    null
-                }
-            } else {
-                item 
+        return cartDao.getAllCartItems().map { entities ->
+            entities.map { entity ->
+                CartItem(
+                    product = Product(
+                        id = entity.productId,
+                        title = entity.title,
+                        price = entity.price,
+                        thumbnail = entity.thumbnail,
+                        discountPercentage = entity.discountPercentage,
+                        description = "",
+                        category = "",
+                        brand = "",
+                        images = emptyList(),
+                        rating = 0.0,
+                        stock = 0
+                    ),
+                    quantity = entity.quantity,
+                    selectedSize = entity.selectedSize
+                )
             }
         }
-        cartDataStore.updateCartItems(updatedItems)
+    }
+
+    override suspend fun addToCart(product: Product, quantity: Int, size: String) {
+        val existingItem = cartDao.getCartItem(product.id, size)
+        if (existingItem != null) {
+            cartDao.updateQuantity(product.id, size, existingItem.quantity + quantity)
+        } else {
+            cartDao.insertCartItem(
+                CartEntity(
+                    productId = product.id,
+                    title = product.title,
+                    price = product.price,
+                    thumbnail = product.thumbnail,
+                    quantity = quantity,
+                    discountPercentage = product.discountPercentage,
+                    selectedSize = size
+                )
+            )
+        }
+    }
+
+    override suspend fun removeFromCart(productId: Int, size: String) {
+        cartDao.deleteCartItem(productId, size)
+    }
+
+    override suspend fun updateQuantity(productId: Int, size: String, quantity: Int) {
+        cartDao.updateQuantity(productId, size, quantity)
     }
 
     override suspend fun clearCart() {
-        cartDataStore.clearCart() 
+        cartDao.clearCart()
     }
 }

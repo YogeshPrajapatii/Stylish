@@ -1,64 +1,73 @@
-package com.yogesh.stylish.data.repositoryimp.product
+package com.yogesh.stylish.data.repositoryimp.cart
 
-import com.yogesh.stylish.data.remote.ProductApiService
-import com.yogesh.stylish.data.remote.dto.CategoryDto
-import com.yogesh.stylish.data.remote.dto.ProductDto
-import com.yogesh.stylish.domain.model.Category
+import com.yogesh.stylish.data.local.dao.CartDao
+import com.yogesh.stylish.data.local.entity.CartEntity
+import com.yogesh.stylish.domain.model.CartItem
 import com.yogesh.stylish.domain.model.Product
-import com.yogesh.stylish.domain.repository.product.ProductRepository
-import com.yogesh.stylish.domain.util.Result
+import com.yogesh.stylish.domain.repository.cart.CartRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class ProductRepositoryImpl(private val apiService: ProductApiService
-) : ProductRepository {
+class CartRepositoryImpl @Inject constructor(
+    private val cartDao: CartDao
+) : CartRepository {
 
-    override suspend fun getAllProducts(): Result<List<Product>> {
-        return try {
-            val response = apiService.getAllProducts()
-            val products = response.products.map { it.toDomainProduct() }
-            Result.Success(products)
-        } catch (e: Exception) {
-            Result.Failure(e.message ?: "An unknown error occurred.")
+    override fun getCartItems(): Flow<List<CartItem>> {
+        return cartDao.getAllCartItems().map { entities ->
+            entities.map { entity ->
+                CartItem(
+                    product = Product(
+                        id = entity.productId,
+                        title = entity.title,
+                        price = entity.price,
+                        thumbnail = entity.thumbnail,
+                        discountPercentage = entity.discountPercentage,
+                        description = "",
+                        category = "",
+                        brand = "",
+                        images = emptyList(),
+                        rating = 0.0,
+                        stock = 0,
+                        sizes = emptyList()
+                    ),
+                    quantity = entity.quantity,
+                    selectedSize = entity.selectedSize
+                )
+            }
         }
     }
 
-    override suspend fun getAllCategories(): Result<List<Category>> {
-        return try {
-            val categoryDto = apiService.getAllCategories()
-            val categories = categoryDto.map { it.toDomainCategory() }
-            Result.Success(categories)
-        } catch (e: Exception) {
-            Result.Failure(e.message ?: "An unknown error occurred.")
+    override suspend fun addToCart(product: Product, quantity: Int, size: String) {
+        val existingItem = cartDao.getCartItem(product.id, size)
+
+        if (existingItem != null) {
+            val newQuantity = existingItem.quantity + quantity
+            cartDao.updateQuantity(product.id, size, newQuantity)
+        } else {
+            cartDao.insertCartItem(
+                CartEntity(
+                    productId = product.id,
+                    title = product.title,
+                    price = product.price,
+                    thumbnail = product.thumbnail,
+                    quantity = quantity,
+                    discountPercentage = product.discountPercentage,
+                    selectedSize = size
+                )
+            )
         }
     }
 
-    override suspend fun getProductById(id: Int): Result<Product> {
-
-        return try {
-            val productDto = apiService.getProductById(id)
-            Result.Success(productDto.toDomainProduct())
-        } catch (e: Exception) {
-            Result.Failure(e.message ?: "Unknown Error !")
-        }
-
-
+    override suspend fun removeFromCart(productId: Int) {
+        TODO("Not yet implemented")
     }
-}
 
-private fun ProductDto.toDomainProduct(): Product {
-    return Product(id = this.id,
-        title = this.title,
-        description = this.description,
-        price = this.price,
-        discountPercentage = this.discountPercentage,
-        rating = this.rating,
-        thumbnail = this.thumbnail,
-        stock = this.stock,
-        brand = this.brand ?: "Unknown",
-        category = this.category,
-        images = this.images,
-        sizes = null)
-}
+    override suspend fun updateQuantity(productId: Int, quantity: Int) {
+        TODO("Not yet implemented")
+    }
 
-private fun CategoryDto.toDomainCategory(): Category {
-    return Category(name = this.name, imageUrl = this.url)
+    override suspend fun clearCart() {
+        cartDao.clearCart()
+    }
 }
