@@ -1,73 +1,68 @@
-package com.yogesh.stylish.data.repositoryimp.cart
+package com.yogesh.stylish.data.repositoryimp.product
 
-import com.yogesh.stylish.data.local.dao.CartDao
-import com.yogesh.stylish.data.local.entity.CartEntity
-import com.yogesh.stylish.domain.model.CartItem
+import com.yogesh.stylish.data.remote.ProductApiService
+import com.yogesh.stylish.data.remote.dto.CategoryDto
+import com.yogesh.stylish.data.remote.dto.ProductDto
+import com.yogesh.stylish.domain.model.Category
 import com.yogesh.stylish.domain.model.Product
-import com.yogesh.stylish.domain.repository.cart.CartRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import com.yogesh.stylish.domain.repository.product.ProductRepository
+import com.yogesh.stylish.domain.util.Result
 
-class CartRepositoryImpl @Inject constructor(
-    private val cartDao: CartDao
-) : CartRepository {
+class ProductRepositoryImpl(private val apiService: ProductApiService) : ProductRepository {
 
-    override fun getCartItems(): Flow<List<CartItem>> {
-        return cartDao.getAllCartItems().map { entities ->
-            entities.map { entity ->
-                CartItem(
-                    product = Product(
-                        id = entity.productId,
-                        title = entity.title,
-                        price = entity.price,
-                        thumbnail = entity.thumbnail,
-                        discountPercentage = entity.discountPercentage,
-                        description = "",
-                        category = "",
-                        brand = "",
-                        images = emptyList(),
-                        rating = 0.0,
-                        stock = 0,
-                        sizes = emptyList()
-                    ),
-                    quantity = entity.quantity,
-                    selectedSize = entity.selectedSize
-                )
-            }
+    override suspend fun getAllProducts(): Result<List<Product>> {
+        return try {
+            val response = apiService.getAllProducts()
+            val products = response.products.map { it.toDomainProduct() }
+            Result.Success(products)
+        } catch (e: Exception) {
+            Result.Failure(e.message ?: "An unknown error occurred.")
         }
     }
 
-    override suspend fun addToCart(product: Product, quantity: Int, size: String) {
-        val existingItem = cartDao.getCartItem(product.id, size)
-
-        if (existingItem != null) {
-            val newQuantity = existingItem.quantity + quantity
-            cartDao.updateQuantity(product.id, size, newQuantity)
-        } else {
-            cartDao.insertCartItem(
-                CartEntity(
-                    productId = product.id,
-                    title = product.title,
-                    price = product.price,
-                    thumbnail = product.thumbnail,
-                    quantity = quantity,
-                    discountPercentage = product.discountPercentage,
-                    selectedSize = size
-                )
-            )
+    override suspend fun getAllCategories(): Result<List<Category>> {
+        return try {
+            val categoryDtos = apiService.getAllCategories()
+            val categories = categoryDtos.map { it.toDomainCategory() }
+            Result.Success(categories)
+        } catch (e: Exception) {
+            Result.Failure(e.message ?: "An unknown error occurred.")
         }
     }
 
-    override suspend fun removeFromCart(productId: Int) {
-        TODO("Not yet implemented")
+    override suspend fun getProductById(id: Int): Result<Product> {
+        return try {
+            val productDto = apiService.getProductById(id)
+            Result.Success(productDto.toDomainProduct())
+        } catch (e: Exception) {
+            Result.Failure(e.message ?: "Unknown Error!")
+        }
+    }
+}
+
+private fun ProductDto.toDomainProduct(): Product {
+    val mockSizes = when {
+        this.category.contains("shoes", ignoreCase = true) -> listOf("7 UK", "8 UK", "9 UK", "10 UK")
+        this.category.contains("clothing", ignoreCase = true) -> listOf("S", "M", "L", "XL")
+        else -> emptyList()
     }
 
-    override suspend fun updateQuantity(productId: Int, quantity: Int) {
-        TODO("Not yet implemented")
-    }
+    return Product(
+        id = this.id,
+        title = this.title,
+        description = this.description,
+        price = this.price,
+        discountPercentage = this.discountPercentage,
+        rating = this.rating,
+        thumbnail = this.thumbnail,
+        stock = this.stock,
+        brand = this.brand ?: "Unknown",
+        category = this.category,
+        images = this.images,
+        sizes = mockSizes
+    )
+}
 
-    override suspend fun clearCart() {
-        cartDao.clearCart()
-    }
+private fun CategoryDto.toDomainCategory(): Category {
+    return Category(name = this.name, imageUrl = this.url)
 }

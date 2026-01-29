@@ -31,6 +31,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yogesh.stylish.domain.model.Product
+import com.yogesh.stylish.domain.model.finalPriceINR
+import com.yogesh.stylish.domain.model.originalPriceINR
 import com.yogesh.stylish.presentation.navigation.Routes
 import kotlin.math.roundToInt
 
@@ -190,18 +192,15 @@ fun ProductDetailsContent(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    val discountedPrice = product.price * (1 - product.discountPercentage / 100.0)
-                    val originalPrice = product.price
-
                     Text(
-                        text = "₹${(discountedPrice * 83).roundToInt()}",
+                        text = "₹${product.finalPriceINR}",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
                     )
                     if (product.discountPercentage > 0) {
                         Text(
-                            text = "₹${(originalPrice * 83).roundToInt()}",
+                            text = "₹${product.originalPriceINR}",
                             style = MaterialTheme.typography.bodyMedium,
                             textDecoration = TextDecoration.LineThrough,
                             color = MaterialTheme.colorScheme.onSurfaceVariant

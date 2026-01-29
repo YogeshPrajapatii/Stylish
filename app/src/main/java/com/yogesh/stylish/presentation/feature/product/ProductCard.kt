@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yogesh.stylish.domain.model.Product
+import com.yogesh.stylish.domain.model.finalPriceINR
+import com.yogesh.stylish.domain.model.originalPriceINR
 import kotlin.math.roundToInt
 
 @Composable
@@ -86,17 +88,14 @@ fun ProductCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    val newPrice = product.price * 10
-
-                    val originalPrice = (newPrice / (1 - product.discountPercentage / 100)).roundToInt()
                     Text(
-                        text = "₹${newPrice.toInt()}",
+                        text = "₹${product.finalPriceINR}", // ✅ Consistent ₹742-₹805 range
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "₹$originalPrice",
+                        text = "₹${product.originalPriceINR}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textDecoration = TextDecoration.LineThrough

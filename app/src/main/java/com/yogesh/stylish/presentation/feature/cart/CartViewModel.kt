@@ -2,11 +2,13 @@ package com.yogesh.stylish.presentation.feature.cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yogesh.stylish.domain.model.finalPriceINR
 import com.yogesh.stylish.domain.usecase.cart.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
@@ -31,9 +33,8 @@ class CartViewModel @Inject constructor(
             }
             .onEach { items ->
                 val calculatedTotalItems = items.sumOf { it.quantity }
-                val calculatedTotalPrice = items.sumOf {
-                    val pricePerItem = it.product.price * (1 - it.product.discountPercentage / 100.0)
-                    pricePerItem * it.quantity
+                val calculatedTotalPrice = items.sumOf { item ->
+                    (item.product.finalPriceINR * item.quantity).toDouble()
                 }
                 _state.update {
                     it.copy(

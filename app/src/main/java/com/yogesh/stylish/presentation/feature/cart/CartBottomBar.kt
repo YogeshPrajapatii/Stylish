@@ -37,11 +37,11 @@ fun CartBottomBar(
                     Text(
                         text = "Total ($totalItems ${if (totalItems == 1) "item" else "items"})",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant // Secondary text color
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "₹${(totalPrice * 83).roundToInt()}", // TODO: Use proper currency conversion
-                        style = MaterialTheme.typography.headlineSmall, // Make total price prominent
+                        text = "₹${totalPrice.toInt()}",
+                        style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yogesh.stylish.domain.model.CartItem
+import com.yogesh.stylish.domain.model.finalPriceINR
 import kotlin.math.roundToInt
 
 @Composable
@@ -98,9 +99,8 @@ fun CartItemCard(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Price
-                val discountedPrice = cartItem.product.price * (1 - cartItem.product.discountPercentage / 100.0)
                 Text(
-                    text = "₹${(discountedPrice * 83).roundToInt()}", // TODO: Use proper currency conversion
+                    text = "₹${cartItem.product.finalPriceINR}", // ✅ Direct use
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
