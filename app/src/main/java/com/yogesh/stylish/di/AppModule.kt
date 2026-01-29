@@ -3,16 +3,19 @@ package com.yogesh.stylish.di
 import android.content.Context
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
+import com.yogesh.stylish.data.local.dao.AddressDao
 import com.yogesh.stylish.data.local.dao.CartDao
 import com.yogesh.stylish.data.local.dao.WishlistDao
 import com.yogesh.stylish.data.local.data_store.user.UserPreferenceManager
 import com.yogesh.stylish.data.local.database.StylishDatabase
 import com.yogesh.stylish.data.remote.ProductApiService
+import com.yogesh.stylish.data.repositoryimp.address.AddressRepositoryImpl
 import com.yogesh.stylish.data.repositoryimp.auth.AuthRepositoryImp
 import com.yogesh.stylish.data.repositoryimp.cart.CartRepositoryImpl
 import com.yogesh.stylish.data.repositoryimp.product.ProductRepositoryImpl
 import com.yogesh.stylish.data.repositoryimp.userprefs.UserPreferenceRepositoryImp
 import com.yogesh.stylish.data.repositoryimp.wishlist.WishlistRepositoryImpl
+import com.yogesh.stylish.domain.repository.address.AddressRepository
 import com.yogesh.stylish.domain.repository.auth.AuthRepository
 import com.yogesh.stylish.domain.repository.cart.CartRepository
 import com.yogesh.stylish.domain.repository.product.ProductRepository
@@ -223,5 +226,17 @@ object AppModule {
     @Singleton
     fun provideAddToWishlistUseCase(repository: WishlistRepository): AddToWishlistUseCase {
         return AddToWishlistUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddressDao(database: StylishDatabase): AddressDao {
+        return database.addressDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddressRepository(addressDao: AddressDao): AddressRepository {
+        return AddressRepositoryImpl(addressDao)
     }
 }
