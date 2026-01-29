@@ -41,5 +41,20 @@ sealed interface Routes {
 
     @Serializable
     data object CartScreen : Routes
+
+    @Serializable
+    object AddAddressScreen : Routes
+
+    @Serializable
+    object AddressListScreen : Routes
+
+    @Serializable
+    object CheckoutSummaryScreen : Routes
+
+    @Serializable object OrderSuccessScreen : Routes
+    @Serializable object OrderHistoryScreen : Routes
+    @Serializable object ProfileEditScreen : Routes
+
+
     
 }

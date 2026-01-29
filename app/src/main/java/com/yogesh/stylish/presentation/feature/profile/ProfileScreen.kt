@@ -1,117 +1,123 @@
 package com.yogesh.stylish.presentation.feature.profile
 
-import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.yogesh.stylish.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavHostController) {
+    val viewModel: ProfileViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsState()
 
-    val profileViewModel: ProfileViewModel = hiltViewModel()
-    val state by profileViewModel.state.collectAsState()
-
-
-    LaunchedEffect(state.didLogout) {
-
-        if (state.didLogout) {
-
-            navController.navigate(Routes.Login) {
-
-                popUpTo(navController.graph.id) {
-                    inclusive = true
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("My Profile", fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { navController.navigate(Routes.ProfileEditScreen) }) {
+                        Icon(Icons.Default.Edit, contentDescription = "Edit Profile")
+                    }
                 }
-
-            }
-
-            state.error?.let { errorMessage ->
-                Log.e("Profile Screen", "Logout Error : $errorMessage")
-
-            }
-
-
+            )
         }
-
-
-    }
-
-    Scaffold(topBar = {
-        TopAppBar(title = { Text("My Profile") },
-            // Correct placement for navigationIcon parameter
-            navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back")
-                }
-            })
-    }) { paddingValues -> // This is the padding that needs to be used
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues) // Apply the padding here
-            .padding(horizontal = 16.dp, vertical = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween) {
-            // Top section: User information
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(modifier = Modifier.size(120.dp),
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Profile Icon",
-                    tint = MaterialTheme.colorScheme.primary)
-                Spacer(modifier = Modifier.height(24.dp))
-
-                if (state.userEmail != null) {
-                    Text(text = state.userEmail!!, fontSize = 22.sp, fontWeight = FontWeight.Medium)
+    ) { padding ->
+        Column(
+            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(modifier = Modifier.size(100.dp)) {
+                if (state.profileInfo?.imageUri != null) {
+                    AsyncImage(
+                        model = state.profileInfo!!.imageUri,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize().clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
                 } else {
-                    CircularProgressIndicator(modifier = Modifier.size(30.dp))
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
 
-            // Bottom section: Logout Button
-            Button(onClick = { profileViewModel.logout() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                enabled = !state.didLogout) {
-                Icon(imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = "Logout Icon")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("LOGOUT", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = state.profileInfo?.fullName ?: "Set Your Name",
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(text = state.userEmail ?: "", color = Color.Gray)
+
+            Spacer(Modifier.height(32.dp))
+            ProfileMenuItem("My Orders", Icons.Default.ShoppingBag) { navController.navigate(Routes.OrderHistoryScreen) }
+            ProfileMenuItem("My Addresses", Icons.Default.LocationOn) { navController.navigate(Routes.AddressListScreen) }
+
+            Spacer(Modifier.weight(1f))
+            Button(
+                onClick = { viewModel.logout() },
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+            ) {
+                Icon(Icons.AutoMirrored.Filled.Logout, null)
+                Text(" LOGOUT", fontWeight = FontWeight.Bold)
             }
         }
+    }
+}
 
+@Composable
+fun ProfileMenuItem(title: String, icon: ImageVector, onClick: () -> Unit) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(vertical = 4.dp),
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.surface
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            }
+            Icon(Icons.AutoMirrored.Filled.NavigateNext, null, tint = Color.Gray)
+        }
     }
 }

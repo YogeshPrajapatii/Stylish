@@ -1,27 +1,10 @@
 package com.yogesh.stylish.presentation.feature.home.components
 
-
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +28,8 @@ fun SearchAndFilterSection() {
 
         var searchText by rememberSaveable { mutableStateOf("") }
 
-        OutlinedTextField(value = searchText,
+        OutlinedTextField(
+            value = searchText,
             onValueChange = { searchText = it },
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("Search any Product..") },
@@ -63,17 +47,18 @@ fun SearchAndFilterSection() {
             },
             singleLine = true,
             shape = RoundedCornerShape(15),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = MaterialTheme.colorScheme.outline, // Focus  border color
-                unfocusedBorderColor = MaterialTheme.colorScheme.outline, // Unfocus  border color
-                cursorColor = MaterialTheme.colorScheme.onSurface, // Cursor color (Text color)
-                focusedLeadingIconColor = MaterialTheme.colorScheme.onSurface, // Focused leading icon color
-                unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface, // Unfocused leading icon color
-                focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface, // Focused trailing icon color
-                unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface, // Unfocused trailing icon color
-                focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), // Placeholder color
-                unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) // Placeholder color
-            ))
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.outline,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                cursorColor = MaterialTheme.colorScheme.onSurface,
+                focusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            )
+        )
 
         Spacer(modifier = Modifier.height(14.dp))
 
@@ -88,12 +73,10 @@ fun SearchAndFilterSection() {
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Sort Button (Pill Shape)
             OutlinedButton(onClick = { /* Handle sort click */ },
                 shape = RoundedCornerShape(percent = 15),
                 modifier = Modifier.height(36.dp),
-                contentPadding = PaddingValues(horizontal = 12.dp,
-                    vertical = 0.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
                 Icon(painter = painterResource(id = R.drawable.ic_sort),
                     contentDescription = "Sort Icon",
@@ -107,17 +90,14 @@ fun SearchAndFilterSection() {
             OutlinedButton(onClick = { /* Handle sort click */ },
                 shape = RoundedCornerShape(percent = 15),
                 modifier = Modifier.height(36.dp),
-                contentPadding = PaddingValues(horizontal = 12.dp,
-                    vertical = 0.dp),
-
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
                 Icon(painter = painterResource(id = R.drawable.ic_filter),
-                    contentDescription = "Sort Icon",
+                    contentDescription = "Filter Icon",
                     modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(6.dp))
                 Text("Filter")
             }
-
         }
     }
 }

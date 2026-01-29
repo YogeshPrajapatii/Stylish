@@ -11,9 +11,14 @@ import com.yogesh.stylish.data.local.entity.AddressEntity
 
 
 import com.yogesh.stylish.data.local.dao.CartDao
+import com.yogesh.stylish.data.local.dao.OrderDao
+import com.yogesh.stylish.data.local.dao.ProfileDao
 import com.yogesh.stylish.data.local.entity.CartEntity
+import com.yogesh.stylish.data.local.entity.OrderEntity
+import com.yogesh.stylish.data.local.entity.ProfileEntity
+
 @Database(
-    entities = [Product::class, CartEntity::class, AddressEntity::class],
+    entities = [Product::class, CartEntity::class, AddressEntity::class, OrderEntity::class,ProfileEntity::class],
     version = 3,
     exportSchema = false
 )
@@ -22,4 +27,8 @@ abstract class StylishDatabase : RoomDatabase() {
     abstract fun wishlistDao(): WishlistDao
     abstract fun cartDao(): CartDao
     abstract fun addressDao(): AddressDao
+
+    abstract fun orderDao(): OrderDao
+
+    abstract fun profileDao(): ProfileDao
 }

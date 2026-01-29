@@ -5,11 +5,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.yogesh.stylish.presentation.feature.address.AddAddressScreen
+import com.yogesh.stylish.presentation.feature.address.AddressListScreen
 import com.yogesh.stylish.presentation.feature.auth.ForgotPassword
 import com.yogesh.stylish.presentation.feature.auth.Login
 import com.yogesh.stylish.presentation.feature.auth.ResetPassword
 import com.yogesh.stylish.presentation.feature.auth.SignUp
 import com.yogesh.stylish.presentation.feature.cart.CartScreen
+import com.yogesh.stylish.presentation.feature.checkout.CheckoutSummaryScreen
+import com.yogesh.stylish.presentation.feature.checkout.OrderSuccessScreen
 import com.yogesh.stylish.presentation.feature.home.screen.HomeScreen
 import com.yogesh.stylish.presentation.feature.profile.ProfileScreen
 import com.yogesh.stylish.presentation.feature.product.ProductDetailScreen
@@ -17,6 +21,8 @@ import com.yogesh.stylish.presentation.feature.product.ProductDetailScreen
 import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding1
 import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding2
 import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding3
+import com.yogesh.stylish.presentation.feature.orders.OrderHistoryScreen
+import com.yogesh.stylish.presentation.feature.profile.ProfileEditScreen
 import com.yogesh.stylish.presentation.feature.splash.Splash
 import com.yogesh.stylish.presentation.feature.splash.SplashViewModel
 import com.yogesh.stylish.presentation.feature.wishlist.WishlistScreen
@@ -63,9 +69,9 @@ fun Navigation() {
         composable<Routes.WishlistScreen> {
             WishlistScreen(navController = navController)
         }
-        
-        
-        composable <Routes.ProfileScreen>{
+
+
+        composable<Routes.ProfileScreen> {
             ProfileScreen(navController = navController)
         }
 
@@ -75,6 +81,36 @@ fun Navigation() {
 
         composable<Routes.CartScreen> {
             CartScreen(navController = navController)
+        }
+
+        composable<Routes.AddressListScreen> {
+            AddressListScreen(navController = navController)
+        }
+
+        composable<Routes.AddAddressScreen> {
+            AddAddressScreen(navController = navController)
+        }
+
+        composable<Routes.CheckoutSummaryScreen> {
+
+            CheckoutSummaryScreen(navController = navController)
+        }
+
+
+        composable<Routes.OrderHistoryScreen> {
+
+            OrderHistoryScreen(navController = navController)
+        }
+
+        composable<Routes.OrderSuccessScreen> {
+
+            OrderSuccessScreen(navController = navController)
+        }
+
+
+        composable<Routes.ProfileEditScreen> {
+
+            ProfileEditScreen(navController = navController)
         }
 
     }

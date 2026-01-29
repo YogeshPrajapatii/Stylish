@@ -3,26 +3,29 @@ package com.yogesh.stylish.presentation.feature.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.yogesh.stylish.data.local.entity.ProfileEntity
 import com.yogesh.stylish.domain.usecase.auth.LogoutUseCase
+import com.yogesh.stylish.domain.usecase.profile.GetProfileUseCase
+import com.yogesh.stylish.domain.usecase.profile.UpdateProfileUseCase
 import com.yogesh.stylish.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class ProfileState(
-
-    val userEmail: String? = null, val didLogout: Boolean = false, val error: String? = null
-
+    val userEmail: String? = null,
+    val didLogout: Boolean = false,
+    val profileInfo: ProfileEntity? = null,
+    val error: String? = null
 )
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-
-    private val firebaseAuth: FirebaseAuth, private val logoutUseCase: LogoutUseCase
-
+    private val firebaseAuth: FirebaseAuth,
+    private val logoutUseCase: LogoutUseCase,
+    private val getProfileUseCase: GetProfileUseCase,
+    private val updateProfileUseCase: UpdateProfileUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileState())
@@ -31,29 +34,52 @@ class ProfileViewModel @Inject constructor(
     init {
         val currentUser = firebaseAuth.currentUser
         _state.update { it.copy(userEmail = currentUser?.email) }
+        observeProfile()
+    }
+
+    private fun observeProfile() {
+        viewModelScope.launch {
+            getProfileUseCase().collect { profile ->
+                _state.update { it.copy(profileInfo = profile) }
+            }
+        }
+    }
+
+    fun saveProfile(
+        imageUri: String?,
+        fullName: String,
+        email: String,
+        pincode: String,
+        address: String,
+        city: String,
+        bankAcc: String,
+        holderName: String,
+        ifsc: String
+    ) {
+        viewModelScope.launch {
+            val updatedProfile = ProfileEntity(
+                id = 1,
+                imageUri = imageUri,
+                fullName = fullName,
+                email = email,
+                pincode = pincode,
+                address = address,
+                city = city,
+                bankAccountNumber = bankAcc,
+                accountHolderName = holderName,
+                ifscCode = ifsc
+            )
+            updateProfileUseCase(updatedProfile)
+        }
     }
 
     fun logout() {
-
-        viewModelScope.launch { 
-            
-            when ( val result = logoutUseCase()){
-               
-                is Result.Success -> {
-                    _state.update { it.copy(didLogout = true) }
-                }
-                
-                is Result.Failure -> {
-                    _state.update { it.copy(error = result.message) }
-                }
-
-                else -> {
-                    
-                }
+        viewModelScope.launch {
+            when (val result = logoutUseCase()) {
+                is Result.Success -> _state.update { it.copy(didLogout = true) }
+                is Result.Failure -> _state.update { it.copy(error = result.message) }
+                else -> {}
             }
-            
         }
-
     }
-
 }

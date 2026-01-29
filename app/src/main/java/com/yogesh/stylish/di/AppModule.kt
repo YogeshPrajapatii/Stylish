@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.yogesh.stylish.data.local.dao.AddressDao
 import com.yogesh.stylish.data.local.dao.CartDao
+import com.yogesh.stylish.data.local.dao.OrderDao
+import com.yogesh.stylish.data.local.dao.ProfileDao
 import com.yogesh.stylish.data.local.dao.WishlistDao
 import com.yogesh.stylish.data.local.data_store.user.UserPreferenceManager
 import com.yogesh.stylish.data.local.database.StylishDatabase
@@ -12,15 +14,23 @@ import com.yogesh.stylish.data.remote.ProductApiService
 import com.yogesh.stylish.data.repositoryimp.address.AddressRepositoryImpl
 import com.yogesh.stylish.data.repositoryimp.auth.AuthRepositoryImp
 import com.yogesh.stylish.data.repositoryimp.cart.CartRepositoryImpl
+import com.yogesh.stylish.data.repositoryimp.order.OrderRepositoryImpl
 import com.yogesh.stylish.data.repositoryimp.product.ProductRepositoryImpl
+import com.yogesh.stylish.data.repositoryimp.profile.ProfileRepositoryImpl
 import com.yogesh.stylish.data.repositoryimp.userprefs.UserPreferenceRepositoryImp
 import com.yogesh.stylish.data.repositoryimp.wishlist.WishlistRepositoryImpl
 import com.yogesh.stylish.domain.repository.address.AddressRepository
 import com.yogesh.stylish.domain.repository.auth.AuthRepository
 import com.yogesh.stylish.domain.repository.cart.CartRepository
+import com.yogesh.stylish.domain.repository.order.OrderRepository
 import com.yogesh.stylish.domain.repository.product.ProductRepository
+import com.yogesh.stylish.domain.repository.profile.ProfileRepository
 import com.yogesh.stylish.domain.repository.userprefs.UserPreferenceRepository
 import com.yogesh.stylish.domain.repository.wishlist.WishlistRepository
+import com.yogesh.stylish.domain.usecase.address.AddAddressUseCase
+import com.yogesh.stylish.domain.usecase.address.DeleteAddressUseCase
+import com.yogesh.stylish.domain.usecase.address.GetAddressesUseCase
+import com.yogesh.stylish.domain.usecase.address.SetDefaultAddressUseCase
 import com.yogesh.stylish.domain.usecase.auth.LoginUseCase
 import com.yogesh.stylish.domain.usecase.auth.LogoutUseCase
 import com.yogesh.stylish.domain.usecase.auth.SignUpUseCase
@@ -29,9 +39,12 @@ import com.yogesh.stylish.domain.usecase.cart.ClearCartUseCase
 import com.yogesh.stylish.domain.usecase.cart.GetCartItemsUseCase
 import com.yogesh.stylish.domain.usecase.cart.RemoveFromCartUseCase
 import com.yogesh.stylish.domain.usecase.cart.UpdateCartQuantityUseCase
+import com.yogesh.stylish.domain.usecase.order.PlaceOrderUseCase
 import com.yogesh.stylish.domain.usecase.product.GetCategoriesUseCase
 import com.yogesh.stylish.domain.usecase.product.GetProductByIdUseCase
 import com.yogesh.stylish.domain.usecase.product.GetProductsUseCase
+import com.yogesh.stylish.domain.usecase.profile.GetProfileUseCase
+import com.yogesh.stylish.domain.usecase.profile.UpdateProfileUseCase
 import com.yogesh.stylish.domain.usecase.userprefs.ReadOnboardingStatusUseCase
 import com.yogesh.stylish.domain.usecase.userprefs.SaveOnboardingStatusUseCase
 import com.yogesh.stylish.domain.usecase.wishlist.AddToWishlistUseCase
@@ -122,6 +135,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideOrderDao(database: StylishDatabase): OrderDao {
+        return database.orderDao()
+    }
+
+    @Provides
+    @Singleton
     fun provideWishlistRepository(wishlistDao: WishlistDao): WishlistRepository {
         return WishlistRepositoryImpl(wishlistDao)
     }
@@ -130,6 +149,12 @@ object AppModule {
     @Singleton
     fun provideCartRepository(cartDao: CartDao): CartRepository {
         return CartRepositoryImpl(cartDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOrderRepository(orderDao: OrderDao): OrderRepository {
+        return OrderRepositoryImpl(orderDao)
     }
 
     @Provides
@@ -238,5 +263,59 @@ object AppModule {
     @Singleton
     fun provideAddressRepository(addressDao: AddressDao): AddressRepository {
         return AddressRepositoryImpl(addressDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddAddressUseCase(repository: AddressRepository): AddAddressUseCase {
+        return AddAddressUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetAddressesUseCase(repository: AddressRepository): GetAddressesUseCase {
+        return GetAddressesUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteAddressUseCase(repository: AddressRepository): DeleteAddressUseCase {
+        return DeleteAddressUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetDefaultAddressUseCase(repository: AddressRepository): SetDefaultAddressUseCase {
+        return SetDefaultAddressUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlaceOrderUseCase(repository: OrderRepository, cartDao: CartDao): PlaceOrderUseCase {
+        return PlaceOrderUseCase(repository, cartDao)
+    }
+
+
+
+    @Provides
+    @Singleton
+    fun provideProfileDao(database: StylishDatabase): ProfileDao = database.profileDao()
+
+    @Provides
+    @Singleton
+    fun provideProfileRepository(profileDao: ProfileDao): ProfileRepository {
+        return ProfileRepositoryImpl(profileDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetProfileUseCase(repository: ProfileRepository): GetProfileUseCase {
+        return GetProfileUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateProfileUseCase(repository: ProfileRepository): UpdateProfileUseCase {
+        return UpdateProfileUseCase(repository)
     }
 }

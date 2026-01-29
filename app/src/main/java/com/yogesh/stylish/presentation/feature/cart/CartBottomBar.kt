@@ -1,4 +1,4 @@
-package com.yogesh.stylish.presentation.feature.cart.components // Adjust package as needed
+package com.yogesh.stylish.presentation.feature.cart
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,7 +8,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlin.math.roundToInt
 
 @Composable
 fun CartBottomBar(
@@ -16,11 +15,10 @@ fun CartBottomBar(
     totalItems: Int,
     onCheckout: () -> Unit
 ) {
-    // Surface provides elevation and background color from the theme
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shadowElevation = 8.dp, // Add shadow to make it pop
-        color = MaterialTheme.colorScheme.surface // Use theme surface color
+        shadowElevation = 8.dp,
+        color = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = Modifier
@@ -32,7 +30,6 @@ fun CartBottomBar(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Total Price and Item Count
                 Column {
                     Text(
                         text = "Total ($totalItems ${if (totalItems == 1) "item" else "items"})",
@@ -47,13 +44,12 @@ fun CartBottomBar(
                     )
                 }
 
-                // Checkout Button
                 Button(
                     onClick = onCheckout,
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .height(56.dp)
-                        .weight(1f) // Give button flexible width
+                        .weight(1f)
                         .padding(start = 16.dp)
                 ) {
                     Text(
