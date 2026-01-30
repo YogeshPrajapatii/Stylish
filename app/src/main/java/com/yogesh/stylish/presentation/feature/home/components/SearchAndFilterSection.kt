@@ -19,7 +19,9 @@ import com.yogesh.stylish.R
 @Composable
 fun SearchAndFilterSection(
     query: String,
-    onQueryChange: (String) -> Unit
+    onQueryChange: (String) -> Unit,
+    onSortClick: () -> Unit,
+    onFilterClick: () -> Unit
 ) {
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -63,11 +65,13 @@ fun SearchAndFilterSection(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            OutlinedButton(onClick = { },
+            OutlinedButton(
+                onClick = onSortClick,
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.height(36.dp),
                 contentPadding = PaddingValues(horizontal = 12.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)
+            ) {
                 Icon(painter = painterResource(id = R.drawable.ic_sort),
                     contentDescription = null,
                     modifier = Modifier.size(18.dp))
@@ -77,11 +81,13 @@ fun SearchAndFilterSection(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            OutlinedButton(onClick = { },
+            OutlinedButton(
+                onClick = onFilterClick,
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.height(36.dp),
                 contentPadding = PaddingValues(horizontal = 12.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)
+            ) {
                 Icon(painter = painterResource(id = R.drawable.ic_filter),
                     contentDescription = null,
                     modifier = Modifier.size(18.dp))

@@ -7,16 +7,25 @@ import com.yogesh.stylish.domain.model.Product
 import com.yogesh.stylish.domain.usecase.product.GetProductsUseCase
 import com.yogesh.stylish.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.roundToInt
+
+enum class SortOrder { NONE, PRICE_LOW_HIGH, PRICE_HIGH_LOW, RATING }
 
 data class HomeScreenState(
     val isLoading: Boolean = true,
     val products: List<Product> = emptyList(),
+    val filteredProducts: List<Product> = emptyList(),
     val categories: List<Category> = emptyList(),
     val searchQuery: String = "",
-    val filteredProducts: List<Product> = emptyList(),
+    val sortOrder: SortOrder = SortOrder.NONE,
+    val minPrice: Float = 0f,
+    val maxPrice: Float = 5000f,
+    val selectedRating: Float = 0f,
     val error: String? = null
 )
 
@@ -40,12 +49,8 @@ class HomeViewModel @Inject constructor(
                     val products = result.data
                     val dynamicCategories = products.groupBy { it.category }
                         .map { (name, prodList) ->
-                            Category(
-                                name = name,
-                                imageUrl = prodList.firstOrNull()?.thumbnail ?: ""
-                            )
+                            Category(name = name, imageUrl = prodList.firstOrNull()?.thumbnail ?: "")
                         }
-
                     _state.update { it.copy(
                         products = products,
                         filteredProducts = products,
@@ -53,9 +58,7 @@ class HomeViewModel @Inject constructor(
                         isLoading = false
                     ) }
                 }
-                is Result.Failure -> {
-                    _state.update { it.copy(isLoading = false, error = result.message) }
-                }
+                is Result.Failure -> _state.update { it.copy(isLoading = false, error = result.message) }
                 else -> Unit
             }
         }
@@ -63,8 +66,43 @@ class HomeViewModel @Inject constructor(
 
     fun onSearchQueryChanged(query: String) {
         _state.update { it.copy(searchQuery = query) }
-        val filtered = if (query.isEmpty()) _state.value.products
-        else _state.value.products.filter { it.title.contains(query, ignoreCase = true) }
-        _state.update { it.copy(filteredProducts = filtered) }
+        applyFiltersAndSort()
+    }
+
+    fun onSortOrderChanged(order: SortOrder) {
+        _state.update { it.copy(sortOrder = order) }
+        applyFiltersAndSort()
+    }
+
+    fun onFilterApplied(minPrice: Float, maxPrice: Float, rating: Float) {
+        _state.update { it.copy(minPrice = minPrice, maxPrice = maxPrice, selectedRating = rating) }
+        applyFiltersAndSort()
+    }
+
+    private fun applyFiltersAndSort() {
+        val query = _state.value.searchQuery
+        val minP = _state.value.minPrice
+        val maxP = _state.value.maxPrice
+        val rating = _state.value.selectedRating
+
+        var list = _state.value.products
+
+        if (query.isNotEmpty()) {
+            list = list.filter { it.title.contains(query, ignoreCase = true) }
+        }
+
+        list = list.filter {
+            val price = (it.price * 90).roundToInt()
+            price >= minP && price <= maxP && it.rating >= rating
+        }
+
+        list = when (_state.value.sortOrder) {
+            SortOrder.PRICE_LOW_HIGH -> list.sortedBy { it.price }
+            SortOrder.PRICE_HIGH_LOW -> list.sortedByDescending { it.price }
+            SortOrder.RATING -> list.sortedByDescending { it.rating }
+            SortOrder.NONE -> list
+        }
+
+        _state.update { it.copy(filteredProducts = list) }
     }
 }
