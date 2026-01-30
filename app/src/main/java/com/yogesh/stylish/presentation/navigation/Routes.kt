@@ -24,4 +24,6 @@ sealed interface Routes {
     @Serializable data object OrderHistoryScreen : Routes
     @Serializable data object ProfileEditScreen : Routes
     @Serializable data class PaymentScreen(val amount: Int, val orderId: Int) : Routes
+
+    @Serializable data class CategoryProductScreen(val categoryName: String) : Routes
 }

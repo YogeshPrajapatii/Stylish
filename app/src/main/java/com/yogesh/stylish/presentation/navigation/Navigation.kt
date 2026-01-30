@@ -23,6 +23,7 @@ import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding2
 import com.yogesh.stylish.presentation.feature.onboarding.OnBoarding3
 import com.yogesh.stylish.presentation.feature.orders.OrderHistoryScreen
 import com.yogesh.stylish.presentation.feature.payment.PaymentScreen
+import com.yogesh.stylish.presentation.feature.product.CategoryProductScreen
 import com.yogesh.stylish.presentation.feature.profile.ProfileEditScreen
 import com.yogesh.stylish.presentation.feature.splash.Splash
 import com.yogesh.stylish.presentation.feature.splash.SplashViewModel
@@ -63,5 +64,15 @@ fun Navigation() {
                 orderId = paymentRoute.orderId
             )
         }
+
+        composable<Routes.CategoryProductScreen> { backStackEntry ->
+            val route: Routes.CategoryProductScreen = backStackEntry.toRoute()
+            CategoryProductScreen(
+                navController = navController,
+                categoryName = route.categoryName
+            )
+        }
+
+
     }
 }

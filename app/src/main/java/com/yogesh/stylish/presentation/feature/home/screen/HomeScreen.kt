@@ -88,7 +88,14 @@ fun SearchSuggestionsGrid(state: HomeScreenState, navController: NavHostControll
 @Composable
 fun HomeContentFeed(state: HomeScreenState, navController: NavHostController) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        item { CategoryChipsRow(categories = state.categories, onCategoryClick = {}) }
+        item {
+            CategoryChipsRow(
+                categories = state.categories,
+                onCategoryClick = { category ->
+                    navController.navigate(Routes.CategoryProductScreen(categoryName = category.name))
+                }
+            )
+        }
         item { PromoBanner() }
         item {
             ProductsRow(
