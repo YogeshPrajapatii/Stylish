@@ -32,8 +32,7 @@ fun OrderSuccessScreen(navController: NavController) {
         Text(
             text = "Payment Successful!",
             style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            fontWeight = FontWeight.Bold
         )
         Text(
             text = "Your order has been placed successfully.",
@@ -53,6 +52,16 @@ fun OrderSuccessScreen(navController: NavController) {
             shape = MaterialTheme.shapes.medium
         ) {
             Text("Continue Shopping", fontSize = 18.sp)
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        TextButton(
+            onClick = {
+                navController.navigate(Routes.OrderHistoryScreen) {
+                    popUpTo(Routes.HomeScreen)
+                }
+            }
+        ) {
+            Text("View My Orders", fontSize = 16.sp, color = MaterialTheme.colorScheme.primary)
         }
     }
 }

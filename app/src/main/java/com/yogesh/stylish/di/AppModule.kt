@@ -59,6 +59,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+import com.yogesh.stylish.data.local.dao.payment.PaymentDao
+import com.yogesh.stylish.domain.repository.payment.PaymentRepository
+import com.yogesh.stylish.data.repositoryimp.payment.PaymentRepositoryImpl
+
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -317,5 +321,15 @@ object AppModule {
     @Singleton
     fun provideUpdateProfileUseCase(repository: ProfileRepository): UpdateProfileUseCase {
         return UpdateProfileUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun providePaymentDao(database: StylishDatabase): PaymentDao = database.paymentDao()
+
+    @Provides
+    @Singleton
+    fun providePaymentRepository(paymentDao: PaymentDao): PaymentRepository {
+        return PaymentRepositoryImpl(paymentDao)
     }
 }

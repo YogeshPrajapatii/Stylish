@@ -1,5 +1,6 @@
 package com.yogesh.stylish.presentation.feature.checkout
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,11 +10,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.yogesh.stylish.presentation.navigation.Routes
@@ -29,62 +31,66 @@ fun CheckoutSummaryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Order Summary") },
+                title = { Text("Order Summary", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
                 }
             )
         },
         bottomBar = {
-            Surface(shadowElevation = 8.dp) {
+            Surface(shadowElevation = 16.dp) {
                 Button(
                     onClick = {
-                        viewModel.placeOrder {
-                            navController.navigate(Routes.OrderSuccessScreen) {
-                                popUpTo(Routes.HomeScreen) { inclusive = false }
-                            }
+                        viewModel.prepareOrder { amount, orderId ->
+                            navController.navigate(Routes.PaymentScreen(amount, orderId))
                         }
                     },
                     modifier = Modifier.fillMaxWidth().padding(16.dp).height(56.dp),
                     shape = RoundedCornerShape(12.dp),
                     enabled = state.selectedAddress != null && state.cartItems.isNotEmpty()
                 ) {
-                    Text("Place Order & Pay ₹${state.finalPayable}", fontWeight = FontWeight.Bold)
+                    Text("Pay ₹${state.totalFinalPrice}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             item {
-                Text("Deliver to:", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text("Shipping Address", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 state.selectedAddress?.let { address ->
-                    Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp), shape = RoundedCornerShape(12.dp)) {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5))
+                    ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(address.fullName, fontWeight = FontWeight.Bold)
-                            Text("${address.houseNumber}, ${address.area}")
-                            Text("${address.city}, ${address.state} - ${address.pincode}")
-                            Text("Phone: ${address.phoneNumber}", style = MaterialTheme.typography.bodySmall)
+                            Text(address.fullName, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                            Text("${address.houseNumber}, ${address.area}", color = Color.DarkGray)
+                            Text("${address.city}, ${address.state} - ${address.pincode}", color = Color.DarkGray)
+                            Text("Phone: ${address.phoneNumber}", modifier = Modifier.padding(top = 4.dp))
                         }
                     }
                 }
             }
 
             item {
-                Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
+                Text("Price Details", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    elevation = CardDefaults.cardElevation(2.dp)
+                ) {
                     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Text("Price Details", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                        PriceRow("Total Original Price", "₹${state.totalOriginalPrice}", isStrikethrough = true)
-                        PriceRow("Product Discount", "- ₹${state.totalSavings}", color = Color(0xFF4CAF50))
-                        PriceRow("Delivery Charges", if (state.shippingCharge == 0) "FREE" else "₹${state.shippingCharge}")
+                        PriceRow(label = "Total MRP", value = "₹${state.totalOriginalPrice}")
+                        PriceRow(label = "Discount", value = "-₹${state.totalSavings}", color = Color(0xFF4CAF50))
+                        PriceRow(label = "Shipping Fee", value = "FREE", color = Color(0xFF4CAF50))
                         HorizontalDivider()
                         Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
-                            Text("Total Amount", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                            Text("₹${state.finalPayable}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                            Text("Total Amount", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+                            Text("₹${state.totalFinalPrice}", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
                         }
                     }
                 }
@@ -94,13 +100,9 @@ fun CheckoutSummaryScreen(
 }
 
 @Composable
-fun PriceRow(label: String, value: String, isStrikethrough: Boolean = false, color: Color = Color.Unspecified) {
+fun PriceRow(label: String, value: String, color: Color = Color.Unspecified) {
     Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
-        Text(label)
-        Text(
-            text = value,
-            color = color,
-            textDecoration = if (isStrikethrough) TextDecoration.LineThrough else null
-        )
+        Text(label, color = Color.Gray)
+        Text(value, fontWeight = FontWeight.Bold, color = color)
     }
 }

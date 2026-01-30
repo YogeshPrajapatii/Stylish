@@ -6,11 +6,10 @@ import com.yogesh.stylish.domain.repository.order.OrderRepository
 import javax.inject.Inject
 
 class PlaceOrderUseCase @Inject constructor(
-    private val orderRepository: OrderRepository,
-    private val cartDao: CartDao
+    private val repository: OrderRepository,
+    cartDao: CartDao
 ) {
     suspend operator fun invoke(order: OrderEntity) {
-        orderRepository.placeOrder(order)
-        cartDao.clearCart()
+        repository.placeOrder(order)
     }
 }

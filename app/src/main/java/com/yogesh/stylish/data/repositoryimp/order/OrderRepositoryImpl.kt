@@ -5,12 +5,16 @@ import com.yogesh.stylish.data.local.entity.OrderEntity
 import com.yogesh.stylish.domain.repository.order.OrderRepository
 import kotlinx.coroutines.flow.Flow
 
-class OrderRepositoryImpl(private val orderDao: OrderDao) : OrderRepository {
+class OrderRepositoryImpl(
+    private val orderDao: OrderDao
+) : OrderRepository {
     override suspend fun placeOrder(order: OrderEntity) {
         orderDao.insertOrder(order)
     }
 
-    override fun getAllOrders(): Flow<List<OrderEntity>> {
-        return orderDao.getAllOrders()
+    override fun getAllOrders(): Flow<List<OrderEntity>> = orderDao.getOrders()
+
+    override suspend fun updateOrderStatus(orderId: Int, status: String) {
+        orderDao.updateOrderStatus(orderId, status)
     }
 }

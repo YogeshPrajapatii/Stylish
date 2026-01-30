@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.yogesh.stylish.data.local.entity.AddressEntity
 import com.yogesh.stylish.data.local.entity.OrderEntity
 import com.yogesh.stylish.domain.model.CartItem
-import com.yogesh.stylish.domain.model.finalPriceINR
-import com.yogesh.stylish.domain.model.originalPriceINR
 import com.yogesh.stylish.domain.repository.address.AddressRepository
 import com.yogesh.stylish.domain.usecase.cart.GetCartItemsUseCase
 import com.yogesh.stylish.domain.usecase.order.PlaceOrderUseCase
@@ -14,15 +12,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 data class CheckoutState(
     val cartItems: List<CartItem> = emptyList(),
     val selectedAddress: AddressEntity? = null,
     val totalOriginalPrice: Int = 0,
-    val totalDiscountedPrice: Int = 0,
+    val totalFinalPrice: Int = 0,
     val totalSavings: Int = 0,
-    val shippingCharge: Int = 0,
-    val finalPayable: Int = 0,
     val isLoading: Boolean = false
 )
 
@@ -37,45 +34,46 @@ class CheckoutViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        loadCheckoutDetails()
+        loadCheckoutData()
     }
 
-    private fun loadCheckoutDetails() {
+    private fun loadCheckoutData() {
         viewModelScope.launch {
-            addressRepository.getAddresses().collect { addresses ->
-                val default = addresses.find { it.isDefault } ?: addresses.firstOrNull()
-                _state.update { it.copy(selectedAddress = default) }
-            }
-        }
+            combine(
+                getCartItemsUseCase(),
+                addressRepository.getAddresses()
+            ) { items, addresses ->
+                val final = items.sumOf { (it.product.price * 90 * it.quantity).roundToInt() }
+                val original = items.sumOf {
+                    val discFactor = 1 - (it.product.discountPercentage / 100)
+                    val origPrice = it.product.price / if (discFactor <= 0) 1.0 else discFactor
+                    (origPrice * 90 * it.quantity).roundToInt()
+                }
 
-        getCartItemsUseCase().onEach { items ->
-            val original = items.sumOf { it.product.originalPriceINR * it.quantity }
-            val discounted = items.sumOf { it.product.finalPriceINR * it.quantity }
-            val savings = original - discounted
-            val shipping = if (discounted in 1..499) 40 else 0
-
-            _state.update {
-                it.copy(
+                _state.update { it.copy(
                     cartItems = items,
+                    selectedAddress = addresses.find { it.isDefault } ?: addresses.firstOrNull(),
                     totalOriginalPrice = original,
-                    totalDiscountedPrice = discounted,
-                    totalSavings = savings,
-                    shippingCharge = shipping,
-                    finalPayable = discounted + shipping
-                )
-            }
-        }.launchIn(viewModelScope)
+                    totalFinalPrice = final,
+                    totalSavings = original - final
+                ) }
+            }.collect()
+        }
     }
 
-    fun placeOrder(onSuccess: () -> Unit) {
+    fun prepareOrder(onOrderCreated: (Int, Int) -> Unit) {
         viewModelScope.launch {
-            val order = OrderEntity(
-                totalAmount = _state.value.finalPayable,
-                addressId = _state.value.selectedAddress?.id ?: 0,
-                itemCount = _state.value.cartItems.size
+            val orderId = (100000..999999).random()
+            val newOrder = OrderEntity(
+                orderId = orderId,
+                totalAmount = _state.value.totalFinalPrice,
+                status = "PENDING",
+                orderDate = System.currentTimeMillis(),
+                itemCount = _state.value.cartItems.size,
+                addressId = _state.value.selectedAddress?.id ?: 0
             )
-            placeOrderUseCase(order)
-            onSuccess()
+            placeOrderUseCase(newOrder)
+            onOrderCreated(_state.value.totalFinalPrice, orderId)
         }
     }
 }
