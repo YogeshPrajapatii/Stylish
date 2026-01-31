@@ -62,6 +62,8 @@ import javax.inject.Singleton
 import com.yogesh.stylish.data.local.dao.payment.PaymentDao
 import com.yogesh.stylish.domain.repository.payment.PaymentRepository
 import com.yogesh.stylish.data.repositoryimp.payment.PaymentRepositoryImpl
+import com.yogesh.stylish.domain.manager.NetworkManager
+import com.yogesh.stylish.domain.util.NotificationHelper
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -331,5 +333,19 @@ object AppModule {
     @Singleton
     fun providePaymentRepository(paymentDao: PaymentDao): PaymentRepository {
         return PaymentRepositoryImpl(paymentDao)
+    }
+
+
+
+    @Provides
+    @Singleton
+    fun provideNetworkManager(@ApplicationContext context: Context): NetworkManager {
+        return NetworkManager(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationHelper(@ApplicationContext context: Context): NotificationHelper {
+        return NotificationHelper(context)
     }
 }

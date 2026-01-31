@@ -11,12 +11,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.WifiOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,43 +45,41 @@ fun HomeScreen(navController: NavHostController) {
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding).fillMaxSize().background(Color.White)) {
 
-            SearchAndFilterSection(
-                query = state.searchQuery,
-                onQueryChange = { viewModel.onSearchQueryChanged(it) },
-                onSortClick = { showSortSheet = true },
-                onFilterClick = { showFilterSheet = true }
-            )
-
-            if (state.isLoading) {
-                ShimmerEffect()
-            } else if (state.error != null) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = state.error!!)
-                }
+            if (!state.isOnline) {
+                NoInternetScreen(onRetry = { viewModel.fetchInitialData() })
             } else {
-                // Logic: If user is searching or has applied filters, show Grid. Else show Feed.
-                if (state.searchQuery.isNotEmpty() || state.sortOrder != SortOrder.NONE || state.selectedRating > 0f) {
-                    SearchSuggestionsGrid(state, navController)
+                SearchAndFilterSection(
+                    query = state.searchQuery,
+                    onQueryChange = { viewModel.onSearchQueryChanged(it) },
+                    onSortClick = { showSortSheet = true },
+                    onFilterClick = { showFilterSheet = true }
+                )
+
+                if (state.isLoading) {
+                    ShimmerEffect()
+                } else if (state.error != null) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(text = state.error!!)
+                    }
                 } else {
-                    HomeContentFeed(state, navController)
+                    if (state.searchQuery.isNotEmpty() || state.sortOrder != SortOrder.NONE || state.selectedRating > 0f) {
+                        SearchSuggestionsGrid(state, navController)
+                    } else {
+                        HomeContentFeed(state, navController)
+                    }
                 }
             }
         }
 
+        // Bottom Sheets
         if (showSortSheet) {
-            ModalBottomSheet(
-                onDismissRequest = { showSortSheet = false },
-                containerColor = Color.White
-            ) {
+            ModalBottomSheet(onDismissRequest = { showSortSheet = false }, containerColor = Color.White) {
                 SortOptionsContent(state.sortOrder) { viewModel.onSortOrderChanged(it); showSortSheet = false }
             }
         }
 
         if (showFilterSheet) {
-            ModalBottomSheet(
-                onDismissRequest = { showFilterSheet = false },
-                containerColor = Color.White
-            ) {
+            ModalBottomSheet(onDismissRequest = { showFilterSheet = false }, containerColor = Color.White) {
                 FilterOptionsContent(state.minPrice, state.maxPrice, state.selectedRating) { min, max, rating ->
                     viewModel.onFilterApplied(min, max, rating)
                     showFilterSheet = false
@@ -89,7 +89,7 @@ fun HomeScreen(navController: NavHostController) {
     }
 }
 
-// Helper Functions
+// --- Helper UI Components ---
 
 @Composable
 fun SearchSuggestionsGrid(state: HomeScreenState, navController: NavHostController) {
@@ -159,6 +159,24 @@ fun HomeContentFeed(state: HomeScreenState, navController: NavHostController) {
 }
 
 @Composable
+fun NoInternetScreen(onRetry: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(Icons.Default.WifiOff, null, Modifier.size(100.dp), Color.Gray)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("No Internet Connection", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text("Please check your network settings and try again.", textAlign = TextAlign.Center, color = Color.Gray)
+        Spacer(modifier = Modifier.height(32.dp))
+        Button(onClick = onRetry, Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(12.dp)) {
+            Text("Retry")
+        }
+    }
+}
+
+@Composable
 fun SortOptionsContent(selectedOrder: SortOrder, onOrderSelected: (SortOrder) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
         Text("Sort By", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
@@ -173,56 +191,27 @@ fun SortOptionsContent(selectedOrder: SortOrder, onOrderSelected: (SortOrder) ->
 
 @Composable
 fun SortItem(text: String, isSelected: Boolean, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth().height(48.dp).clickable { onClick() },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Row(Modifier.fillMaxWidth().height(48.dp).clickable { onClick() }, verticalAlignment = Alignment.CenterVertically) {
         RadioButton(selected = isSelected, onClick = onClick)
-        Text(text = text, modifier = Modifier.padding(start = 8.dp))
+        Text(text, modifier = Modifier.padding(start = 8.dp))
     }
 }
 
 @Composable
-fun FilterOptionsContent(
-    min: Float,
-    max: Float,
-    rating: Float,
-    onApply: (Float, Float, Float) -> Unit
-) {
+fun FilterOptionsContent(min: Float, max: Float, rating: Float, onApply: (Float, Float, Float) -> Unit) {
     var priceRange by remember { mutableStateOf(min..max) }
     var selectedRating by remember { mutableStateOf(rating) }
-
     Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
         Text("Filters", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text("Price Range: ₹${priceRange.start.toInt()} - ₹${priceRange.endInclusive.toInt()}", fontWeight = FontWeight.Medium)
-        RangeSlider(
-            value = priceRange,
-            onValueChange = { priceRange = it },
-            valueRange = 0f..5000f,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text("Minimum Rating: ${selectedRating.toInt()}+ Stars", fontWeight = FontWeight.Medium)
-        Slider(
-            value = selectedRating,
-            onValueChange = { selectedRating = it },
-            valueRange = 0f..5f,
-            steps = 4
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-            onClick = { onApply(priceRange.start, priceRange.endInclusive, selectedRating) },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
-            shape = RoundedCornerShape(12.dp)
-        ) {
+        Spacer(Modifier.height(24.dp))
+        Text("Price Range: ₹${priceRange.start.toInt()} - ₹${priceRange.endInclusive.toInt()}")
+        RangeSlider(value = priceRange, onValueChange = { priceRange = it }, valueRange = 0f..5000f, modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(24.dp))
+        Text("Minimum Rating: ${selectedRating.toInt()}+ Stars")
+        Slider(value = selectedRating, onValueChange = { selectedRating = it }, valueRange = 0f..5f, steps = 4)
+        Spacer(Modifier.height(32.dp))
+        Button(onClick = { onApply(priceRange.start, priceRange.endInclusive, selectedRating) }, modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(12.dp)) {
             Text("Apply Filters")
         }
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }

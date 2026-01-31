@@ -19,16 +19,16 @@ import com.yogesh.stylish.R
 fun SectionHeader(
     title: String,
     onViewAllClicked: () -> Unit,
-    modifier: Modifier = Modifier, // <-- यहाँ modifier को बाहर से आने दें
+    modifier: Modifier = Modifier,
     subtitle: String? = null,
     icon: ImageVector? = null,
     containerColor: Color,
     contentColor: Color
 ) {
     Card(
-        modifier = modifier // <-- यहाँ बाहर से आया modifier apply hoga
+        modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp), // <-- FIX: horizontal padding को यहाँ से हटाया
+            .padding(vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor)
@@ -36,7 +36,7 @@ fun SectionHeader(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp), // <-- FIX: Row के content को inner padding
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {

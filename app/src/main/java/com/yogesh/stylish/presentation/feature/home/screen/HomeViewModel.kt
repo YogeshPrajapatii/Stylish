@@ -6,10 +6,9 @@ import com.yogesh.stylish.domain.model.Category
 import com.yogesh.stylish.domain.model.Product
 import com.yogesh.stylish.domain.usecase.product.GetProductsUseCase
 import com.yogesh.stylish.domain.util.Result
+import com.yogesh.stylish.domain.manager.NetworkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -26,22 +25,37 @@ data class HomeScreenState(
     val minPrice: Float = 0f,
     val maxPrice: Float = 5000f,
     val selectedRating: Float = 0f,
+    val isOnline: Boolean = true,
     val error: String? = null
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getProductsUseCase: GetProductsUseCase
+    private val getProductsUseCase: GetProductsUseCase,
+    private val networkManager: NetworkManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeScreenState())
     val state = _state.asStateFlow()
 
     init {
+        observeNetwork()
         fetchInitialData()
     }
 
-    private fun fetchInitialData() {
+    private fun observeNetwork() {
+        viewModelScope.launch {
+            networkManager.isConnected.collect { online ->
+                _state.update { it.copy(isOnline = online) }
+                // अगर इंटरनेट वापस आए और डेटा खाली हो, तो ऑटो-लोड करें
+                if (online && _state.value.products.isEmpty()) {
+                    fetchInitialData()
+                }
+            }
+        }
+    }
+
+    fun fetchInitialData() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             when (val result = getProductsUseCase()) {
@@ -55,7 +69,8 @@ class HomeViewModel @Inject constructor(
                         products = products,
                         filteredProducts = products,
                         categories = dynamicCategories,
-                        isLoading = false
+                        isLoading = false,
+                        error = null
                     ) }
                 }
                 is Result.Failure -> _state.update { it.copy(isLoading = false, error = result.message) }
