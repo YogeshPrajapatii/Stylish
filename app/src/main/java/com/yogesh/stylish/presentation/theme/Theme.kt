@@ -36,7 +36,11 @@ fun StylishTheme(
     content: @Composable () -> Unit 
 ) {
     
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = if (darkTheme) {
+        DarkColorScheme.copy(surfaceTint = Color.Transparent)
+    } else {
+        LightColorScheme.copy(surfaceTint = Color.White)
+    }
 
    
     MaterialTheme(colorScheme = colorScheme,

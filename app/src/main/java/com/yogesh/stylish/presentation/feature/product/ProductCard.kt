@@ -9,17 +9,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape // Add this import for RoundedCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip // Add this import for clip
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -48,7 +49,9 @@ fun ProductCard(
             .padding(8.dp)
             .width(180.dp)
             .clickable { onProductClick(product.id) }, 
-        shape = RoundedCornerShape(12.dp),  
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column {
             AsyncImage(
@@ -89,7 +92,7 @@ fun ProductCard(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "₹${product.finalPriceINR}", // ✅ Consistent ₹742-₹805 range
+                        text = "₹${product.finalPriceINR}",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -112,7 +115,7 @@ fun ProductCard(
                         Icon(
                             imageVector = Icons.Filled.Star,
                             contentDescription = "Star",
-                            tint = Color(0xFFFFC107), // Yellow Star
+                            tint = Color(0xFFFFC107),
                             modifier = Modifier.size(16.dp)
                         )
                     }
