@@ -7,44 +7,55 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val LightColorScheme =
-    lightColorScheme(primary = PrimaryRed,    // Main brand color (buttons, links)
-        onPrimary = TextWhite,                // Color on top of primary (e.g., button text)
-        background = BackgroundWhite,         // Default screen background
-        onBackground = TextPrimary,           // Color on top of background (main text)
-        surface = SurfaceWhite,               // Color for elevated surfaces (cards, fields)
-        onSurface = TextPrimary,              // Color on top of surface (text in cards)
-        onSurfaceVariant = TextSecondaryGray, // Secondary text color on surfaces
-        error = ErrorRed                      // Color for errors
-    )
+// Light Color Scheme based on Figma
+private val LightColorScheme = lightColorScheme(
+    primary = StylishRed,
+    onPrimary = White,
+    secondary = StylishBlack,
+    onSecondary = White,
+    error = ErrorRed,
+    onError = White,
+    background = BackgroundGrey,
+    onBackground = TextBlack,
+    surface = White,
+    onSurface = TextBlack,
+    surfaceVariant = BackgroundGrey,
+    onSurfaceVariant = TextGrey,
+    outline = DividerGrey
+)
 
-private val DarkColorScheme =
-    darkColorScheme(primary = PrimaryRed,          // Main brand color remains the same
-        onPrimary = TextWhite,                     // Color on top of primary remains the same
-        background = Color(0xFF000000),     // Dark background for dark theme
-        onBackground = TextWhite,                  // Light text on dark background
-        surface = Color(0xFF1E1E1E),        // A common dark surface color (slightly lighter than // black)
-        onSurface = TextWhite,                     // Light text on dark surfaces
-        onSurfaceVariant = TextSecondaryGray,      // Use StylishGray or TextSecondaryGray for secondary dark text
-        error = ErrorRed                           // Error color remains the same
-        
-    )
+// Dark Color Scheme - Can be refined later
+private val DarkColorScheme = darkColorScheme(
+    primary = StylishRed,
+    onPrimary = White,
+    secondary = TextGrey,
+    onSecondary = TextBlack,
+    error = ErrorRed,
+    onError = White,
+    background = Color(0xFF121212),
+    onBackground = White,
+    surface = Color(0xFF1E1E1E),
+    onSurface = White,
+    surfaceVariant = Color(0xFF2A2A2A),
+    onSurfaceVariant = TextGrey,
+    outline = Color(0xFF444444)
+)
 
 @Composable
-fun StylishTheme( 
-    darkTheme: Boolean = isSystemInDarkTheme(), 
-    content: @Composable () -> Unit 
+fun StylishTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
 ) {
-    
-    val colorScheme = if (darkTheme) {
-        DarkColorScheme.copy(surfaceTint = Color.Transparent)
-    } else {
-        LightColorScheme.copy(surfaceTint = Color.White)
-    }
+    val baseColorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
-   
-    MaterialTheme(colorScheme = colorScheme,
-        typography = Typography, 
-        content = content        
+    // Override surface tint to keep cards white/dark on elevation
+    val finalColorScheme = baseColorScheme.copy(
+        surfaceTint = if (darkTheme) baseColorScheme.surface else White
+    )
+
+    MaterialTheme(
+        colorScheme = finalColorScheme,
+        typography = Typography,
+        content = content
     )
 }

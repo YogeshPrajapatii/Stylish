@@ -24,32 +24,39 @@ import com.yogesh.stylish.presentation.navigation.Routes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeAppBar(navController: NavController) {
-    CenterAlignedTopAppBar(modifier = Modifier.height(70.dp),
-
-
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface, // Surface color
-            titleContentColor = MaterialTheme.colorScheme.onSurface, // Title  color (If Text Available)
-            navigationIconContentColor = MaterialTheme.colorScheme.onSurface, // Navigation icon  color
-            actionIconContentColor = MaterialTheme.colorScheme.onSurface // Action icons  color
-        ), title = {
-            Image(painter = painterResource(id = R.drawable.img_app_logo),
+    CenterAlignedTopAppBar(
+        modifier = Modifier.padding(vertical = 8.dp),
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        title = {
+            Image(
+                painter = painterResource(id = R.drawable.img_app_logo),
                 contentDescription = "App Logo",
-                modifier = Modifier.height(36.dp))
-        }, navigationIcon = {
-            IconButton(onClick = {}, modifier = Modifier.padding(start = 4.dp)) {
-                Icon(painter = painterResource(id = R.drawable.ic_menu),
+                modifier = Modifier.height(32.dp)
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = {}, modifier = Modifier.padding(start = 8.dp)) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_menu),
                     contentDescription = "Menu",
-                    modifier = Modifier.size(28.dp))
+                    modifier = Modifier.size(28.dp),
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
             }
-        }, actions = {
-            IconButton(onClick = {navController.navigate(Routes.ProfileScreen)},modifier = Modifier
-                .padding(end = 4
-                .dp)) {
-                Image(painter = painterResource(R.drawable.img_profile_pic),
+        },
+        actions = {
+            IconButton(onClick = { navController.navigate(Routes.ProfileScreen) }, modifier = Modifier.padding(end = 8.dp)) {
+                Image(
+                    painter = painterResource(R.drawable.img_profile_pic),
                     contentDescription = "Profile Image",
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier
+                        .size(40.dp)
                         .clip(CircleShape),
-                    contentScale = ContentScale.Crop)
+                    contentScale = ContentScale.Crop
+                )
             }
-        })
+        }
+    )
 }

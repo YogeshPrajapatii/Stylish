@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.compose.material3)
     implementation(libs.material3)
+    implementation(libs.androidx.compose.foundation.layout)
     kapt(libs.androidx.room.compiler)
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.compose.material:material-icons-extended:1.6.7")

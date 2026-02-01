@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -26,7 +24,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -44,42 +41,15 @@ data class BottomNavItem(
 )
 
 val bottomNavItems = listOf(
-    BottomNavItem(
-        label = "Home",
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home,
-        route = Routes.HomeScreen
-    ),
-    BottomNavItem(
-        label = "Wishlist",
-        selectedIcon = Icons.Filled.Favorite,
-        unselectedIcon = Icons.Outlined.FavoriteBorder,
-        route = Routes.WishlistScreen 
-    ),
-    BottomNavItem(
-        label = "Cart",
-        selectedIcon = Icons.Filled.ShoppingCart,
-        unselectedIcon = Icons.Outlined.ShoppingCart,
-        route = Routes.CartScreen 
-    ),
-    BottomNavItem(
-        label = "Search",
-        selectedIcon = Icons.Filled.Search,
-        unselectedIcon = Icons.Outlined.Search,
-        route = Routes.HomeScreen
-    ),
-    BottomNavItem(
-        label = "Setting",
-        selectedIcon = Icons.Filled.Settings,
-        unselectedIcon = Icons.Outlined.Settings,
-        route = Routes.ProfileScreen 
-    )
+    BottomNavItem("Home", Icons.Filled.Home, Icons.Outlined.Home, Routes.HomeScreen),
+    BottomNavItem("Wishlist", Icons.Filled.Favorite, Icons.Outlined.FavoriteBorder, Routes.WishlistScreen),
+    BottomNavItem("Cart", Icons.Filled.ShoppingCart, Icons.Outlined.ShoppingCart, Routes.CartScreen),
+    BottomNavItem("Search", Icons.Filled.Search, Icons.Outlined.Search, Routes.HomeScreen),
+    BottomNavItem("Setting", Icons.Filled.Settings, Icons.Outlined.Settings, Routes.ProfileScreen)
 )
-
 
 @Composable
 fun MyBottomBar(navController: NavController) {
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
@@ -88,28 +58,20 @@ fun MyBottomBar(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(1.dp)
-                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)) 
+                .background(MaterialTheme.colorScheme.outline)
         )
-
         NavigationBar(
             containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface, 
-            modifier = Modifier.fillMaxWidth()
+            tonalElevation = 0.dp
         ) {
             bottomNavItems.forEach { item ->
-
-                val isSelected = currentDestination?.hierarchy?.any {
-                    it.route == item.route::class.qualifiedName
-                } == true
+                val isSelected = currentDestination?.hierarchy?.any { it.route == item.route::class.qualifiedName } == true
 
                 NavigationBarItem(
                     selected = isSelected,
                     onClick = {
                         navController.navigate(item.route) {
-                           
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
+                            popUpTo(navController.graph.startDestinationId) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
                         }
@@ -117,35 +79,20 @@ fun MyBottomBar(navController: NavController) {
                     label = {
                         Text(
                             text = item.label,
-                            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            style = MaterialTheme.typography.labelSmall
                         )
                     },
                     icon = {
-                        if (item.label == "Cart" && isSelected) {
-                            Box(
-                                modifier = Modifier
-                                    .size(45.dp)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primary,
-                                        shape = CircleShape
-                                    ),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = item.selectedIcon,
-                                    contentDescription = item.label,
-                                    tint = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
-                        } else {
-                            Icon(
-                                imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
-                                contentDescription = item.label,
-                                tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                        Icon(
+                            imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
+                            contentDescription = item.label
+                        )
                     },
                     colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         indicatorColor = Color.Transparent
                     )
                 )

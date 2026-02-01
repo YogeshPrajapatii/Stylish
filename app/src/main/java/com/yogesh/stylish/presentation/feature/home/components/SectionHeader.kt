@@ -1,9 +1,20 @@
 package com.yogesh.stylish.presentation.feature.home.components
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yogesh.stylish.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionHeader(
     title: String,
@@ -28,9 +38,9 @@ fun SectionHeader(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor)
     ) {
         Row(
@@ -48,7 +58,10 @@ fun SectionHeader(
                     color = contentColor
                 )
                 if (subtitle != null && icon != null) {
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(top = 4.dp)
+                    ) {
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
@@ -65,19 +78,16 @@ fun SectionHeader(
                 }
             }
 
-            OutlinedButton(
-                onClick = onViewAllClicked,
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(1.dp, contentColor.copy(alpha = 0.5f)),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = contentColor,
-                    containerColor = Color.Transparent
-                ),
-                modifier = Modifier.height(36.dp),
-                contentPadding = PaddingValues(horizontal = 12.dp)
+            Row(
+                modifier = Modifier.clickable(onClick = onViewAllClicked),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(text = "View all", style = MaterialTheme.typography.labelLarge)
-                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "View all",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = contentColor
+                )
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = "View All",

@@ -1,8 +1,17 @@
 package com.yogesh.stylish.presentation.feature.home.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -12,23 +21,42 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.WifiOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RangeSlider
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.yogesh.stylish.presentation.navigation.Routes
-import com.yogesh.stylish.presentation.feature.home.components.*
+import com.yogesh.stylish.presentation.feature.home.components.CategoryChipsRow
+import com.yogesh.stylish.presentation.feature.home.components.FootwaresCard
+import com.yogesh.stylish.presentation.feature.home.components.HomeAppBar
+import com.yogesh.stylish.presentation.feature.home.components.MyBottomBar
+import com.yogesh.stylish.presentation.feature.home.components.OfferCards
+import com.yogesh.stylish.presentation.feature.home.components.PromoBanner
+import com.yogesh.stylish.presentation.feature.home.components.SearchAndFilterSection
+import com.yogesh.stylish.presentation.feature.home.components.ShimmerEffect
+import com.yogesh.stylish.presentation.feature.home.components.SponsoredCard
+import com.yogesh.stylish.presentation.feature.home.components.SummerSale
 import com.yogesh.stylish.presentation.feature.product.ProductCard
 import com.yogesh.stylish.presentation.feature.product.ProductsRow
-import com.yogesh.stylish.presentation.theme.StylishRed
-import com.yogesh.stylish.presentation.theme.White
+import com.yogesh.stylish.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,10 +68,9 @@ fun HomeScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = { HomeAppBar(navController) },
-        bottomBar = { MyBottomBar(navController) },
-        containerColor = Color.White
+        bottomBar = { MyBottomBar(navController) }
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding).fillMaxSize().background(Color.White)) {
+        Column(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
 
             if (!state.isOnline) {
                 NoInternetScreen(onRetry = { viewModel.fetchInitialData() })
@@ -71,15 +98,14 @@ fun HomeScreen(navController: NavHostController) {
             }
         }
 
-        // Bottom Sheets
         if (showSortSheet) {
-            ModalBottomSheet(onDismissRequest = { showSortSheet = false }, containerColor = Color.White) {
+            ModalBottomSheet(onDismissRequest = { showSortSheet = false }) {
                 SortOptionsContent(state.sortOrder) { viewModel.onSortOrderChanged(it); showSortSheet = false }
             }
         }
 
         if (showFilterSheet) {
-            ModalBottomSheet(onDismissRequest = { showFilterSheet = false }, containerColor = Color.White) {
+            ModalBottomSheet(onDismissRequest = { showFilterSheet = false }) {
                 FilterOptionsContent(state.minPrice, state.maxPrice, state.selectedRating) { min, max, rating ->
                     viewModel.onFilterApplied(min, max, rating)
                     showFilterSheet = false
@@ -89,21 +115,19 @@ fun HomeScreen(navController: NavHostController) {
     }
 }
 
-// --- Helper UI Components ---
-
 @Composable
 fun SearchSuggestionsGrid(state: HomeScreenState, navController: NavHostController) {
     if (state.filteredProducts.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("No products found for '${state.searchQuery}'", color = Color.Gray)
+        Box(modifier = Modifier.fillMaxSize().padding(16.dp), contentAlignment = Alignment.Center) {
+            Text("No products found for '${state.searchQuery}'", color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     } else {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Adaptive(minSize = 160.dp),
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(state.filteredProducts) { product ->
                 ProductCard(product = product, onProductClick = {
@@ -116,7 +140,7 @@ fun SearchSuggestionsGrid(state: HomeScreenState, navController: NavHostControll
 
 @Composable
 fun HomeContentFeed(state: HomeScreenState, navController: NavHostController) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         item {
             CategoryChipsRow(
                 categories = state.categories,
@@ -129,32 +153,33 @@ fun HomeContentFeed(state: HomeScreenState, navController: NavHostController) {
         item {
             ProductsRow(
                 title = "Deal of the Day",
-                products = state.products,
+                products = state.products.take(6),
                 onViewAllClicked = {},
                 subtitle = "Limited Time Offer",
                 icon = Icons.Default.Schedule,
-                headerContainerColor = Color(0xFF4392F9),
-                headerContentColor = Color.White,
+                headerContainerColor = MaterialTheme.colorScheme.secondary,
+                headerContentColor = MaterialTheme.colorScheme.onSecondary,
                 onProductClick = { navController.navigate(Routes.ProductDetailScreen(it)) }
             )
         }
         item { OfferCards() }
+        item { FootwaresCard() }
         item {
-            val trendingProducts = state.products.filter { it.rating > 4.5 }
+            val trendingProducts = state.products.filter { it.rating > 4.5 }.take(6)
             ProductsRow(
                 title = "Trending Products",
                 products = trendingProducts,
                 onViewAllClicked = {},
                 subtitle = "Top Rated",
                 icon = Icons.Default.DateRange,
-                headerContainerColor = StylishRed,
-                headerContentColor = White,
+                headerContainerColor = MaterialTheme.colorScheme.primary,
+                headerContentColor = MaterialTheme.colorScheme.onPrimary,
                 onProductClick = { navController.navigate(Routes.ProductDetailScreen(it)) }
             )
         }
-        item { SummerSaleCard() }
+        item { SummerSale() }
         item { SponsoredCard() }
-        item { Spacer(modifier = Modifier.height(10.dp)) }
+        item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
 
@@ -165,10 +190,15 @@ fun NoInternetScreen(onRetry: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(Icons.Default.WifiOff, null, Modifier.size(100.dp), Color.Gray)
+        Icon(
+            imageVector = Icons.Default.WifiOff,
+            contentDescription = "No Internet Connection",
+            modifier = Modifier.size(100.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Text("No Internet Connection", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-        Text("Please check your network settings and try again.", textAlign = TextAlign.Center, color = Color.Gray)
+        Text("Please check your network settings and try again.", textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = onRetry, Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(12.dp)) {
             Text("Retry")
