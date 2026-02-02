@@ -47,6 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.yogesh.stylish.R
 import com.yogesh.stylish.domain.util.Result
+import com.yogesh.stylish.presentation.component.StylishButton
 import com.yogesh.stylish.presentation.navigation.Routes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -143,7 +144,9 @@ fun SignUp(navController: NavHostController) {
                     }
                 )
 
-                Button(
+                StylishButton(
+
+                    text = "Sign Up",
                     onClick = {
                         if (userId.isNotBlank() && password.isNotBlank()) {
                             if (password == confirmPassword) {
@@ -157,15 +160,8 @@ fun SignUp(navController: NavHostController) {
                             Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT)
                                 .show()
                         }
-                    },
-                    // <-- FIX: Added contentColor = Color.White
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = Color.White
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.small
-                ) {
+                    }
+                )
                     if (isLoading) {
                         CircularProgressIndicator(
                             color = Color.White, // Ensure spinner is also white
@@ -217,4 +213,3 @@ fun SignUp(navController: NavHostController) {
             }
         }
     }
-}

@@ -102,6 +102,12 @@ class ProductDetailViewModel @Inject constructor(
 
     fun addToCart() {
         viewModelScope.launch {
+            if (_state.value.isAlreadyInCart) {
+                _state.update { it.copy(snackbarMessage = "Product already in cart") }
+                return@launch
+            }
+
+
             val product = _state.value.product ?: return@launch
             val selectedSize = _state.value.selectedSize
             val isSizeRequired = !product.sizes.isNullOrEmpty()

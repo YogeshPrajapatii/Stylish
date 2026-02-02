@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.yogesh.stylish.presentation.component.StylishButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,17 +103,13 @@ fun ProfileEditScreen(
             ProfileTextField("IFSC Code", ifsc) { ifsc = it }
 
             Spacer(modifier = Modifier.height(32.dp))
-            Button(
+            StylishButton(
+                text = "Save",
                 onClick = {
                     viewModel.saveProfile(selectedImageUri?.toString(), fullName, email, pincode, address, city, bankAcc, holderName, ifsc)
                     navController.popBackStack()
-                },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                shape = MaterialTheme.shapes.medium,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF4B6E))
-            ) {
-                Text("Save Changes", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            }
+                }
+            )
         }
     }
 }

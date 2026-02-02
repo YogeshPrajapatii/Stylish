@@ -9,5 +9,7 @@ data class ProductDetailState(
     val error: String? = null,
     val isInWishlist: Boolean = false,
     val selectedSize:String = "",
-    val snackbarMessage: String? = null
+    val snackbarMessage: String? = null,
+    val isAlreadyInCart: Boolean = false
+
 )

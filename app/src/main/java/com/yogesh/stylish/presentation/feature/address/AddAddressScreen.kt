@@ -1,12 +1,12 @@
 package com.yogesh.stylish.presentation.feature.address
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.yogesh.stylish.presentation.component.StylishButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,13 +106,18 @@ fun AddAddressScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            Button(
-                onClick = { viewModel.saveAddress { navController.popBackStack() } },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Text("Save Address", fontWeight = FontWeight.Bold)
-            }
+
         }
+
+        Box(modifier = Modifier,
+            contentAlignment = Alignment.Center){
+
+            StylishButton(
+                text = "Save",
+                onClick = { viewModel.saveAddress { navController.popBackStack() } }
+            )
+
+        }
+
     }
 }

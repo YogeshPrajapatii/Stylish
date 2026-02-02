@@ -1,9 +1,7 @@
 package com.yogesh.stylish.presentation.feature.checkout
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
@@ -14,10 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.yogesh.stylish.presentation.component.StylishButton
 import com.yogesh.stylish.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,19 +40,22 @@ fun CheckoutSummaryScreen(
             )
         },
         bottomBar = {
-            Surface(shadowElevation = 16.dp) {
-                Button(
-                    onClick = {
-                        viewModel.prepareOrder { amount, orderId ->
-                            navController.navigate(Routes.PaymentScreen(amount, orderId))
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth().padding(16.dp).height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    enabled = state.selectedAddress != null && state.cartItems.isNotEmpty()
-                ) {
-                    Text("Pay ₹${state.totalFinalPrice}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Surface(shadowElevation = 16.dp, color = Color.White) {
+
+                Box(modifier = Modifier.padding(16.dp),
+                    contentAlignment = Alignment.Center){
+                    StylishButton(
+                        text = "Pay ₹${state.totalFinalPrice}",
+                        onClick = {
+                            viewModel.prepareOrder { amount, orderId ->
+                                navController.navigate(Routes.PaymentScreen(amount, orderId))
+                            }
+                        },
+                        enabled = state.selectedAddress != null && state.cartItems.isNotEmpty(),
+                    )
+
                 }
+
             }
         }
     ) { paddingValues ->

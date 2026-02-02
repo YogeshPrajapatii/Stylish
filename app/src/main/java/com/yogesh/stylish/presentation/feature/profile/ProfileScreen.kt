@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Edit
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.yogesh.stylish.presentation.component.StylishButton
 import com.yogesh.stylish.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,15 +84,10 @@ fun ProfileScreen(navController: NavHostController) {
             ProfileMenuItem("My Orders", Icons.Default.ShoppingBag) { navController.navigate(Routes.OrderHistoryScreen) }
             ProfileMenuItem("My Addresses", Icons.Default.LocationOn) { navController.navigate(Routes.AddressListScreen) }
 
-            Spacer(Modifier.weight(1f))
-            Button(
-                onClick = { viewModel.logout() },
-                modifier = Modifier.fillMaxWidth().height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-            ) {
-                Icon(Icons.AutoMirrored.Filled.Logout, null)
-                Text(" LOGOUT", fontWeight = FontWeight.Bold)
-            }
+            Spacer(modifier = Modifier.weight(1f))
+            StylishButton(
+                text = "LOGOUT",
+                onClick = { viewModel.logout() })
         }
     }
 }

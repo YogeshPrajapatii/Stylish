@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.yogesh.stylish.presentation.component.StylishButton
 import com.yogesh.stylish.presentation.navigation.Routes
 
 @Composable
@@ -71,23 +72,20 @@ fun ResetPassword(navController: NavHostController) {
             modifier = Modifier.fillMaxWidth())
 
 
-        ElevatedButton(onClick = {
+        StylishButton(text = "Change",
+            onClick = {
 
-            if (newPassword.isBlank()) {
+                if (newPassword.isBlank()) {
 
-                Toast.makeText(context, "Please enter your password !", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Please enter your password !", Toast.LENGTH_SHORT).show()
 
-            } else {
-                Toast.makeText(context, "Password Changed", Toast.LENGTH_SHORT).show()
-                navController.navigate(Routes.Login)
-            }
+                } else {
+                    Toast.makeText(context, "Password Changed", Toast.LENGTH_SHORT).show()
+                    navController.navigate(Routes.Login)
+                }
 
 
-        },
-            colors = ButtonDefaults.elevatedButtonColors(containerColor = MaterialTheme.colorScheme.primary),
-            modifier = Modifier.fillMaxWidth()) {
-            Text("Change Password", style = MaterialTheme.typography.titleLarge)
-        }
+            })
 
 
     }

@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.yogesh.stylish.presentation.component.StylishButton
 import com.yogesh.stylish.presentation.navigation.Routes
 
 @Composable
@@ -42,17 +43,13 @@ fun OrderSuccessScreen(navController: NavController) {
             modifier = Modifier.padding(top = 8.dp)
         )
         Spacer(modifier = Modifier.height(48.dp))
-        Button(
-            onClick = {
-                navController.navigate(Routes.HomeScreen) {
-                    popUpTo(Routes.HomeScreen) { inclusive = true }
-                }
-            },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text("Continue Shopping", fontSize = 18.sp)
-        }
+        StylishButton(
+
+            text = "Continue",
+            onClick = { navController.navigate(Routes.HomeScreen) {
+                popUpTo(Routes.HomeScreen) { inclusive = true }
+            }}
+        )
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(
             onClick = {
