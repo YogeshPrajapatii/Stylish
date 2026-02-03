@@ -3,7 +3,7 @@ package com.yogesh.stylish.presentation.feature.profile
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -34,16 +34,29 @@ fun ProfileEditScreen(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val scrollState = rememberScrollState()
 
-    var fullName by remember { mutableStateOf(state.profileInfo?.fullName ?: "") }
-    var email by remember { mutableStateOf(state.profileInfo?.email ?: "") }
-    var pincode by remember { mutableStateOf(state.profileInfo?.pincode ?: "") }
-    var address by remember { mutableStateOf(state.profileInfo?.address ?: "") }
-    var city by remember { mutableStateOf(state.profileInfo?.city ?: "") }
-    var bankAcc by remember { mutableStateOf(state.profileInfo?.bankAccountNumber ?: "") }
-    var holderName by remember { mutableStateOf(state.profileInfo?.accountHolderName ?: "") }
-    var ifsc by remember { mutableStateOf(state.profileInfo?.ifscCode ?: "") }
-    var selectedImageUri by remember { mutableStateOf<Uri?>(state.profileInfo?.imageUri?.let { Uri.parse(it) }) }
+    var fullName by remember { mutableStateOf("") }
+    var pincode by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+    var city by remember { mutableStateOf("") }
+    var bankAcc by remember { mutableStateOf("") }
+    var holderName by remember { mutableStateOf("") }
+    var ifsc by remember { mutableStateOf("") }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
+    LaunchedEffect(state.profileInfo) {
+        state.profileInfo?.let {
+            fullName = it.fullName
+            pincode = it.pincode
+            address = it.address
+            city = it.city
+            bankAcc = it.bankAccountNumber
+            holderName = it.accountHolderName
+            ifsc = it.ifscCode
+            selectedImageUri = it.imageUri?.let { uri -> Uri.parse(uri) }
+        }
+    }
 
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -59,10 +72,42 @@ fun ProfileEditScreen(
                     }
                 }
             )
+        },
+        bottomBar = {
+            Surface(tonalElevation = 8.dp) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    StylishButton(
+                        text = "Save Changes",
+                        onClick = {
+                            viewModel.saveProfile(
+                                selectedImageUri?.toString(),
+                                fullName,
+                                pincode,
+                                address,
+                                city,
+                                bankAcc,
+                                holderName,
+                                ifsc
+                            ) {
+                                navController.popBackStack()
+                            }
+                        }
+                    )
+                }
+            }
         }
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(scrollState)
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(contentAlignment = Alignment.BottomEnd) {
@@ -70,62 +115,101 @@ fun ProfileEditScreen(
                     AsyncImage(
                         model = selectedImageUri,
                         contentDescription = null,
-                        modifier = Modifier.size(100.dp).clip(CircleShape),
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape),
                         contentScale = ContentScale.Crop
                     )
                 } else {
-                    Icon(Icons.Default.AccountCircle, null, Modifier.size(100.dp).clip(CircleShape), MaterialTheme.colorScheme.primary)
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
                 Surface(
-                    modifier = Modifier.size(30.dp).clickable { galleryLauncher.launch("image/*") },
+                    modifier = Modifier
+                        .size(32.dp)
+                        .offset(x = (-4).dp, y = (-4).dp),
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
+                    onClick = { galleryLauncher.launch("image/*") }
                 ) {
-                    Icon(Icons.Default.Edit, null, Modifier.padding(6.dp), tint = Color.White)
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = null,
+                        modifier = Modifier.padding(6.dp),
+                        tint = Color.White
+                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-            SectionTitle("Personal Details")
-            ProfileTextField("Full Name", fullName) { fullName = it }
-            ProfileTextField("Email Address", email) { email = it }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            SectionTitle("Address Details")
-            ProfileTextField("Pincode", pincode) { pincode = it }
-            ProfileTextField("Address", address) { address = it }
-            ProfileTextField("City", city) { city = it }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            SectionTitle("Bank Details")
-            ProfileTextField("Bank Account Number", bankAcc) { bankAcc = it }
-            ProfileTextField("Account Holder Name", holderName) { holderName = it }
-            ProfileTextField("IFSC Code", ifsc) { ifsc = it }
-
             Spacer(modifier = Modifier.height(32.dp))
-            StylishButton(
-                text = "Save",
-                onClick = {
-                    viewModel.saveProfile(selectedImageUri?.toString(), fullName, email, pincode, address, city, bankAcc, holderName, ifsc)
-                    navController.popBackStack()
-                }
-            )
+
+            SectionHeader("Personal Details")
+            ProfileEntryField("Full Name", fullName, state.validationErrors["name"]) { fullName = it }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SectionHeader("Address Details")
+            ProfileEntryField("Pincode", pincode, state.validationErrors["pincode"]) { if (it.length <= 6) pincode = it }
+            ProfileEntryField("Full Address", address, state.validationErrors["address"]) { address = it }
+            ProfileEntryField("City", city, state.validationErrors["city"]) { city = it }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SectionHeader("Bank Details")
+            ProfileEntryField("Bank Account Number", bankAcc, state.validationErrors["bank"]) { bankAcc = it }
+            ProfileEntryField("Account Holder Name", holderName, state.validationErrors["holder"]) { holderName = it }
+            ProfileEntryField("IFSC Code", ifsc, state.validationErrors["ifsc"]) { if (it.length <= 11) ifsc = it.uppercase() }
+
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
 
 @Composable
-fun SectionTitle(title: String) {
-    Text(text = title, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+fun SectionHeader(title: String) {
+    Text(
+        text = title,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        fontWeight = FontWeight.Bold,
+        fontSize = 17.sp,
+        color = MaterialTheme.colorScheme.primary
+    )
 }
 
 @Composable
-fun ProfileTextField(label: String, value: String, onValueChange: (String) -> Unit) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-        shape = MaterialTheme.shapes.medium
-    )
+fun ProfileEntryField(
+    label: String,
+    value: String,
+    errorMessage: String?,
+    onValueChange: (String) -> Unit
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            label = { Text(label) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            isError = errorMessage != null,
+            singleLine = true,
+            shape = MaterialTheme.shapes.medium
+        )
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
 }

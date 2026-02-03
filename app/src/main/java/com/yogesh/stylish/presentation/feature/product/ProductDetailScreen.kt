@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -23,10 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -40,7 +37,6 @@ import com.yogesh.stylish.domain.model.originalPriceINR
 import com.yogesh.stylish.presentation.component.SizeSelector
 import com.yogesh.stylish.presentation.component.StylishButton
 import com.yogesh.stylish.presentation.navigation.Routes
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,37 +53,30 @@ fun ProductDetailScreen(
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }, topBar = {
-            Column {
-                TopAppBar(
-                    title = {}, navigationIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                        }
-                    }, actions = {
-                        IconButton(onClick = { navController.navigate(Routes.CartScreen) }) {
-                            Icon(Icons.Default.ShoppingCart, contentDescription = "Cart")
-                        }
-                    }, colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                        scrolledContainerColor = MaterialTheme.colorScheme.background
-                    )
-                )
-                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+    Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }, topBar = {
+        TopAppBar(title = {}, navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
-        }, bottomBar = {
-            if (state.product != null) {
-                ProductDetailBottomBar(
-                    isInWishlist = state.isInWishlist,
-                    onToggleWishlist = { viewModel.toggleWishlist() },
-                    onAddToCart = { viewModel.addToCart() },
-                    isStockAvailable = state.product!!.stock > 0,
-                    isAlreadyInCart = state.isAlreadyInCart
-                )
+        }, actions = {
+            IconButton(onClick = { navController.navigate(Routes.CartScreen) }) {
+                Icon(Icons.Default.ShoppingCart, contentDescription = "Cart")
             }
-        }, containerColor = MaterialTheme.colorScheme.background
-    ) { paddingValues ->
+        })
+    }, bottomBar = {
+        if (state.product != null) {
+            ProductDetailBottomBar(
+                isInWishlist = state.isInWishlist,
+                isAlreadyInCart = state.isAlreadyInCart,
+                isStockAvailable = state.product!!.stock > 0,
+                onToggleWishlist = { viewModel.toggleWishlist() },
+                onToggleCart = { viewModel.toggleCart() },
+                onBuyNow = {
+                    if (!state.isAlreadyInCart) viewModel.toggleCart()
+                    navController.navigate(Routes.CartScreen)
+                })
+        }
+    }) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -97,15 +86,13 @@ fun ProductDetailScreen(
             when {
                 state.isLoading -> CircularProgressIndicator()
                 state.error != null -> Text(
-                    text = "Error: ${state.error}", color = MaterialTheme.colorScheme.error
+                    text = state.error!!, color = MaterialTheme.colorScheme.error
                 )
 
                 state.product != null -> ProductDetailsContent(
                     product = state.product!!,
                     selectedSize = state.selectedSize,
-                    onSizeSelected = { size -> viewModel.onSizeSelected(size) })
-
-                else -> Text("Product not found.")
+                    onSizeSelected = { viewModel.onSizeSelected(it) })
             }
         }
     }
@@ -116,9 +103,7 @@ fun ProductDetailScreen(
 fun ProductDetailsContent(
     product: Product, selectedSize: String, onSizeSelected: (String) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
             Box(
                 modifier = Modifier
@@ -126,34 +111,28 @@ fun ProductDetailsContent(
                     .aspectRatio(1f)
             ) {
                 val pagerState = rememberPagerState { product.images.size }
-                HorizontalPager(
-                    state = pagerState, modifier = Modifier.fillMaxSize()
-                ) { page ->
+                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(product.images[page]).crossfade(true).build(),
-                        contentDescription = "Product Image ${page + 1}",
+                        contentDescription = null,
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)),
                         contentScale = ContentScale.Crop
                     )
                 }
-
                 Row(
                     Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    repeat(pagerState.pageCount) { iteration ->
+                    repeat(product.images.size) { iteration ->
                         val color =
-                            if (pagerState.currentPage == iteration) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface.copy(
-                                alpha = 0.5f
-                            )
+                            if (pagerState.currentPage == iteration) MaterialTheme.colorScheme.primary else Color.LightGray
                         Box(
                             modifier = Modifier
-                                .padding(4.dp)
                                 .clip(CircleShape)
                                 .background(color)
                                 .size(8.dp)
@@ -162,7 +141,6 @@ fun ProductDetailsContent(
                 }
             }
         }
-
         item {
             Column(
                 modifier = Modifier.padding(16.dp),
@@ -171,38 +149,26 @@ fun ProductDetailsContent(
                 Text(
                     text = product.brand,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = Color.Gray
                 )
                 Text(
                     text = product.title,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
-
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
                         Icons.Filled.Star,
-                        contentDescription = "Star",
+                        null,
                         tint = Color(0xFFFFC107),
                         modifier = Modifier.size(20.dp)
                     )
-                    Text(
-                        text = product.rating.toString(),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    if (product.stock > 0) {
-                        Text(
-                            text = "|  In Stock (${product.stock} left)",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF4CAF50)
-                        )
-                    }
+                    Text(text = product.rating.toString(), fontWeight = FontWeight.SemiBold)
+                    if (product.stock > 0) Text(text = "| In Stock", color = Color(0xFF4CAF50))
                 }
-
                 if (!product.sizes.isNullOrEmpty()) {
                     SizeSelector(
                         sizes = product.sizes,
@@ -210,9 +176,7 @@ fun ProductDetailsContent(
                         onSizeSelected = onSizeSelected
                     )
                 }
-
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
+                HorizontalDivider()
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -228,21 +192,19 @@ fun ProductDetailsContent(
                             text = "₹${product.originalPriceINR}",
                             style = MaterialTheme.typography.titleMedium,
                             textDecoration = TextDecoration.LineThrough,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = Color.Gray
                         )
                     }
                 }
-
                 Text(
                     text = "Description",
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 8.dp)
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = product.description,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = Color.DarkGray
                 )
             }
         }
@@ -252,21 +214,17 @@ fun ProductDetailsContent(
 @Composable
 fun ProductDetailBottomBar(
     isInWishlist: Boolean,
-    onToggleWishlist: () -> Unit,
-    onAddToCart: () -> Unit,
+    isAlreadyInCart: Boolean,
     isStockAvailable: Boolean,
-    isAlreadyInCart: Boolean
+    onToggleWishlist: () -> Unit,
+    onToggleCart: () -> Unit,
+    onBuyNow: () -> Unit
 ) {
-    BottomAppBar(
-        containerColor = MaterialTheme.colorScheme.surface,
-        tonalElevation = 8.dp,
-        contentPadding = PaddingValues(horizontal = 16.dp)
-    ) {
-        val haptics = LocalHapticFeedback.current
+    BottomAppBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 8.dp) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -274,46 +232,35 @@ fun ProductDetailBottomBar(
                 onClick = onToggleWishlist,
                 shape = CircleShape,
                 modifier = Modifier.size(52.dp),
-                contentPadding = PaddingValues(0.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Icon(
                     imageVector = if (isInWishlist) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Wishlist",
-                    tint = MaterialTheme.colorScheme.primary
+                    contentDescription = null,
+                    tint = if (isInWishlist) Color.Red else MaterialTheme.colorScheme.primary
                 )
             }
-
-            Box(
-                modifier = Modifier.weight(1f), contentAlignment = Alignment.Center
-            ) {
-
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                 StylishButton(
-                    text = "Buy",
-                    onClick = {},
-                    enabled = isStockAvailable
+                    text = "Buy Now",
+                    onClick = onBuyNow,
+                    enabled = isStockAvailable,
+                    modifier = Modifier.fillMaxWidth(0.9f)
                 )
-
-
             }
-
             OutlinedButton(
-                onClick = onAddToCart,
+                onClick = onToggleCart,
                 shape = CircleShape,
                 modifier = Modifier.size(52.dp),
                 contentPadding = PaddingValues(0.dp),
-                enabled = isStockAvailable,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+                enabled = isStockAvailable
             ) {
-
                 Icon(
                     imageVector = if (isAlreadyInCart) Icons.Filled.ShoppingCart else Icons.Outlined.ShoppingCart,
-                    contentDescription = "Cart",
-                    tint = MaterialTheme.colorScheme.primary
+                    contentDescription = null,
+                    tint = if (isAlreadyInCart) Color.Red else MaterialTheme.colorScheme.primary
                 )
             }
-
-
         }
     }
 }

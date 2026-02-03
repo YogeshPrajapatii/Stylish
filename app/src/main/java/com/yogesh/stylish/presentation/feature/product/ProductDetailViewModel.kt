@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.yogesh.stylish.domain.usecase.cart.AddToCartUseCase
+import com.yogesh.stylish.domain.usecase.cart.GetCartItemsUseCase
+import com.yogesh.stylish.domain.usecase.cart.RemoveFromCartUseCase
 import com.yogesh.stylish.domain.usecase.product.GetProductByIdUseCase
 import com.yogesh.stylish.domain.usecase.wishlist.AddToWishlistUseCase
 import com.yogesh.stylish.domain.usecase.wishlist.CheckWishlistStatusUseCase
@@ -25,6 +27,8 @@ class ProductDetailViewModel @Inject constructor(
     private val removeFromWishlistUseCase: RemoveFromWishlistUseCase,
     private val checkWishlistStatusUseCase: CheckWishlistStatusUseCase,
     private val addToCartUseCase: AddToCartUseCase,
+    private val getCartItemsUseCase: GetCartItemsUseCase,
+    private val removeFromCartUseCase: RemoveFromCartUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -38,30 +42,33 @@ class ProductDetailViewModel @Inject constructor(
 
         if (currentProductId != -1) {
             getProductById(currentProductId)
+            observeCartStatus(currentProductId)
         } else {
             _state.update { it.copy(isLoading = false, error = "Invalid Product ID.") }
+        }
+    }
+
+    private fun observeCartStatus(productId: Int) {
+        viewModelScope.launch {
+            getCartItemsUseCase().collect { cartItems ->
+                val isInCart = cartItems.any { it.product.id == productId }
+                _state.update { it.copy(isAlreadyInCart = isInCart) }
+            }
         }
     }
 
     private fun getProductById(id: Int) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-
             when (val result = getProductByIdUseCase(id)) {
                 is Result.Failure -> {
-                    _state.update {
-                        it.copy(isLoading = false, error = result.message)
-                    }
+                    _state.update { it.copy(isLoading = false, error = result.message) }
                 }
                 is Result.Success -> {
-                    _state.update {
-                        it.copy(product = result.data, isLoading = false, error = null)
-                    }
+                    _state.update { it.copy(product = result.data, isLoading = false) }
                     checkWishlistStatus(id)
                 }
-                else -> {
-                    _state.update { it.copy(isLoading = false) }
-                }
+                else -> { _state.update { it.copy(isLoading = false) } }
             }
         }
     }
@@ -72,7 +79,7 @@ class ProductDetailViewModel @Inject constructor(
                 val isInWishlistNow = checkWishlistStatusUseCase(productId)
                 _state.update { it.copy(isInWishlist = isInWishlistNow) }
             } catch (e: Exception) {
-                _state.update { it.copy(isInWishlist = false, error = "Failed to check wishlist status") }
+                _state.update { it.copy(isInWishlist = false) }
             }
         }
     }
@@ -80,56 +87,44 @@ class ProductDetailViewModel @Inject constructor(
     fun toggleWishlist() {
         viewModelScope.launch {
             val currentState = _state.value
-            val product = currentState.product
-            if (product != null) {
-                try {
-                    if (currentState.isInWishlist) {
-                        removeFromWishlistUseCase(product.id)
-                    } else {
-                        addToWishlistUseCase(product)
-                    }
-                    _state.update { it.copy(isInWishlist = !currentState.isInWishlist) }
-                } catch (e: Exception) {
-                    _state.update { it.copy(error = "Wishlist update failed: ${e.message}") }
+            val product = currentState.product ?: return@launch
+            try {
+                if (currentState.isInWishlist) {
+                    removeFromWishlistUseCase(product.id)
+                } else {
+                    addToWishlistUseCase(product)
                 }
+                _state.update { it.copy(isInWishlist = !currentState.isInWishlist) }
+            } catch (e: Exception) {
+                _state.update { it.copy(error = "Wishlist update failed") }
+            }
+        }
+    }
+
+    fun toggleCart() {
+        viewModelScope.launch {
+            val product = _state.value.product ?: return@launch
+            val selectedSize = _state.value.selectedSize
+            if (!product.sizes.isNullOrEmpty() && selectedSize.isEmpty()) {
+                _state.update { it.copy(error = "Please select a size first") }
+                return@launch
+            }
+            try {
+                if (_state.value.isAlreadyInCart) {
+                    removeFromCartUseCase(product.id, selectedSize)
+                    _state.update { it.copy(snackbarMessage = "Removed from cart") }
+                } else {
+                    addToCartUseCase(product, 1, selectedSize)
+                    _state.update { it.copy(snackbarMessage = "Added to cart successfully!") }
+                }
+            } catch (e: Exception) {
+                _state.update { it.copy(error = "Cart update failed") }
             }
         }
     }
 
     fun onSizeSelected(size: String) {
         _state.update { it.copy(selectedSize = size, error = null) }
-    }
-
-    fun addToCart() {
-        viewModelScope.launch {
-            if (_state.value.isAlreadyInCart) {
-                _state.update { it.copy(snackbarMessage = "Product already in cart") }
-                return@launch
-            }
-
-
-            val product = _state.value.product ?: return@launch
-            val selectedSize = _state.value.selectedSize
-            val isSizeRequired = !product.sizes.isNullOrEmpty()
-
-            if (isSizeRequired && selectedSize.isEmpty()) {
-                _state.update { it.copy(error = "Please select a size") }
-                return@launch
-            }
-
-            try {
-                val finalSize = if (isSizeRequired) selectedSize else ""
-                addToCartUseCase(product, 1, finalSize)
-                _state.update {
-                    it.copy(
-                        error = null,
-                        snackbarMessage = "Added to cart successfully!"
-                    )
-                }
-            } catch (e: Exception) {
-                _state.update { it.copy(error = "Add to cart failed: ${e.message}") }
-            }
-        }
     }
 
     fun resetSnackbarMessage() {

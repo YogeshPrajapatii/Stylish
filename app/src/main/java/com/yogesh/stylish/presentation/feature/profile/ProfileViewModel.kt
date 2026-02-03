@@ -17,7 +17,8 @@ data class ProfileState(
     val userEmail: String? = null,
     val didLogout: Result<String>? = null,
     val profileInfo: ProfileEntity? = null,
-    val error: String? = null
+    val error: String? = null,
+    val validationErrors: Map<String, String> = emptyMap()
 )
 
 @HiltViewModel
@@ -48,20 +49,34 @@ class ProfileViewModel @Inject constructor(
     fun saveProfile(
         imageUri: String?,
         fullName: String,
-        email: String,
         pincode: String,
         address: String,
         city: String,
         bankAcc: String,
         holderName: String,
-        ifsc: String
+        ifsc: String,
+        onSuccess: () -> Unit
     ) {
+        val errors = mutableMapOf<String, String>()
+        if (fullName.isBlank()) errors["name"] = "Full Name is required"
+        if (pincode.length != 6 || !pincode.all { it.isDigit() }) errors["pincode"] = "Enter valid 6-digit Pincode"
+        if (address.isBlank()) errors["address"] = "Address is required"
+        if (city.isBlank()) errors["city"] = "City is required"
+        if (bankAcc.length < 10 || !bankAcc.all { it.isDigit() }) errors["bank"] = "Enter valid Account Number"
+        if (holderName.isBlank()) errors["holder"] = "Account Holder Name is required"
+        if (ifsc.length != 11) errors["ifsc"] = "Enter valid 11-digit IFSC Code"
+
+        if (errors.isNotEmpty()) {
+            _state.update { it.copy(validationErrors = errors) }
+            return
+        }
+
         viewModelScope.launch {
             val updatedProfile = ProfileEntity(
                 id = 1,
                 imageUri = imageUri,
                 fullName = fullName,
-                email = email,
+                email = _state.value.userEmail ?: "",
                 pincode = pincode,
                 address = address,
                 city = city,
@@ -70,6 +85,8 @@ class ProfileViewModel @Inject constructor(
                 ifscCode = ifsc
             )
             updateProfileUseCase(updatedProfile)
+            _state.update { it.copy(validationErrors = emptyMap()) }
+            onSuccess()
         }
     }
 

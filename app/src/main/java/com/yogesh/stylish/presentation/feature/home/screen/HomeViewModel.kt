@@ -16,7 +16,7 @@ import kotlin.math.roundToInt
 enum class SortOrder { NONE, PRICE_LOW_HIGH, PRICE_HIGH_LOW, RATING }
 
 data class HomeScreenState(
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val products: List<Product> = emptyList(),
     val filteredProducts: List<Product> = emptyList(),
     val categories: List<Category> = emptyList(),
@@ -47,7 +47,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             networkManager.isConnected.collect { online ->
                 _state.update { it.copy(isOnline = online) }
-                // अगर इंटरनेट वापस आए और डेटा खाली हो, तो ऑटो-लोड करें
                 if (online && _state.value.products.isEmpty()) {
                     fetchInitialData()
                 }
@@ -57,6 +56,8 @@ class HomeViewModel @Inject constructor(
 
     fun fetchInitialData() {
         viewModelScope.launch {
+            if (_state.value.products.isNotEmpty()) return@launch
+
             _state.update { it.copy(isLoading = true) }
             when (val result = getProductsUseCase()) {
                 is Result.Success -> {
@@ -74,7 +75,7 @@ class HomeViewModel @Inject constructor(
                     ) }
                 }
                 is Result.Failure -> _state.update { it.copy(isLoading = false, error = result.message) }
-                else -> Unit
+                else -> _state.update { it.copy(isLoading = false) }
             }
         }
     }
@@ -99,7 +100,6 @@ class HomeViewModel @Inject constructor(
         val minP = _state.value.minPrice
         val maxP = _state.value.maxPrice
         val rating = _state.value.selectedRating
-
         var list = _state.value.products
 
         if (query.isNotEmpty()) {

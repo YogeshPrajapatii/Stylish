@@ -1,7 +1,9 @@
 package com.yogesh.stylish.presentation.feature.address
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
@@ -17,12 +19,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.yogesh.stylish.presentation.component.StylishButton
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddAddressScreen(
     navController: NavController,
     viewModel: AddressViewModel = hiltViewModel()
 ) {
+    val scrollState = rememberScrollState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -33,10 +39,29 @@ fun AddAddressScreen(
                     }
                 }
             )
+        },
+        bottomBar = {
+            Surface(tonalElevation = 8.dp) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    StylishButton(
+                        text = "Save",
+                        onClick = { viewModel.saveAddress { navController.popBackStack() } },
+                    )
+                }
+            }
         }
     ) { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .verticalScroll(scrollState)
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             if (viewModel.errorMessage != null) {
@@ -104,20 +129,7 @@ fun AddAddressScreen(
                 )
             }
 
-            Spacer(Modifier.height(24.dp))
-
-
+            Spacer(Modifier.height(100.dp))
         }
-
-        Box(modifier = Modifier,
-            contentAlignment = Alignment.Center){
-
-            StylishButton(
-                text = "Save",
-                onClick = { viewModel.saveAddress { navController.popBackStack() } }
-            )
-
-        }
-
     }
 }

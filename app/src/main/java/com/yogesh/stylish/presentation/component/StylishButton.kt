@@ -26,7 +26,7 @@ fun StylishButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .fillMaxWidth(0.50f)
+            .fillMaxWidth(0.70f)
             .height(50.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
@@ -38,7 +38,8 @@ fun StylishButton(
         Text(
             text = text,
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1
         )
     }
 }

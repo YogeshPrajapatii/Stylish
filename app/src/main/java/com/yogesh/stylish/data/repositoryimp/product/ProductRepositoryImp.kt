@@ -7,13 +7,24 @@ import com.yogesh.stylish.domain.model.Category
 import com.yogesh.stylish.domain.model.Product
 import com.yogesh.stylish.domain.repository.product.ProductRepository
 import com.yogesh.stylish.domain.util.Result
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ProductRepositoryImpl(private val apiService: ProductApiService) : ProductRepository {
+@Singleton
+class ProductRepositoryImpl @Inject constructor(
+    private val apiService: ProductApiService
+) : ProductRepository {
+
+    private var cachedProducts: List<Product>? = null
 
     override suspend fun getAllProducts(): Result<List<Product>> {
+        cachedProducts?.let {
+            return Result.Success(it)
+        }
         return try {
             val response = apiService.getAllProducts()
             val products = response.products.map { it.toDomainProduct() }
+            cachedProducts = products
             Result.Success(products)
         } catch (e: Exception) {
             Result.Failure(e.message ?: "An unknown error occurred.")
@@ -31,6 +42,9 @@ class ProductRepositoryImpl(private val apiService: ProductApiService) : Product
     }
 
     override suspend fun getProductById(id: Int): Result<Product> {
+        cachedProducts?.find { it.id == id }?.let {
+            return Result.Success(it)
+        }
         return try {
             val productDto = apiService.getProductById(id)
             Result.Success(productDto.toDomainProduct())

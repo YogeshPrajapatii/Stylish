@@ -43,18 +43,26 @@ fun OrderSuccessScreen(navController: NavController) {
             modifier = Modifier.padding(top = 8.dp)
         )
         Spacer(modifier = Modifier.height(48.dp))
-        StylishButton(
 
-            text = "Continue",
-            onClick = { navController.navigate(Routes.HomeScreen) {
-                popUpTo(Routes.HomeScreen) { inclusive = true }
-            }}
+        StylishButton(
+            text = "Continue Shopping",
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                navController.navigate(Routes.HomeScreen) {
+                    popUpTo(Routes.HomeScreen) { inclusive = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         )
+
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(
             onClick = {
                 navController.navigate(Routes.OrderHistoryScreen) {
                     popUpTo(Routes.HomeScreen)
+                    launchSingleTop = true
+                    restoreState = true
                 }
             }
         ) {

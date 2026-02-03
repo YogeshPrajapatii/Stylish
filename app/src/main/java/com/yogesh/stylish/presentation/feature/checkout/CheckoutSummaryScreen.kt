@@ -40,10 +40,18 @@ fun CheckoutSummaryScreen(
             )
         },
         bottomBar = {
-            Surface(shadowElevation = 16.dp, color = Color.White) {
-
-                Box(modifier = Modifier.padding(16.dp),
-                    contentAlignment = Alignment.Center){
+            Surface(
+                shadowElevation = 8.dp,
+                color = Color.White,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
                     StylishButton(
                         text = "Pay ₹${state.totalFinalPrice}",
                         onClick = {
@@ -52,10 +60,9 @@ fun CheckoutSummaryScreen(
                             }
                         },
                         enabled = state.selectedAddress != null && state.cartItems.isNotEmpty(),
+                        modifier = Modifier.fillMaxWidth(0.9f)
                     )
-
                 }
-
             }
         }
     ) { paddingValues ->
