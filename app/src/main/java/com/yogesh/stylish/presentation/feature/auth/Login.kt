@@ -11,6 +11,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
@@ -45,6 +47,7 @@ fun Login(navController: NavHostController) {
     val authState by authViewModel.authState.collectAsState()
     val isLoading = authState is Result.Loading
 
+
     LaunchedEffect(authState) {
         when (val currentState = authState) {
             is Result.Failure -> {
@@ -64,104 +67,115 @@ fun Login(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.statusBars)
-                .padding(24.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(horizontal = 16.dp)
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Header Section
-            Text(
-                text = "Welcome \nBack!",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Form Section
-            OutlinedTextField(
-                value = userId,
-                onValueChange = { userId = it },
-                label = { Text("Username or Email") },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                trailingIcon = {
-                    val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = image, contentDescription = null)
-                    }
-                }
-            )
-
-            Text(
-                text = "Forgot Password?",
+            Column(
                 modifier = Modifier
-                    .clickable { navController.navigate(Routes.ForgotPassword) }
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-                textAlign = TextAlign.End,
-                color = Color.Red,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            StylishButton(
-                text = if (isLoading) "Loading..." else "Login",
-                enabled = !isLoading,
-                onClick = {
-                    if (userId.isNotBlank() && password.isNotBlank()) {
-                        authViewModel.login(userId, password)
-                    } else {
-                        Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Text(
-                text = "- or continue with -",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
-            )
-
-            Row(
-                modifier = Modifier.padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SocialLoginButton(R.drawable.ic_google, "Google")
-                SocialLoginButton(R.drawable.ic_apple, "Apple")
-                SocialLoginButton(R.drawable.ic_facebook, "Facebook")
+                Spacer(modifier = Modifier.height(48.dp))
+
+                Text(
+                    text = "Welcome \nBack!",
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth(),
+                    lineHeight = 42.sp
+                )
+
+                Spacer(modifier = Modifier.height(36.dp))
+
+                OutlinedTextField(
+                    value = userId,
+                    maxLines = 1,
+                    onValueChange = { userId = it },
+                    label = { Text("Username or Email") },
+                    leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // Password Input
+                OutlinedTextField(
+                    value = password,
+                    maxLines = 1,
+                    onValueChange = { password = it },
+                    label = { Text("Password") },
+                    leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(
+                                imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                )
+
+                Text(
+                    text = "Forgot Password?",
+                    modifier = Modifier
+                        .clickable { navController.navigate(Routes.ForgotPassword) }
+                        .fillMaxWidth()
+                        .padding(top = 12.dp),
+                    textAlign = TextAlign.End,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                Spacer(modifier = Modifier.height(36.dp))
+
+                StylishButton(
+                    text = if (isLoading) "Loading..." else "Login",
+                    enabled = !isLoading,
+                    onClick = {
+                        if (userId.isNotBlank() && password.isNotBlank()) {
+                            authViewModel.login(userId, password)
+                        } else {
+                            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                        }
+                    })
             }
 
-            Row(
-                modifier = Modifier.padding(bottom = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text("Create an account ", style = MaterialTheme.typography.bodyMedium)
                 Text(
-                    text = "Sign Up",
-                    modifier = Modifier.clickable { navController.navigate(Routes.SignUp) },
-                    color = Color.Red,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline
+                    text = "- OR Continue with -",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray
                 )
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SocialLoginButton(R.drawable.ic_google, "Google")
+                    SocialLoginButton(R.drawable.ic_apple, "Apple")
+                    SocialLoginButton(R.drawable.ic_facebook, "Facebook")
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Create An Account ", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "Sign Up",
+                        modifier = Modifier.clickable { navController.navigate(Routes.SignUp) },
+                        color = Color.Red,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }
@@ -170,10 +184,10 @@ fun Login(navController: NavHostController) {
 @Composable
 fun SocialLoginButton(iconRes: Int, contentDescription: String) {
     Surface(
-        onClick = { /* TODO */ },
+        onClick = { /* Handle Social Login */ },
         shape = CircleShape,
-        border = BorderStroke(1.dp, Color.LightGray),
-        modifier = Modifier.size(52.dp),
+        border = BorderStroke(1.dp, Color(0xFFFDE9EA)),
+        modifier = Modifier.size(54.dp),
         color = Color.White
     ) {
         Box(contentAlignment = Alignment.Center) {

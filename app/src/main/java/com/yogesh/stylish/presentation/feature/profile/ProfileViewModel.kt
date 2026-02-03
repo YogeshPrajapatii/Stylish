@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 data class ProfileState(
     val userEmail: String? = null,
-    val didLogout: Boolean = false,
+    val didLogout: Result<String>? = null,
     val profileInfo: ProfileEntity? = null,
     val error: String? = null
 )
@@ -75,11 +75,8 @@ class ProfileViewModel @Inject constructor(
 
     fun logout() {
         viewModelScope.launch {
-            when (val result = logoutUseCase()) {
-                is Result.Success -> _state.update { it.copy(didLogout = true) }
-                is Result.Failure -> _state.update { it.copy(error = result.message) }
-                else -> {}
-            }
+            val result = logoutUseCase()
+            _state.update { it.copy(didLogout = result) }
         }
     }
 }

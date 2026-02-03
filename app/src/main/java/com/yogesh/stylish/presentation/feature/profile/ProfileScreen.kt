@@ -1,5 +1,6 @@
 package com.yogesh.stylish.presentation.feature.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -18,20 +19,39 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.yogesh.stylish.domain.util.Result
 import com.yogesh.stylish.presentation.component.StylishButton
 import com.yogesh.stylish.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavHostController) {
+    val context = LocalContext.current
     val viewModel: ProfileViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(state.didLogout) {
+        state.didLogout?.let { result ->
+            when (result) {
+                is Result.Success -> {
+                    navController.navigate(Routes.Login) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+                is Result.Failure -> {
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                }
+                else -> {}
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -51,9 +71,14 @@ fun ProfileScreen(navController: NavHostController) {
         }
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(Modifier.height(24.dp))
+
             Box(modifier = Modifier.size(100.dp)) {
                 if (state.profileInfo?.imageUri != null) {
                     AsyncImage(
@@ -73,6 +98,7 @@ fun ProfileScreen(navController: NavHostController) {
             }
 
             Spacer(Modifier.height(16.dp))
+
             Text(
                 text = state.profileInfo?.fullName ?: "Set Your Name",
                 fontSize = 22.sp,
@@ -81,10 +107,16 @@ fun ProfileScreen(navController: NavHostController) {
             Text(text = state.userEmail ?: "", color = Color.Gray)
 
             Spacer(Modifier.height(32.dp))
-            ProfileMenuItem("My Orders", Icons.Default.ShoppingBag) { navController.navigate(Routes.OrderHistoryScreen) }
-            ProfileMenuItem("My Addresses", Icons.Default.LocationOn) { navController.navigate(Routes.AddressListScreen) }
+
+            ProfileMenuItem("My Orders", Icons.Default.ShoppingBag) {
+                navController.navigate(Routes.OrderHistoryScreen)
+            }
+            ProfileMenuItem("My Addresses", Icons.Default.LocationOn) {
+                navController.navigate(Routes.AddressListScreen)
+            }
 
             Spacer(modifier = Modifier.weight(1f))
+
             StylishButton(
                 text = "LOGOUT",
                 onClick = { viewModel.logout() })
@@ -100,7 +132,8 @@ fun ProfileMenuItem(title: String, icon: ImageVector, onClick: () -> Unit) {
             .clickable { onClick() }
             .padding(vertical = 4.dp),
         shape = MaterialTheme.shapes.medium,
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 1.dp
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
