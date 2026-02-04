@@ -120,6 +120,11 @@ fun ProfileScreen(navController: NavHostController) {
             StylishButton(
                 text = "LOGOUT",
                 onClick = { viewModel.logout() })
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+
+
         }
     }
 }
