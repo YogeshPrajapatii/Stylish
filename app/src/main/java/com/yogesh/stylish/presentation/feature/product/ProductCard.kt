@@ -56,7 +56,7 @@ fun ProductCard(
                     .fillMaxWidth()
                     .height(130.dp)
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Fit
             )
             Column(
                 modifier = Modifier.padding(12.dp),

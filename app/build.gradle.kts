@@ -24,7 +24,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -57,8 +60,8 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.androidx.compose.foundation.layout)
     kapt(libs.androidx.room.compiler)
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.compose.material:material-icons-extended:1.6.7")
+    implementation("com.google.android.material:material:1.13.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
     implementation(libs.shimmer)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.auth)
