@@ -2,7 +2,8 @@
    
 # Stylish - A Full-Stack E-commerce App 🛍️
 
-> **Status:** 🚧 In Development 🚧
+> **Status:** 🚧 In Development 
+
 
 Stylish is a modern, full-stack e-commerce application being built to master the entire lifecycle of a native Android app, from a beautiful client interface to a robust backend.
 
