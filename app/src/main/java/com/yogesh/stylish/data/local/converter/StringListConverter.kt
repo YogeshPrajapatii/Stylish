@@ -16,6 +16,7 @@ class StringListConverter {
         return value.let { json.encodeToString(it) }
     }
 
+
     @TypeConverter 
     fun toStringList(value: String): List<String>? { 
         return try {
