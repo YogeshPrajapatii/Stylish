@@ -40,4 +40,5 @@ class NetworkManager(context: Context) {
             connectivityManager.unregisterNetworkCallback(callback)
         }
     }.distinctUntilChanged()
+
 }
