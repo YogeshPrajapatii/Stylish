@@ -1,5 +1,6 @@
 package com.yogesh.stylish.data.local.converter
 
+
 import androidx.room.TypeConverter
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
