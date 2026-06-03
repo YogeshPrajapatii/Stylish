@@ -9,6 +9,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.yogesh.stylish"
     compileSdk = 35
 
