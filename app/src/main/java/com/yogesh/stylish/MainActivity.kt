@@ -18,6 +18,7 @@ import com.yogesh.stylish.presentation.navigation.Navigation
 import com.yogesh.stylish.presentation.theme.StylishTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(), PaymentResultWithDataListener {
 
